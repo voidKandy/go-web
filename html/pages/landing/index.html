@@ -1,0 +1,38 @@
+{{define "content"}}
+<section class="hero has-text-centered">
+  <h1 class="title is-1">Ezra Klitsie</h1>
+  <h1 class="subtitle is-3">(voidkandy)</h1>
+</section>
+<section class="section">
+  <nav class="breadcrumb has-dot-separator" aria-label="breadcrumbs">
+    <ul class="is-justify-content-center">
+      <li>
+        <a
+          hx-get="/landing/projects"
+          hx-trigger="click"
+          hx-target="#landing"
+          hx-swap="innerHTML transition:true"
+          >Developer</a
+        >
+      </li>
+      <li>
+        <a
+          hx-get="/landing/musician"
+          hx-trigger="click"
+          hx-target="#landing"
+          hx-swap="innerHTML transition:true"
+          >Musician</a
+        >
+      </li>
+    </ul>
+  </nav>
+</section>
+<div
+  hx-get="/landing/projects"
+  hx-trigger="load once"
+  hx-target="this"
+  class="simple-transition"
+  hx-swap="innerHTML transition:true"
+  id="landing"
+></div>
+{{end}}

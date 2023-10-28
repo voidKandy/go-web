@@ -1,0 +1,9 @@
+<div>
+  {{ range .Projects }}
+  <h1>{{.Name}}</h1>
+  <h1>{{.Description}}</h1>
+  <h1>{{.ImagePath}}</h1>
+  {{range .Tags}}
+  <h1>{{.Tag}}</h1>
+  {{end}} {{ end }}
+</div>

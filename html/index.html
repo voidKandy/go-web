@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HTMX WITH GO!</title>
+    <script
+      src="https://unpkg.com/htmx.org@1.9.6"
+      integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="aesthetic.css" />
+  </head>
+  <body class="simple-transition">
+    <nav class="navbar" hx-boost="true" hx-swap="innerHTML transition:true">
+      <a class="p-5" href="/"> Home </a>
+      <div class="navbar-end">
+        <a class="p-5" href="/about">About</a>
+        <a class="p-5" href="/blog">Blog</a>
+      </div>
+    </nav>
+    {{template "content" .}}
+  </body>
+</html>
