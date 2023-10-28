@@ -11,7 +11,7 @@ func InitializeRoutes() {
 	http.HandleFunc("/about", AboutHandler)
 	http.HandleFunc("/blog", BlogHandler)
 	http.HandleFunc("/landing/projects", ProjectsHandler)
-	http.HandleFunc("/hidden/projects", ProjectsView)
+	http.HandleFunc("/templates/projects", ProjectsView)
 	http.HandleFunc("/landing/musician", MusicHandler)
 }
 
