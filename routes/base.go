@@ -1,4 +1,4 @@
-package handlers
+package routes
 
 import (
 	"fmt"
@@ -6,16 +6,15 @@ import (
 	"net/http"
 )
 
-func InitializeRoutes() {
-	http.HandleFunc("/", IndexHandler)
+func InitializePageRoutes() {
+	http.HandleFunc("/", LandingHandler)
 	http.HandleFunc("/about", AboutHandler)
 	http.HandleFunc("/blog", BlogHandler)
 	http.HandleFunc("/landing/projects", ProjectsHandler)
-	http.HandleFunc("/templates/projects", ProjectsView)
 	http.HandleFunc("/landing/musician", MusicHandler)
 }
 
-func RenderTemplate(w http.ResponseWriter, tmpl string) {
+func RenderPage(w http.ResponseWriter, tmpl string) {
 	templatePath := fmt.Sprintf("html/pages/%s.html", tmpl)
 	indexTmpl := template.Must(template.ParseFiles("html/index.html", templatePath))
 
@@ -25,14 +24,24 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	}
 }
 
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	RenderTemplate(w, "landing/index")
+func LandingHandler(w http.ResponseWriter, r *http.Request) {
+	RenderPage(w, "landing/index")
 }
 
 func AboutHandler(w http.ResponseWriter, r *http.Request) {
-	RenderTemplate(w, "about")
+	RenderPage(w, "about")
 }
 
 func BlogHandler(w http.ResponseWriter, r *http.Request) {
-	RenderTemplate(w, "blog")
+	RenderPage(w, "blog")
+}
+
+func MusicHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, _ := template.ParseFiles("html/pages/landing/musician.html")
+	tmpl.Execute(w, nil)
+}
+
+func ProjectsHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, _ := template.ParseFiles("html/pages/landing/projects.html")
+	tmpl.Execute(w, nil)
 }
