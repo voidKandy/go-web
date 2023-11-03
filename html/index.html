@@ -12,18 +12,40 @@
 
     <link
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+
+    <link
+      rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     />
     <link rel="stylesheet" href="transitions.css" />
   </head>
-  <body class="simple-transition">
-    <nav class="navbar" hx-boost="true" hx-swap="innerHTML transition:true">
-      <a class="p-5" href="/"> Home </a>
-      <div class="navbar-end">
-        <a class="p-5" href="/about">About</a>
-        <a class="p-5" href="/blog">Blog</a>
-      </div>
-    </nav>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+    }
+    body {
+      min-height: 100vh;
+    }
+  </style>
+  <body class="simple-transition has-background-dark">
+    <!-- <nav -->
+    <!--   class="navbar has-background-dark" -->
+    <!--   hx-boost="true" -->
+    <!--   hx-swap="innerHTML transition:true" -->
+    <!-- > -->
+    <!--   <a class="p-5" href="/"> Home </a> -->
+    <!--   <div class="navbar-end"> -->
+    <!--     <a class="p-5" href="/about">About</a> -->
+    <!--     <a class="p-5" href="/blog">Blog</a> -->
+    <!--   </div> -->
+    <!-- </nav> -->
     {{template "content" .}}
+    <footer class="footer has-background-dark"></footer>
   </body>
 </html>

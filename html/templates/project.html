@@ -1,6 +1,5 @@
-<div>
-  {{ range .Projects }}
-  <div class="card">
+<div class="columns is-multiline">
+  <div class="card column">
     <div class="card-image">
       <figure class="image">
         <img src="{{.ImagePath}}" alt="Project Preview Image" />
@@ -17,8 +16,19 @@
         </div>
       </div>
 
-      <div class="content">{{.Content}}</div>
+      {{ if .Links.HasRepo }}
+      <a href="{{.Links.GitUrl}}">
+        <img
+          src="public/assets/svg/gh-icon.svg"
+          class="is-clickable"
+          alt="GitHub Icon"
+          width="20"
+          height="20"
+        />
+      </a>
+      {{ end }} {{ if .Links.HasWebDemo }}
+      <a href="{{.Links.DemoUrl}}">Demo</a>
+      {{ end }}
     </div>
   </div>
-  {{ end }}
 </div>

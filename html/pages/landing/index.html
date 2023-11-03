@@ -1,42 +1,57 @@
 {{define "content"}}
+<style>
+  .project-nav-button {
+    background-color: transparent;
+    border-color: transparent;
+    transition: all 0.3s;
+  }
+  .project-nav-button:hover {
+    transform: scale(1.1); /* Increase size on hover */
+    background-color: #2ecc71; /* Change background color on hover */
+    border-color: #2ecc71; /* Change border color on hover */
+    border-radius: 10px;
+    color: #fff; /* Change text color on hover */
+  }
+</style>
 <section
-  class="container is-flex is-flex-shrink is-flex-direction-column has-text-centered"
+  class="container is-flex is-flex-shrink is-flex-direction-column has-text-centered p-5"
 >
-  <h1 class="title is-1 has-text-weight-bold">voidkandy.dev</h1>
-</section>
-<section class="section">
-  <small class="is-italic is-size-6 has-text-weight-light">
+  <h1 class="title is-1 has-text-weight-bold has-text-white-ter">
+    voidkandy.dev
+  </h1>
+  <small
+    class="is-italic is-size-6 has-text-weight-light has-text-grey-lighter"
+  >
     <p class="has-text-centered">Ezra Klitsie</p>
   </small>
-  <nav class="breadcrumb has-dot-separator" aria-label="breadcrumbs">
-    <ul class="is-justify-content-center">
-      <li>
-        <a
-          hx-get="/landing/projects"
-          hx-trigger="click"
-          hx-target="#landing"
-          hx-swap="innerHTML transition:true"
-          >Developer</a
-        >
-      </li>
-      <li>
-        <a
-          hx-get="/landing/musician"
-          hx-trigger="click"
-          hx-target="#landing"
-          hx-swap="innerHTML transition:true"
-          >Musician</a
-        >
-      </li>
-    </ul>
-  </nav>
 </section>
-<div
-  hx-get="/landing/projects"
-  hx-trigger="load once"
-  hx-target="this"
-  class="simple-transition"
+<section
+  class="container"
   hx-swap="innerHTML transition:true"
-  id="landing"
-></div>
+  hx-target="#project-div"
+>
+  <div class="level is-flex is-justfify-content-space-between is-vcentered">
+    <button
+      class="level-left mx-4 project-nav-button has-text-warning-light material-symbols-outlined"
+      hx-trigger="click"
+      hx-get="/projects/prev"
+    >
+      keyboard_double_arrow_left
+    </button>
+    <button
+      class="level-right mx-4 project-nav-button has-text-warning-light material-symbols-outlined"
+      hx-trigger="click"
+      hx-get="/projects/next"
+    >
+      keyboard_double_arrow_right
+    </button>
+  </div>
+  <div
+    hx-get="/projects/first"
+    hx-trigger="load once"
+    class="simple-transition"
+    id="project-div"
+  ></div>
+</section>
+
 {{end}}
