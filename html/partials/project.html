@@ -1,3 +1,4 @@
+{{ define "project" }}
 <div class="columns is-multiline">
   <div class="card column">
     <div class="card-image">
@@ -19,7 +20,7 @@
       {{ if .Links.HasRepo }}
       <a href="{{.Links.GitUrl}}">
         <img
-          src="public/assets/svg/gh-icon.svg"
+          src="static/assets/svg/gh-icon.svg"
           class="is-clickable"
           alt="GitHub Icon"
           width="20"
@@ -32,3 +33,4 @@
     </div>
   </div>
 </div>
+{{ end }}

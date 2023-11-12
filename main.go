@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"voidkandy-dot-dev/routes"
-	"voidkandy-dot-dev/routes/data"
+	"voidkandy-dot-dev/logic/routes"
 )
 
 func main() {
 	routes.InitializePageRoutes()
-	data.InitializeDataRoutes()
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
+	// views.InitializeViewRoutes()
 	fmt.Println("Listening on port 3000")
+	// fs := http.FileServer(http.Dir("static"))
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }

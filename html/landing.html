@@ -1,0 +1,79 @@
+{{ define "landing" }}
+<script type="text/hyperscript">
+  behavior LandingListItem
+      init
+          set :c to my textContent
+          if I match #default-selection
+          send select to me
+      end
+      on click
+          if I do not match .selected then
+              send select to me
+          end
+      end
+      on select
+          send reset to <li/> in closest parent <ul/>
+          add .selected to me
+          send getContent to me
+          put '◉' into me
+          wait for a reset
+          put :c into me
+          remove .selected from me
+      end
+  end
+</script>
+
+<div class="noise-bg">
+  <div class="noise-slide"></div>
+  <div class="noise-slide"></div>
+</div>
+<div class="is-overlay main-tile is-flex is-flex-direction-column">
+  <header class="m-2 p-0 section is-medium is-flex">
+    <div class="is-3 m-2 p-2">
+      <h1 class="title is-1 has-text-weight-bold has-text-white-ter">
+        voidkandy.dev
+      </h1>
+      <small
+        class="is-italic is-size-6 has-text-weight-light has-text-grey-lighter"
+      >
+        <p>Ezra Klitsie</p>
+      </small>
+    </div>
+  </header>
+  <div
+    class="m-4 is-flex is-flex-direction-row is-justify-content-space-between"
+  >
+    <ul
+      class="landing-list"
+      hx-trigger="getContent"
+      hx-target="#content-section"
+      hx-swap="innerHTML"
+      hx-push-url="true"
+    >
+      <li
+        tabindex="0"
+        _="install LandingListItem"
+        hx-get="/"
+        hx-select="#content-section"
+      >
+        Home
+      </li>
+      <li tabindex="1" _="install LandingListItem" hx-get="/blog">Projects</li>
+      <li tabindex="2" _="install LandingListItem" hx-get="/about">About</li>
+      <li tabindex="3" _="install LandingListItem">Contact</li>
+    </ul>
+
+    <div
+      hx-push-url="true"
+      hx-target="this"
+      hx-swap="innerHTML"
+      hx-trigger="load once"
+      id="content-section"
+      class="is-flex"
+    >
+      Default home content
+    </div>
+    <!-- <div id="content-section" class="is-flex">Default home content</div> -->
+  </div>
+</div>
+{{ end }}

@@ -1,0 +1,21 @@
+behavior LandingListItem
+    init
+        set :c to my textContent
+        if I match #default-selection
+        send select to me
+    end
+    on click
+        if I do not match .selected then
+            send select to me
+        end
+    end
+    on select
+        send reset to <li/> in closest parent <ul/>
+        add .selected to me
+        send getContent to me
+        put '◉' into me
+        wait for a reset
+        put :c into me
+        remove .selected from me
+    end
+end

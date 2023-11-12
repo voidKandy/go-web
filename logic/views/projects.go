@@ -1,4 +1,4 @@
-package data
+package views
 
 type LinkInfo struct {
 	HasRepo    bool

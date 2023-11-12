@@ -1,0 +1,123 @@
+@font-face {
+  font-family: "space-mono";
+  src: url("/static/space_mono/SpaceMono-Regular.ttf") format("truetype");
+  /* You can also include additional font formats for better browser compatibility */
+}
+
+:root {
+  --bgGradient: linear-gradient(265deg, #3d077f, #070d7f);
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+  font-family: "space-mono", sans-serif;
+}
+
+[tabindex]:focus {
+  color: #ff00c8;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+}
+
+.noise-bg {
+  overflow-y: hidden;
+  white-space: nowrap;
+  display: inline-block;
+  width: 100%;
+  background-size: 5000%;
+  background-position: center;
+  background: linear-gradient(210deg, rgba(0, 0, 0, 1), rgba(255, 255, 0, 0));
+  animation: noiseBgAnimation 1s linear infinite;
+}
+
+.noise-slide {
+  height: 100vh;
+  filter: contrast(10%) brightness(1%);
+  background:
+  /* radial-gradient( */
+  /*     circle at 50% 50%, */
+  /*     rgba(0, 0, 0, 1), */
+  /*     rgba(255, 255, 0, 0) */
+  /*   ), */ url("/static/assets/noise-filter.svg");
+  /* background-size: 250%; */
+  animation: noiseSlideAnimation 40s linear infinite;
+}
+
+@keyframes noiseSlideAnimation {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+.polka-dot {
+  background-color: #001;
+  background-image: radial-gradient(white 8%, transparent 8%),
+    radial-gradient(white 8%, transparent 8%);
+
+  background-size: 50px 50px;
+  background-position: left top;
+  mix-blend-mode: multiply;
+  animation: dotAnimation 200s infinite alternate linear;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+@keyframes dotAnimation {
+  0% {
+    background-image: radial-gradient(white 8%, transparent 8%),
+      radial-gradient(white 8%, transparent 8%);
+  }
+  50% {
+    background-position: right bottom;
+    /* background-size: 60px 90px; */
+  }
+  100% {
+    background-position: left top;
+    background-image: radial-gradient(white 8%, transparent 8%),
+      radial-gradient(white 8%, transparent 8%);
+  }
+}
+
+.main-tile {
+  backdrop-filter: invert(3%) saturate(0%);
+
+  background: linear-gradient(10deg, rgba(0, 0, 0, 1), rgba(255, 255, 0, 0));
+  /* background-color: #1c1c1c; */
+  margin: 1%;
+  border: 1px dotted transparent;
+  border-color: white;
+}
+
+.landing-list {
+  display: inline-block;
+}
+
+.landing-list li {
+  cursor: pointer;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+  color: white;
+}
+
+.landing-list li:hover {
+  color: grey;
+}
+
+.landing-list li.selected {
+  color: white;
+}
