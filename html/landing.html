@@ -1,9 +1,10 @@
 {{ define "landing" }}
 <script type="text/hyperscript">
-  behavior LandingListItem
+  behavior LandingListItem(path)
       init
           set :c to my textContent
-          if I match #default-selection
+          add @hx-get='`path`' to me
+          if path == '{{ .Path }}'
           send select to me
       end
       on click
@@ -52,15 +53,16 @@
     >
       <li
         tabindex="0"
-        _="install LandingListItem"
-        hx-get="/"
+        _="install LandingListItem(path: '/')"
         hx-select="#content-section"
       >
         Home
       </li>
-      <li tabindex="1" _="install LandingListItem" hx-get="/blog">Projects</li>
-      <li tabindex="2" _="install LandingListItem" hx-get="/about">About</li>
-      <li tabindex="3" _="install LandingListItem">Contact</li>
+      <li tabindex="1" _="install LandingListItem(path: '/blog')">Projects</li>
+      <li tabindex="2" _="install LandingListItem(path: '/about')">About</li>
+      <li tabindex="3" _="install LandingListItem(path: '/contact')">
+        Contact
+      </li>
     </ul>
 
     <div

@@ -21,9 +21,6 @@ func Middleware(h http.Handler) http.Handler {
 			urlParts := strings.Split(r.URL.String(), "?")
 			fmt.Println("Url Parts: ", urlParts)
 			path := urlParts[0]
-			if path == "/" {
-				path = "/home"
-			}
 			params := ""
 			if len(urlParts) > 1 {
 				params = string('?') + urlParts[1]
