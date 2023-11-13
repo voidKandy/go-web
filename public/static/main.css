@@ -16,6 +16,73 @@ body {
   margin: 0;
   overflow-x: hidden;
   font-family: "space-mono", sans-serif;
+  background-color: white;
+}
+
+html {
+  background-color: #1c1c1c;
+}
+
+#spinny-switcher {
+  width: 8.5em;
+  height: 8.5em;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.1s ease;
+  transition: all 0.2s ease;
+}
+
+#spinny-switcher h1:hover {
+  color: red;
+  font-size: 2.1em;
+  transform: translateX(-25%);
+}
+
+#spinny-switcher h1::before {
+  content: "keyboard";
+  opacity: 1;
+  transition: all 0.5s ease-in-out;
+}
+
+#spinny-switcher h1:hover::before {
+  opacity: 0;
+  /* display: none; */
+}
+
+#spinny-switcher h1::after {
+  content: "🎹";
+  opacity: 0;
+}
+
+#spinny-switcher h1:hover::after {
+  content: "music_note";
+  opacity: 1;
+  visibility: visible;
+}
+
+#spinny-switcher h1 {
+  position: absolute;
+  transform: translateX(25%);
+  color: white;
+  font-size: 2em;
+  z-index: 2;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#spinny-switcher img {
+  width: 100%;
+  height: 100%;
+  animation: rotateCircle 20s linear infinite;
+}
+
+@keyframes rotateCircle {
+  to {
+    transform: rotate(1turn);
+  }
 }
 
 [tabindex]:focus {
@@ -31,12 +98,9 @@ body {
 }
 
 .noise-bg {
-  overflow-y: hidden;
   white-space: nowrap;
   display: inline-block;
   width: 100%;
-  background-size: 5000%;
-  background-position: center;
   background: linear-gradient(210deg, rgba(0, 0, 0, 1), rgba(255, 255, 0, 0));
   animation: noiseBgAnimation 1s linear infinite;
 }
@@ -44,13 +108,7 @@ body {
 .noise-slide {
   height: 100vh;
   filter: contrast(10%) brightness(1%);
-  background:
-  /* radial-gradient( */
-  /*     circle at 50% 50%, */
-  /*     rgba(0, 0, 0, 1), */
-  /*     rgba(255, 255, 0, 0) */
-  /*   ), */ url("/static/assets/noise-filter.svg");
-  /* background-size: 250%; */
+  background: url("/static/assets/noise-filter.svg");
   animation: noiseSlideAnimation 40s linear infinite;
 }
 
@@ -63,38 +121,8 @@ body {
   }
 }
 
-.polka-dot {
-  background-color: #001;
-  background-image: radial-gradient(white 8%, transparent 8%),
-    radial-gradient(white 8%, transparent 8%);
-
-  background-size: 50px 50px;
-  background-position: left top;
-  mix-blend-mode: multiply;
-  animation: dotAnimation 200s infinite alternate linear;
-  height: 100%;
-  overflow-x: hidden;
-}
-
-@keyframes dotAnimation {
-  0% {
-    background-image: radial-gradient(white 8%, transparent 8%),
-      radial-gradient(white 8%, transparent 8%);
-  }
-  50% {
-    background-position: right bottom;
-    /* background-size: 60px 90px; */
-  }
-  100% {
-    background-position: left top;
-    background-image: radial-gradient(white 8%, transparent 8%),
-      radial-gradient(white 8%, transparent 8%);
-  }
-}
-
 .main-tile {
   backdrop-filter: invert(3%) saturate(0%);
-
   background: linear-gradient(10deg, rgba(0, 0, 0, 1), rgba(255, 255, 0, 0));
   /* background-color: #1c1c1c; */
   margin: 1%;

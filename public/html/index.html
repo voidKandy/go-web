@@ -17,6 +17,9 @@
     <!-- _hyperscript  -->
     <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
 
+    <!-- Md Block -->
+    <script type="module" src="https://md-block.verou.me/md-block.js"></script>
+
     <!-- Google Symbols -->
     <link
       rel="stylesheet"
@@ -32,6 +35,7 @@
     <!-- Custom Css -->
     <link rel="stylesheet" href="/static/main.css" />
   </head>
-  {{ template "landing" . }}
+  <body>
+    {{ template "landing" . }}
   </body>
 </html>

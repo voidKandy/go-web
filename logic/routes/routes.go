@@ -14,16 +14,16 @@ import (
 func InitializePageRoutes() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", IndexHandler)
-	// r.HandleFunc("/home", LandingHandler)
+	r.HandleFunc("/landing", LandingHandler)
 	r.HandleFunc("/about", AboutHandler)
-	r.HandleFunc("/blog", BlogHandler)
+	r.HandleFunc("/projects", ProjectsHandler)
 	// r.HandleFunc("/projects/{name}", ProjectsHandler)
 	// r.HandleFunc("/musician", MusicHandler)
 	http.Handle("/", Middleware(r))
 }
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("html/index.html", "html/landing.html"))
+	tmpl := template.Must(template.ParseFiles("public/html/index.html", "public/html/layout.html"))
 
 	err := tmpl.Execute(w, nil)
 	if err != nil {
@@ -32,7 +32,8 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LandingHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("html/landing.html"))
+	fmt.Println("Hit it!")
+	tmpl := template.Must(template.ParseFiles("public/html/templates/landing.html"))
 
 	err := tmpl.Execute(w, nil)
 	if err != nil {
@@ -41,7 +42,8 @@ func LandingHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AboutHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("html/templates/about.html"))
+	fmt.Println("Hit about")
+	tmpl := template.Must(template.ParseFiles("public/html/templates/about.html"))
 
 	err := tmpl.Execute(w, nil)
 	if err != nil {
@@ -49,8 +51,8 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func BlogHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("html/templates/blog.html"))
+func ProjectsHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("public/html/templates/blog.html"))
 
 	err := tmpl.Execute(w, nil)
 	if err != nil {
@@ -66,7 +68,7 @@ func renderProject(t *template.Template, data interface{}) (*bytes.Buffer, error
 	return rendered, nil
 }
 
-func ProjectsHandler(w http.ResponseWriter, r *http.Request) {
+func _(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	projectName, ok := vars["name"]
@@ -96,7 +98,7 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("Project: ", p)
 
-	tmpl, err := template.New("project").ParseFiles("html/partials/project.html")
+	tmpl, err := template.New("project").ParseFiles("public/html/partials/project.html")
 	if err != nil {
 		http.Error(w, "Failed to get partial", http.StatusInternalServerError)
 		return
@@ -108,7 +110,7 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	parentTmpl, err := template.ParseFiles("html/templates/projects.html")
+	parentTmpl, err := template.ParseFiles("public/html/templates/projects.html")
 	if err != nil {
 		http.Error(w, "Failed to get template", http.StatusInternalServerError)
 		return

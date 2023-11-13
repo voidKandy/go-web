@@ -9,7 +9,7 @@ import (
 
 func main() {
 	routes.InitializePageRoutes()
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("public/static"))))
 
 	// views.InitializeViewRoutes()
 	fmt.Println("Listening on port 3000")

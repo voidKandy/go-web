@@ -1,0 +1,84 @@
+{{ define "landing" }}
+<!-- add @hx-get='`path`' to me -->
+<script type="text/hyperscript">
+  behavior LandingListItem(path)
+      init
+          set :c to my textContent
+          if path == '{{ .Path }}'
+          send select to me
+      end
+      on click
+          if I do not match .selected then
+              send select to me
+          end
+      end
+      on select
+          send reset to <li/> in closest parent <ul/>
+          send getContent to me
+          log 'got content for {{ .Path }}'
+          add .selected to me
+          put '◉' into me
+          wait for a reset
+          put :c into me
+          remove .selected from me
+      end
+  end
+</script>
+
+<div class="noise-bg">
+  <div class="noise-slide"></div>
+  <div class="noise-slide"></div>
+</div>
+<div
+  class="is-overlay main-tile is-flex is-flex-direction-column is-justify-content-space-between"
+>
+  <div
+    id="route-content"
+    hx-trigger="load once"
+    hx-target="#route-content"
+    hx-swap="innerHtml"
+    hx-get="{{.Path}}{{.Params}}"
+  ></div>
+
+  <footer
+    class="mx-4 my-2 is-flex is-flex-direction-row is-justify-content-space-between"
+  >
+    <ul
+      class="landing-list"
+      hx-trigger="getContent"
+      hx-target="#route-content"
+      hx-swap="innerHtml"
+      hx-push-url="true"
+    >
+      <li
+        tabindex="0"
+        _="install LandingListItem(path: '/landing')"
+        hx-get="/landing"
+      >
+        /.
+      </li>
+      <li
+        tabindex="1"
+        _="install LandingListItem(path: '/projects')"
+        hx-get="/projects"
+      >
+        /projects
+      </li>
+      <li
+        tabindex="2"
+        _="install LandingListItem(path: '/about')"
+        hx-get="/about"
+      >
+        /about
+      </li>
+      <li tabindex="3" _="install LandingListItem(path: '/contact')">
+        /contact
+      </li>
+    </ul>
+    <div id="spinny-switcher">
+      <h1 class="material-symbols-outlined"></h1>
+      <img src="/static/assets/circular-text.svg" alt="SpinnyGuy" />
+    </div>
+  </footer>
+</div>
+{{ end }}
