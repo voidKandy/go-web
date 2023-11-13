@@ -44,12 +44,11 @@ html {
 #spinny-switcher h1::before {
   content: "keyboard";
   opacity: 1;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 #spinny-switcher h1:hover::before {
   opacity: 0;
-  /* display: none; */
 }
 
 #spinny-switcher h1::after {
