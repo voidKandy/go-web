@@ -1,36 +1,38 @@
-{{ define "project" }}
-<div class="columns is-multiline">
-  <div class="card column">
-    <div class="card-image">
-      <figure class="image">
-        <img src="{{.ImagePath}}" alt="Project Preview Image" />
-      </figure>
-    </div>
-    <div class="card-content">
-      <div class="media">
-        <div class="media-content">
-          <p class="title is-4">{{.Name}}</p>
-          <p class="subtitle is-6">{{.Description}}</p>
-          {{range .Tags}}
-          <span class="-mt-5 tag is-primary">{{.}}</span>
-          {{end}}
-        </div>
-      </div>
+<style>
+  .project-tag {
+    font-size: 12px;
+    color: white;
+  }
+</style>
 
-      {{ if .Links.HasRepo }}
-      <a href="{{.Links.GitUrl}}">
-        <img
-          src="static/assets/svg/gh-icon.svg"
-          class="is-clickable"
-          alt="GitHub Icon"
-          width="20"
-          height="20"
-        />
-      </a>
-      {{ end }} {{ if .Links.HasWebDemo }}
-      <a href="{{.Links.DemoUrl}}">Demo</a>
-      {{ end }}
-    </div>
-  </div>
+<div class="is-flex is-flex-direction-column">
+  <header
+    class="is-flex is-justify-content-space-between is-flex-direction-rows"
+  >
+    <p class="is-flex title is-4 has-text-white">{{.Name}}</p>
+
+    {{ if .Links.HasRepo }}
+    <a href="{{.Links.GitUrl}}">
+      <img
+        src="/static/assets/github-mark/github-mark-white.svg"
+        class="is-clickable"
+        alt="github-icon"
+        width="20"
+        height="20"
+      />
+    </a>
+    {{ end }}
+  </header>
+
+  <p class="subtitle is-6">{{.Description}}</p>
+  <ul class="is-flex-direction-row is-flex is-align-content-center">
+    <span class="dot">●</span>
+    {{range $index, $tag := .Tags}}
+    <span class="project-tag">{{$tag}}</span>
+    <span class="dot">●</span>
+    {{end}}
+  </ul>
+  {{ if .Links.HasWebDemo }}
+  <a href="{{.Links.DemoUrl}}">Demo</a>
+  {{ end }}
 </div>
-{{ end }}

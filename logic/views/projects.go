@@ -8,6 +8,7 @@ type LinkInfo struct {
 }
 
 type Project struct {
+	Path        string
 	Name        string
 	Description string
 	ImagePath   string
@@ -17,6 +18,7 @@ type Project struct {
 
 var Projects = []Project{
 	{
+		Path:        "espionox",
 		Name:        "Espionox",
 		Description: "A Rust library for creating Ai driven Agent workflows",
 		ImagePath:   "public/assets/espionox-gui-screenshot.png",
@@ -29,6 +31,7 @@ var Projects = []Project{
 		Tags: []string{"Rustlang", "Applied Ai", "System Design"},
 	},
 	{
+		Path:        "espionox-demo",
 		Name:        "Espionox Web Demo",
 		Description: "A chat web app utilizing Espionox",
 		ImagePath:   "public/assets/espionox-gui-screenshot.png",
@@ -41,6 +44,7 @@ var Projects = []Project{
 		Tags: []string{"Axum", "Htmx"},
 	},
 	{
+		Path:        "showbeam",
 		Name:        "Showbeam",
 		Description: "A web app for sharing and creating markdown slide shows",
 		ImagePath:   "public/assets/espionox-gui-screenshot.png",

@@ -1,11 +1,9 @@
 package routes
 
 import (
-	"bytes"
 	"fmt"
 	"html/template"
 	"net/http"
-	"strconv"
 	"voidkandy-dot-dev/logic/views"
 
 	"github.com/gorilla/mux"
@@ -16,8 +14,8 @@ func InitializePageRoutes() {
 	r.HandleFunc("/", IndexHandler)
 	r.HandleFunc("/landing", LandingHandler)
 	r.HandleFunc("/about", AboutHandler)
-	r.HandleFunc("/projects", ProjectsHandler)
-	// r.HandleFunc("/projects/{name}", ProjectsHandler)
+	r.HandleFunc("/projects", ProjectsHomeHandler)
+	r.HandleFunc("/projects/{name}", ProjectsHandler)
 	// r.HandleFunc("/musician", MusicHandler)
 	http.Handle("/", Middleware(r))
 }
@@ -51,8 +49,8 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ProjectsHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("public/html/templates/blog.html"))
+func ProjectsHomeHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("public/html/templates/projects.html"))
 
 	err := tmpl.Execute(w, nil)
 	if err != nil {
@@ -60,28 +58,10 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func renderProject(t *template.Template, data interface{}) (*bytes.Buffer, error) {
-	rendered := bytes.NewBuffer(nil)
-	if err := t.Execute(rendered, data); err != nil {
-		return nil, err
-	}
-	return rendered, nil
-}
-
-func _(w http.ResponseWriter, r *http.Request) {
+func ProjectsHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	projectName, ok := vars["name"]
-	idx, atoiErr := strconv.Atoi(projectName)
-	nameIsInt := atoiErr == nil
-
-	if nameIsInt {
-		if len(views.Projects) >= idx+1 {
-			projectName = views.Projects[idx].Name
-		} else {
-			projectName = views.Projects[0].Name
-		}
-	}
 
 	if !ok {
 		projectName = views.Projects[0].Name
@@ -91,32 +71,17 @@ func _(w http.ResponseWriter, r *http.Request) {
 
 	var p views.Project
 	for _, project := range views.Projects {
-		if project.Name == projectName {
+		if project.Path == projectName {
 			p = project
 			break
 		}
 	}
 	fmt.Println("Project: ", p)
 
-	tmpl, err := template.New("project").ParseFiles("public/html/partials/project.html")
+	tmpl := template.Must(template.ParseFiles("public/html/partials/project.html"))
+	err := tmpl.Execute(w, p)
 	if err != nil {
-		http.Error(w, "Failed to get partial", http.StatusInternalServerError)
-		return
+		fmt.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-
-	renderedProject, err := renderProject(tmpl, p)
-	if err != nil {
-		http.Error(w, "Failed to render project template", http.StatusInternalServerError)
-		return
-	}
-
-	parentTmpl, err := template.ParseFiles("public/html/templates/projects.html")
-	if err != nil {
-		http.Error(w, "Failed to get template", http.StatusInternalServerError)
-		return
-	}
-
-	fmt.Println("", renderedProject)
-
-	parentTmpl.Execute(w, renderedProject)
 }

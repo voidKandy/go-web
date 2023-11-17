@@ -35,8 +35,8 @@
   <div
     id="route-content"
     hx-trigger="load once"
-    hx-target="#route-content"
-    hx-swap="innerHtml"
+    hx-target="this"
+    hx-swap="innerHtml transition:true"
     hx-get="{{.Path}}{{.Params}}"
   ></div>
 
@@ -47,7 +47,7 @@
       class="landing-list"
       hx-trigger="getContent"
       hx-target="#route-content"
-      hx-swap="innerHtml"
+      hx-swap="innerHtml transition:true"
       hx-push-url="true"
     >
       <li

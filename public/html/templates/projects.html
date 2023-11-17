@@ -1,35 +1,108 @@
-{{ define "projects" }}
+<script type="text/hyperscript">
+  behavior ProjectListItem(path)
+      init
+          if path == '{{ .Path }}'
+          send select to me
+      end
+      on click
+          if I do not match .selected then
+              send select to me
+          end
+      end
+      on select
+          send reset to <li/> in closest parent <ul/>
+          send getContent to me
+          add .selected to me
+          wait for a reset
+          remove .selected from me
+      end
+  end
+</script>
+
 <style>
-  .project-nav-button {
-    background-color: transparent;
-    border-color: transparent;
-    transition: all 0.3s;
+  .project-list {
+    font-size: 3vw;
+    color: #2b2b2b;
+    margin: 5em 1em 0 0;
+    white-space: nowrap;
   }
-  .project-nav-button:hover {
-    transform: scale(1.1); /* Increase size on hover */
-    background-color: #2ecc71; /* Change background color on hover */
-    border-color: #2ecc71; /* Change border color on hover */
-    border-radius: 10px;
-    color: #fff; /* Change text color on hover */
+
+  .project-list li {
+    cursor: pointer;
+    transition:
+      transform 0.2s ease-in-out,
+      color 0.1s ease-in-out;
+  }
+
+  .project-list li.selected,
+  .project-list li:hover {
+    color: white;
+    transform: scale(105%);
+  }
+
+  .project-list li:has(+ li:hover),
+  .project-list li:hover + li {
+    color: #a7a7a7;
+    transform: scale(102%);
   }
 </style>
-<section class="container" hx-swap="innerHTML transition:true">
-  <div class="level is-flex is-justfify-content-space-between is-vcentered">
-    <button
-      class="level-left mx-4 project-nav-button has-text-warning-light material-symbols-outlined"
-      hx-trigger="click"
-      hx-get="/projects/2"
-    >
-      keyboard_double_arrow_left
-    </button>
-    <button
-      class="level-right mx-4 project-nav-button has-text-warning-light material-symbols-outlined"
-      hx-trigger="click"
-      hx-get="/projects/0"
-    >
-      keyboard_double_arrow_right
-    </button>
+
+<div
+  class="is-flex is-flex-direction-row is-justify-content-space-between page-transition"
+  _="on load
+        remove .page-transition from me
+    end
+    on htmx:trigger from .landing-list
+        add .page-transition to me
+    end"
+>
+  <div class="is-flex is-flex-direction-column">
+    <header class="is-flex is-flex-direction-column m-4">
+      <h1
+        class="mb-0 title has-text-weight-bold has-text-white-ter"
+        style="font-size: 10vw; cursor: pointer"
+        hx-get="/projects"
+        hx-select="#project-content"
+        hx-swap="innerHTML transition:true"
+        hx-target="#project-content"
+        hx-push-url="true"
+        _="
+            on click
+                send reset to <li/> in .project-list
+            end
+        "
+      >
+        Projects
+      </h1>
+      <hr style="color: white" />
+    </header>
+    <section id="project-content" class="m-4">CONTENt!</section>
   </div>
-  <div class="simple-transition" id="project-div"></div>
-</section>
-{{ end }}
+  <section class="project-list is-flex is-align-self-flex-end">
+    <ul
+      hx-target="#project-content"
+      hx-push-url="true"
+      hx-trigger="getContent"
+      hx-swap="innerHTML transition:true"
+    >
+      <li
+        _="install ProjectListItem(path: '/espoionox')"
+        hx-get="/projects/espionox"
+      >
+        Espionox
+      </li>
+      <li
+        _="install ProjectListItem(path: '/espoionox_demo')"
+        hx-get="/projects/espionox-demo"
+      >
+        Espionox Demo
+      </li>
+      <li
+        _="install ProjectListItem(path: '/showbeam')"
+        hx-get="/projects/showbeam"
+      >
+        Showbeam
+      </li>
+    </ul>
+  </section>
+</div>
