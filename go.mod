@@ -1,4 +1,4 @@
-module voidkandy-dot-dev
+module voidkandy-dot-space
 
 go 1.21.3
 

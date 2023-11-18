@@ -1,10 +1,10 @@
-{{ define "landing" }}
+{{ define "layout" }}
 <!-- add @hx-get='`path`' to me -->
 <script type="text/hyperscript">
   behavior LandingListItem(path)
       init
           set :c to my textContent
-          if path == '{{ .Path }}'
+          if '{{ .Path }}' includes path
           send select to me
       end
       on click
@@ -38,6 +38,7 @@
     hx-target="this"
     hx-swap="innerHtml transition:true"
     hx-get="{{.Path}}{{.Params}}"
+    style="overflow: auto"
   ></div>
 
   <footer
@@ -59,8 +60,8 @@
       </li>
       <li
         tabindex="1"
-        _="install LandingListItem(path: '/projects')"
-        hx-get="/projects"
+        _="install LandingListItem(path: '/projects/')"
+        hx-get="/projects/espionox"
       >
         /projects
       </li>

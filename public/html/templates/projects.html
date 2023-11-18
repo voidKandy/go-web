@@ -2,6 +2,7 @@
   behavior ProjectListItem(path)
       init
           if path == '{{ .Path }}'
+          wait 400ms then
           send select to me
       end
       on click
@@ -23,7 +24,7 @@
   .project-list {
     font-size: 3vw;
     color: #2b2b2b;
-    margin: 5em 1em 0 0;
+    margin-right: 2rem;
     white-space: nowrap;
   }
 
@@ -48,7 +49,7 @@
 </style>
 
 <div
-  class="is-flex is-flex-direction-row is-justify-content-space-between page-transition"
+  class="page-transition"
   _="on load
         remove .page-transition from me
     end
@@ -56,8 +57,8 @@
         add .page-transition to me
     end"
 >
-  <div class="is-flex is-flex-direction-column">
-    <header class="is-flex is-flex-direction-column m-4">
+  <header class="is-flex is-flex-direction-column m-4">
+    <div style="width: max-content">
       <h1
         class="mb-0 title has-text-weight-bold has-text-white-ter"
         style="font-size: 10vw; cursor: pointer"
@@ -75,34 +76,41 @@
         Projects
       </h1>
       <hr style="color: white" />
-    </header>
-    <section id="project-content" class="m-4">CONTENt!</section>
+    </div>
+  </header>
+  <div class="is-flex is-flex-direction-row is-justify-content-space-between">
+    <section id="project-content" class="m-4">
+      {{ template "project" . }}
+    </section>
+    <section class="project-list is-flex is-align-self-flex-start">
+      <ul
+        hx-target="#project-content"
+        hx-select="#project-content"
+        hx-push-url="true"
+        hx-swap="outerHTML transition:true"
+      >
+        <li
+          _="install ProjectListItem(path: 'espionox')"
+          hx-get="/projects/espionox"
+          hx-trigger="getContent"
+        >
+          Espionox
+        </li>
+        <li
+          _="install ProjectListItem(path: 'espionox-demo')"
+          hx-get="/projects/espionox-demo"
+          hx-trigger="getContent"
+        >
+          Espionox Demo
+        </li>
+        <li
+          _="install ProjectListItem(path: 'showbeam')"
+          hx-get="/projects/showbeam"
+          hx-trigger="getContent"
+        >
+          Showbeam
+        </li>
+      </ul>
+    </section>
   </div>
-  <section class="project-list is-flex is-align-self-flex-end">
-    <ul
-      hx-target="#project-content"
-      hx-push-url="true"
-      hx-trigger="getContent"
-      hx-swap="innerHTML transition:true"
-    >
-      <li
-        _="install ProjectListItem(path: '/espoionox')"
-        hx-get="/projects/espionox"
-      >
-        Espionox
-      </li>
-      <li
-        _="install ProjectListItem(path: '/espoionox_demo')"
-        hx-get="/projects/espionox-demo"
-      >
-        Espionox Demo
-      </li>
-      <li
-        _="install ProjectListItem(path: '/showbeam')"
-        hx-get="/projects/showbeam"
-      >
-        Showbeam
-      </li>
-    </ul>
-  </section>
 </div>

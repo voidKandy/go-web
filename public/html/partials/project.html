@@ -1,21 +1,32 @@
+{{ define "project" }}
 <style>
+  .project-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+  }
+
   .project-tag {
     font-size: 12px;
-    color: white;
+    color: #5e5e5e;
+  }
+
+  .project-tag.not-last::after {
+    content: "\00a0●\00a0";
+    color: #878787;
   }
 </style>
 
-<div class="is-flex is-flex-direction-column">
+<div class="is-flex is-flex-direction-column project-transition">
   <header
-    class="is-flex is-justify-content-space-between is-flex-direction-rows"
+    class="m-0 p-0 is-flex is-justify-content-space-between is-flex-direction-rows"
   >
-    <p class="is-flex title is-4 has-text-white">{{.Name}}</p>
-
+    <h2 class="is-flex project-name">{{.Name}}</h2>
     {{ if .Links.HasRepo }}
-    <a href="{{.Links.GitUrl}}">
+    <a href="{{.Links.GitUrl}}" class="is-flex is-align-items-center">
       <img
         src="/static/assets/github-mark/github-mark-white.svg"
-        class="is-clickable"
+        class="is-clickable m-0 p-0"
         alt="github-icon"
         width="20"
         height="20"
@@ -23,16 +34,26 @@
     </a>
     {{ end }}
   </header>
-
-  <p class="subtitle is-6">{{.Description}}</p>
   <ul class="is-flex-direction-row is-flex is-align-content-center">
-    <span class="dot">●</span>
-    {{range $index, $tag := .Tags}}
-    <span class="project-tag">{{$tag}}</span>
-    <span class="dot">●</span>
+    {{ $length := len .Tags }} {{range $index, $tag := .Tags}}
+    <span
+      class="project-tag"
+      _="
+      on load
+        if {{$index}} is less than {{$length}} - 1
+            add .not-last to me
+        end
+      end
+        "
+    >
+      {{$tag}}</span
+    >
     {{end}}
   </ul>
+
+  <p class="subtitle is-6 has-text-white">{{.Description}}</p>
   {{ if .Links.HasWebDemo }}
-  <a href="{{.Links.DemoUrl}}">Demo</a>
+  <a href="{{.Links.DemoUrl}}">Check out a demo</a>
   {{ end }}
 </div>
+{{ end }}

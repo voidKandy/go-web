@@ -35,6 +35,15 @@ html {
   transition: all 0.2s ease;
 }
 
+#spinny-switcher h1 {
+  position: absolute;
+  color: white;
+  font-size: 2em;
+  z-index: 2;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
 #spinny-switcher h1:hover {
   color: red;
   font-size: 2.1em;
@@ -51,25 +60,10 @@ html {
   opacity: 0;
 }
 
-#spinny-switcher h1::after {
-  content: "🎹";
-  opacity: 0;
-}
-
 #spinny-switcher h1:hover::after {
   content: "music_note";
   opacity: 1;
   visibility: visible;
-}
-
-#spinny-switcher h1 {
-  position: absolute;
-  transform: translateX(25%);
-  color: white;
-  font-size: 2em;
-  z-index: 2;
-  cursor: pointer;
-  transition: all 0.2s ease;
 }
 
 #spinny-switcher img {
