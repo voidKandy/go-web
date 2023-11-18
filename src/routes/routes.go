@@ -14,9 +14,8 @@ func InitializePageRoutes() {
 	r.HandleFunc("/", IndexHandler)
 	r.HandleFunc("/landing", LandingHandler)
 	r.HandleFunc("/about", AboutHandler)
-	// r.HandleFunc("/projects", ProjectsHandler)
 	r.HandleFunc("/projects/{name}", ProjectsHandler)
-	// r.HandleFunc("/musician", MusicHandler)
+	r.HandleFunc("/art", ArtHandler)
 	http.Handle("/", Middleware(r))
 }
 
@@ -30,7 +29,6 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LandingHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Hit it!")
 	tmpl := template.Must(template.ParseFiles("public/html/templates/landing.html"))
 
 	err := tmpl.Execute(w, nil)
@@ -40,7 +38,6 @@ func LandingHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AboutHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Hit about")
 	tmpl := template.Must(template.ParseFiles("public/html/templates/about.html"))
 
 	err := tmpl.Execute(w, nil)
@@ -49,14 +46,14 @@ func AboutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// func ProjectsHomeHandler(w http.ResponseWriter, r *http.Request) {
-// 	tmpl := template.Must(template.ParseFiles("public/html/templates/projects.html"))
-//
-// 	err := tmpl.Execute(w, nil)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 	}
-// }
+func ArtHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("public/html/templates/art.html"))
+
+	err := tmpl.Execute(w, nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
 
 func ProjectsHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

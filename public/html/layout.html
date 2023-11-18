@@ -34,10 +34,11 @@
 >
   <div
     id="route-content"
-    hx-trigger="load once"
+    hx-trigger="load"
     hx-target="this"
     hx-swap="innerHtml transition:true"
     hx-get="{{.Path}}{{.Params}}"
+    hx-push-url="true"
     style="overflow: auto"
   ></div>
 
@@ -45,10 +46,12 @@
     class="mx-4 my-2 is-flex is-flex-direction-row is-justify-content-space-between"
   >
     <ul
+      id="gone-for-art"
       class="landing-list"
       hx-trigger="getContent"
       hx-target="#route-content"
       hx-swap="innerHtml transition:true"
+      hx-swap-oob="true"
       hx-push-url="true"
     >
       <li
@@ -76,9 +79,15 @@
         /contact
       </li>
     </ul>
-    <div id="spinny-switcher">
-      <h1 class="material-symbols-outlined"></h1>
-      <img src="/static/assets/circular-text.svg" alt="SpinnyGuy" />
+    <div hx-swap-oob="true" id="spinny-switcher">
+      <h1
+        class="material-symbols-outlined"
+        hx-get="/art"
+        hx-target="#route-content"
+        hx-push-url="true"
+        hx-swap="innerHTML transition:true"
+      ></h1>
+      <img src="/static/assets/dev-text.svg" alt="SpinnyGuy" />
     </div>
   </footer>
 </div>

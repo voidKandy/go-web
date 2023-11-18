@@ -56,12 +56,24 @@ html {
   transition: all 0.2s ease-in-out;
 }
 
+#spinny-switcher h1.art::before {
+  content: "music_note";
+  opacity: 1;
+  transition: all 0.2s ease-in-out;
+}
+
 #spinny-switcher h1:hover::before {
   opacity: 0;
 }
 
 #spinny-switcher h1:hover::after {
   content: "music_note";
+  opacity: 1;
+  visibility: visible;
+}
+
+#spinny-switcher h1.art:hover::after {
+  content: "keyboard";
   opacity: 1;
   visibility: visible;
 }

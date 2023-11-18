@@ -16,7 +16,10 @@ func Middleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Hit middleware from", r.URL)
 		hxReq := r.Header.Get("Hx-Request")
-		if hxReq == "" {
+
+		hxTrig := r.Header.Get("Hx-Trigger")
+
+		if hxReq == "" || hxTrig == "switch-from-art" {
 			// Non-Hx-Request detected, extract path and params from the request URL
 			urlParts := strings.Split(r.URL.String(), "?")
 			fmt.Println("Url Parts: ", urlParts)
