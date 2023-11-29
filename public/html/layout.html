@@ -47,7 +47,7 @@
   >
     <ul
       id="gone-for-art"
-      class="landing-list"
+      class="is-flex is-flex-direction-column landing-list is-justify-content-center"
       hx-trigger="getContent"
       hx-target="#route-content"
       hx-swap="innerHtml transition:true"
@@ -75,7 +75,11 @@
       >
         /about
       </li>
-      <li tabindex="3" _="install LandingListItem(path: '/contact')">
+      <li
+        tabindex="3"
+        _="install LandingListItem(path: '/contact')"
+        hx-get="/contact"
+      >
         /contact
       </li>
     </ul>

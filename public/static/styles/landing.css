@@ -6,6 +6,7 @@
 
 :root {
   --bgGradient: linear-gradient(265deg, #3d077f, #070d7f);
+  --secondaryColor: #e7c7ff;
 }
 
 html,
@@ -37,15 +38,15 @@ html {
 
 #spinny-switcher h1 {
   position: absolute;
-  color: white;
   font-size: 2em;
   z-index: 2;
   cursor: pointer;
   transition: all 0.2s ease;
+  color: var(--secondaryColor);
 }
 
 #spinny-switcher h1:hover {
-  color: red;
+  color: white;
   font-size: 2.1em;
   transform: translateX(-25%);
 }
@@ -91,7 +92,7 @@ html {
 }
 
 [tabindex]:focus {
-  color: #ff00c8;
+  color: #ffffff;
 }
 
 .material-symbols-outlined {
@@ -144,7 +145,7 @@ html {
   transition:
     color 0.3s ease,
     transform 0.3s ease;
-  color: white;
+  color: var(--secondaryColor);
 }
 
 .landing-list li:hover {

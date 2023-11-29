@@ -1,0 +1,84 @@
+<style>
+  .contact h1 {
+    color: white;
+    font-size: 5em;
+    margin: 3rem 0;
+    font-weight: 400;
+  }
+
+  .contact form input[type="submit"] {
+    background-color: #1c1c1c;
+    color: white;
+    cursor: pointer;
+    border: 1px solid #ffff;
+  }
+
+  .contact form textarea {
+    resize: none;
+  }
+</style>
+
+<div
+  class="is-flex contact is-flex-direction-column m-2 page-transition"
+  style="height: 100%"
+>
+  <div
+    class="is-flex is-flex-direction-column is-align-self-center is-justify-content-space-between"
+  >
+    <h1>Get in contact</h1>
+
+    <div class="m-4">
+      <form
+        class="is-flex is-flex-direction-column has-text-white"
+        action="#"
+        method="post"
+      >
+        <label for="email">Your Email:</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required />
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+
+        <input class="my-5" type="submit" value="Submit" />
+      </form>
+    </div>
+
+    <div class="is-flex is-justify-content-space-between">
+      <h2
+        class="is-flex has-text-white is-justify-content-center is-align-items-center"
+      >
+        Follow me ------▶︎
+      </h2>
+
+      <div class="m-4 is-flex is-flex-direction-row">
+        <a
+          href="https://github.com/voidKandy"
+          class="is-flex is-align-items-center"
+        >
+          <img
+            src="/static/assets/github-mark/github-mark-white.svg"
+            class="is-clickable mr-2 p-0"
+            alt="github-icon"
+            width="20"
+            height="20"
+          />
+        </a>
+        <a
+          href="https://twitter.com/KandyVoid"
+          class="is-flex is-align-items-center"
+        >
+          <img
+            src="/static/assets/twitter-logo/logo.svg"
+            class="is-clickable m-0 p-0"
+            alt="twitter-icon"
+            width="20"
+            height="20"
+          />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

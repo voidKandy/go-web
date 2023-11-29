@@ -14,6 +14,7 @@ func InitializePageRoutes() {
 	r.HandleFunc("/", IndexHandler)
 	r.HandleFunc("/landing", LandingHandler)
 	r.HandleFunc("/about", AboutHandler)
+	r.HandleFunc("/contact", ContactHandler)
 	r.HandleFunc("/projects/{name}", ProjectsHandler)
 	r.HandleFunc("/art", ArtHandler)
 	http.Handle("/", Middleware(r))
@@ -39,6 +40,15 @@ func LandingHandler(w http.ResponseWriter, r *http.Request) {
 
 func AboutHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("public/html/templates/about.html"))
+
+	err := tmpl.Execute(w, nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func ContactHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("public/html/templates/contact.html"))
 
 	err := tmpl.Execute(w, nil)
 	if err != nil {

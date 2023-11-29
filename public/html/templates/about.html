@@ -1,17 +1,30 @@
 <style>
   .about p {
-    color: #a6a6a6;
+    color: white;
   }
+
   .about h1 {
     color: white;
-    font-size: 2em;
-  }
-  .about h2 {
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    color: white;
     font-size: 3em;
-    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  .about section {
+    margin: 5rem 15rem;
+  }
+
+  .about ul {
+    list-style: none;
+  }
+
+  .about li {
+    color: white;
+    margin-left: 2rem;
+  }
+
+  .about li::before {
+    content: "•";
+    margin-right: 0.5rem;
   }
 </style>
 
@@ -20,23 +33,36 @@
   style="height: 100%"
 >
   <div class="is-flex is-flex-direction-column">
-    <h1>It started with music</h1>
-    <p>
-      As soon as I graduated highschool in 2018 my life revolved around making
-      music. I was a full time artist, producer and manager; I released albums,
-      played shows and did all my own marketing.
-    </p>
-    <br />
-    <p>But in 2022 I discovered Programming.</p>
-    <br />
-    <p>
-      Since then, I've been an intern at a small startup, I've written my own
-      library in Rust, I am a junior in every sense of the word, but as someone
-      with extensive workplace experience outside of tech, I have more soft
-      skills than I think most junior developers at my experience level. I am
-      eager to learn and apply myself to a project I care about and work with a
-      team I can learn from.
-    </p>
+    <div
+      class="is-flex is-flex-direction-column is-align-self-center is-align-items-center mt-1"
+    >
+      <h1>My name is Ezra Klitsie</h1>
+      <p>(aka. voidkandy)</p>
+    </div>
+    <section>
+      <p>
+        I spent 5 years as a full time musician, but since 2022 I've been
+        completely engrossed in software:
+      </p>
+      <ul class="mb-4 mt-2">
+        <li>I was an intern at a small startup called LoveTogether</li>
+        <!-- prettier-ignore -->
+        <li>I'm the core writer and maintainer of my own LangChain-like Rust
+          library; Espionox
+        </li>
+        <!-- prettier-ignore -->
+        <li>I've built/maintained multiple websites using Svelte/React/Htmx</li>
+        <li>I've trained / fine-tuned my own machine learning models</li>
+      </ul>
+      <p>
+        Though I am not enrolled in any institution, I consider myself a full
+        time student. Since March of 2022 I've been studying software
+        architecture design, applied AI, and web design. I have a lot to learn
+        in the realm of software but I believe I'm ready to join a team of
+        developers, and as someone with nearly a decade of experience in the
+        service industry, I may possess more soft skills than other developers
+        fresh out of University.
+      </p>
+    </section>
   </div>
-  <h2 class="pl-5 title">? What is voidkandy ?</h2>
 </div>
