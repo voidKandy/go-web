@@ -62,18 +62,20 @@ func ArtHandler(w http.ResponseWriter, r *http.Request) {
 	if playing == "" {
 		playing = "sgitf"
 	}
+	currentSong, _ := views.FilterSongsByAudioName(playing)
 
-	tmpl := template.Must(template.ParseFiles("public/html/templates/art.html", "public/html/partials/album-images.html", "public/html/partials/song-player.html"))
+	tmpl := template.Must(template.ParseFiles("public/html/templates/art.html", "public/html/partials/song-player.html", "public/html/partials/album-images.html"))
 
 	type ArtPageInfo struct {
-		Images      []views.AlbumImage
-		CurrentSong string
+		AllSongs    []views.SongInfo
+		CurrentSong views.SongInfo
 	}
 
-	info := ArtPageInfo{Images: views.AlbumImages, CurrentSong: playing}
+	info := ArtPageInfo{AllSongs: views.SongInfos, CurrentSong: currentSong}
 
 	err := tmpl.Execute(w, info)
 	if err != nil {
+		fmt.Println("ERR: ", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

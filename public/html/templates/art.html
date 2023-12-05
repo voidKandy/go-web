@@ -9,6 +9,46 @@
     animation: kenBurns 200s infinite linear alternate;
   }
 
+  .listen {
+    margin-top: 7em;
+  }
+
+  .listen h1 {
+    font-size: 1rem;
+    color: white;
+    border-bottom: 0.5px dotted white;
+  }
+
+  .listen a {
+    margin-right: 0.4rem;
+    margin-left: 0.4rem;
+  }
+  .listen img {
+    transition: all ease-in-out 200ms;
+  }
+
+  .listen img:hover {
+    transform: scale(1.08);
+  }
+
+  .song-list h1 {
+    font-size: 3rem;
+    color: white;
+    border-bottom: 0.5px dotted white;
+  }
+
+  .song-list h2 {
+    font-size: 1rem;
+    color: var(--secondaryColor);
+    transition: all ease-in-out 150ms;
+  }
+
+  .song-list h2:hover {
+    transform: scale(1.02);
+    cursor: pointer;
+    color: grey;
+  }
+
   #audio {
     filter: invert(100%);
     mix-blend-mode: difference;
@@ -22,15 +62,13 @@
   #album-slide-container {
     width: auto;
     white-space: nowrap;
-    overflow: hidden;
-    position: relative;
   }
 
   .full-album-slide {
     gap: 10%;
-    overflow: hidden;
+    overflow: visible;
     width: 100%;
-    animation: albumSlideAnimation 150s linear infinite;
+    animation: albumSlideAnimation 180s linear infinite;
   }
 
   .full-album-slide img {
@@ -40,7 +78,8 @@
   }
 
   .full-album-slide img:hover {
-    transform: scale(1.08);
+    cursor: pointer;
+    transform: scale(1.01);
   }
 
   @keyframes kenBurns {
@@ -74,39 +113,91 @@
 
 <div id="background" class="art" hx-swap-oob="true"></div>
 <div id="footer-left" hx-swap-oob="true">
-  <div
-    <!-- hx-get="?song={{.CurrentSong}}" -->
-    <!-- hx-select="#footer-left" -->
-    <!-- hx-replace-url="true" -->
-    <!-- hx-trigger="load" -->
-  >
-    {{ template "song-player" . }}
-  </div>
+  <div id="song-player">{{ template "song-player" . }}</div>
 </div>
 
 <div id="art-content" class="page-transition">
-  <div
-    id="album-slide-container"
-    class="is-flex is-flex-direction-column is-justify-content-center"
-  >
-    <div class="full-album-slide is-flex is-flex-direction-column">
-      {{ template "album-images" . }}
+  <div class="is-flex is-flex-direction-row is-justify-content-space-between">
+    <div
+      id="album-slide-container"
+      class="is-flex is-flex-direction-column is-justify-content-center"
+    >
+      <div class="full-album-slide flex-grow is-flex is-flex-direction-column">
+        {{ template "album-images" . }}
+      </div>
+      <div class="full-album-slide is-flex is-flex-direction-column">
+        {{ template "album-images" . }}
+      </div>
     </div>
-    <div class="full-album-slide is-flex is-flex-direction-column">
-      {{ template "album-images" . }}
+    <div class="mr-5 ml-3 my-2 is-flex is-flex-direction-column">
+      <div class="song-list">
+        <h1>△⁍⍝ß</h1>
+        {{ range .AllSongs }} {{ if .AudioName }}
+        <h2
+          hx-get="?song={{.AudioName}}"
+          hx-push-url="true"
+          hx-select="#song-player"
+          hx-target="#song-player"
+          hx-swap="innerHTML"
+        >
+          {{.Name}}
+        </h2>
+        {{ end }} {{ end }}
+      </div>
+      <div class="is-align-self-flex-end listen">
+        <h1>Listen to more</h1>
+        <div
+          class="m-2 is-flex is-flex-direction-row is-justify-content-space-evenly is-align-items-center"
+        >
+          <a
+            href="https://open.spotify.com/artist/19BbMfHJwXYA8zKWAs8cel?si=G4H6q3RNTiKU8OcWtUk0rg"
+          >
+            <img
+              src="/static/assets/streaming-logos/spotify-logo.svg"
+              width="20rem"
+              style="filter: invert(100%)"
+              alt="SpotifyLogo"
+            />
+          </a>
+          <a href="https://music.apple.com/us/artist/void-kandy/1517903121">
+            <img
+              src="/static/assets/streaming-logos/apple-logo.svg"
+              width="20rem"
+              style="filter: invert(100%)"
+              alt="AppleLogo"
+            />
+          </a>
+          <a
+            href="https://voidkandy.bandcamp.com/?from=search&search_item_id=3990916999&search_item_type=b&search_match_part=?&search_page_id=3011954228&search_page_no=1&search_rank=3&search_sig=62ec632d0b1dd1a0a90e1bde5b7139d3"
+          >
+            <img
+              src="/static/assets/streaming-logos/bandcamp-logo.png"
+              width="20rem"
+              alt="BandCampLogo"
+            />
+          </a>
+          <a href="https://www.youtube.com/@Voidkandy">
+            <img
+              src="/static/assets/streaming-logos/youtube-logo.svg"
+              width="20rem"
+              style="filter: invert(100%)"
+              alt="YoutubeLogo"
+            />
+          </a>
+        </div>
+      </div>
     </div>
-  </div>
-  <!-- <div class="is-flex is-align-self-flex-end">Info!</div> -->
-  <div hx-swap-oob="true" id="spinny-switcher">
-    <h1
-      id="switch-from-art"
-      class="art material-symbols-outlined"
-      hx-get="/"
-      hx-target="#art-content"
-      hx-select="#route-content"
-      hx-push-url="true"
-      hx-swap="outerHTML transition:true"
-    ></h1>
-    <img src="/static/assets/musician-text.svg" alt="SpinnyGuy" />
+    <div hx-swap-oob="true" id="spinny-switcher">
+      <h1
+        id="switch-from-art"
+        class="art material-symbols-outlined"
+        hx-get="/"
+        hx-target="#art-content"
+        hx-select="#route-content"
+        hx-push-url="true"
+        hx-swap="outerHTML transition:true"
+      ></h1>
+      <img src="/static/assets/musician-text.svg" alt="SpinnyGuy" />
+    </div>
   </div>
 </div>

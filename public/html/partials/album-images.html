@@ -1,3 +1,14 @@
-{{define "album-images"}} {{range .Images}}
+{{define "album-images"}} {{range .AllSongs}} {{if .Url}} {{if .AudioName}}
+<img
+  src="{{.Url}}"
+  alt="{{.Name}}"
+  hx-get="?song={{.AudioName}}"
+  hx-push-url="true"
+  hx-swap="innerHTML"
+  hx-select="#song-player"
+  hx-target="#song-player"
+/>
+{{else}}
+
 <img src="{{.Url}}" alt="{{.Name}}" />
-{{end}}{{end}}
+{{end}} {{end}} {{end}} {{end}}
