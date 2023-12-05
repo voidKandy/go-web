@@ -1,0 +1,10 @@
+{{define "song-player"}}
+<h1>{{.CurrentSong}}</h1>
+<audio id="audio" controls>
+  <source
+    src="/static/assets/art/songs/{{.CurrentSong}}.wav"
+    type="audio/wav"
+  />
+  Your browser does not support the audio element.
+</audio>
+{{end}}

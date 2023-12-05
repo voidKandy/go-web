@@ -57,9 +57,22 @@ func ContactHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ArtHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("public/html/templates/art.html"))
+	queryParams := r.URL.Query()
+	playing := queryParams.Get("song")
+	if playing == "" {
+		playing = "sgitf"
+	}
 
-	err := tmpl.Execute(w, nil)
+	tmpl := template.Must(template.ParseFiles("public/html/templates/art.html", "public/html/partials/album-images.html", "public/html/partials/song-player.html"))
+
+	type ArtPageInfo struct {
+		Images      []views.AlbumImage
+		CurrentSong string
+	}
+
+	info := ArtPageInfo{Images: views.AlbumImages, CurrentSong: playing}
+
+	err := tmpl.Execute(w, info)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

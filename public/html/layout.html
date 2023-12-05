@@ -25,7 +25,7 @@
   end
 </script>
 
-<div class="noise-bg">
+<div id="background" hx-swap-oob="true" class="noise-bg">
   <div class="noise-slide"></div>
   <div class="noise-slide"></div>
 </div>
@@ -42,16 +42,17 @@
     style="overflow: auto"
   ></div>
 
-  <footer
+  <div
+    hx-swap="outerHTML"
     class="mx-4 my-2 is-flex is-flex-direction-row is-justify-content-space-between"
   >
     <ul
-      id="gone-for-art"
+      id="footer-left"
+      hx-swap-oob="true"
       class="is-flex is-flex-direction-column landing-list is-justify-content-center"
       hx-trigger="getContent"
       hx-target="#route-content"
       hx-swap="innerHtml transition:true"
-      hx-swap-oob="true"
       hx-push-url="true"
     >
       <li
@@ -93,6 +94,6 @@
       ></h1>
       <img src="/static/assets/dev-text.svg" alt="SpinnyGuy" />
     </div>
-  </footer>
+  </div>
 </div>
 {{ end }}

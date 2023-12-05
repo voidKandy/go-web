@@ -1,6 +1,102 @@
+<style>
+  #background.art {
+    background-image: url("/static/assets/art/live-1.jpg");
+    height: 100%;
+    background-size: 200%; /* Adjust as needed */
+    background-position: 25% 25%; /* Adjust as needed */
+    background-repeat: no-repeat; /* Adjust as needed */
+    /* Other background-related properties can be added here */
+    animation: kenBurns 200s infinite linear alternate;
+  }
+
+  #audio {
+    filter: invert(100%);
+    mix-blend-mode: difference;
+  }
+
+  #art-content {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  #album-slide-container {
+    width: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .full-album-slide {
+    gap: 10%;
+    overflow: hidden;
+    width: 100%;
+    animation: albumSlideAnimation 150s linear infinite;
+  }
+
+  .full-album-slide img {
+    margin: 3% 0 2.5% 2.5%;
+    width: 75vh;
+    transition: all ease-in-out 400ms;
+  }
+
+  .full-album-slide img:hover {
+    transform: scale(1.08);
+  }
+
+  @keyframes kenBurns {
+    0% {
+      background-position: 75% 25%;
+      background-size: 200%; /* Adjust as needed */
+    }
+    25% {
+      background-position: 45% 75%;
+      background-size: 300%; /* Adjust as needed */
+    }
+    75% {
+      background-position: 25% 15%;
+      background-size: 250%; /* Adjust as needed */
+    }
+    100% {
+      background-position: 90% 75%; /* Adjust as needed */
+      background-size: 200%; /* Adjust as needed */
+    }
+  }
+
+  @keyframes albumSlideAnimation {
+    from {
+      transform: translateY(0%);
+    }
+    to {
+      transform: translateY(-100%);
+    }
+  }
+</style>
+
+<div id="background" class="art" hx-swap-oob="true"></div>
+<div id="footer-left" hx-swap-oob="true">
+  <div
+    <!-- hx-get="?song={{.CurrentSong}}" -->
+    <!-- hx-select="#footer-left" -->
+    <!-- hx-replace-url="true" -->
+    <!-- hx-trigger="load" -->
+  >
+    {{ template "song-player" . }}
+  </div>
+</div>
+
 <div id="art-content" class="page-transition">
-  <h1>Music</h1>
-  <div hx-swap-oob="true" id="gone-for-art"></div>
+  <div
+    id="album-slide-container"
+    class="is-flex is-flex-direction-column is-justify-content-center"
+  >
+    <div class="full-album-slide is-flex is-flex-direction-column">
+      {{ template "album-images" . }}
+    </div>
+    <div class="full-album-slide is-flex is-flex-direction-column">
+      {{ template "album-images" . }}
+    </div>
+  </div>
+  <!-- <div class="is-flex is-align-self-flex-end">Info!</div> -->
   <div hx-swap-oob="true" id="spinny-switcher">
     <h1
       id="switch-from-art"
