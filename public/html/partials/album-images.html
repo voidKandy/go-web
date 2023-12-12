@@ -2,10 +2,9 @@
 <img
   src="{{.Url}}"
   alt="{{.Name}}"
-  hx-get="?song={{.AudioName}}"
-  hx-push-url="true"
+  hx-get="/player/{{.AudioName}}"
+  hx-push-url="?song={{.AudioName}}"
   hx-swap="innerHTML"
-  hx-select="#song-player"
   hx-target="#song-player"
 />
 {{else}}

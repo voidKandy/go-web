@@ -1,0 +1,61 @@
+<style>
+  form button[type="submit"] {
+    background-color: #1c1c1c;
+    color: white;
+    cursor: pointer;
+    height: 1rem;
+    width: 5rem;
+    border: 1px solid #ffff;
+  }
+
+  .contact form textarea {
+    resize: none;
+  }
+</style>
+
+<div class="m-4" id="email-div">
+  <form
+    class="is-flex is-flex-direction-column has-text-white"
+    hx-post="/email"
+    hx-push-url="false"
+    hx-target="closest <div/>"
+    hx-swap="outerHTML transition:false"
+  >
+    <label for="email">Your Email:</label>
+    <input type="email" id="email" name="email" required />
+
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" name="subject" required />
+
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" rows="4" required></textarea>
+
+    {{if .IsGet}}
+    <button
+      class="my-5 px-4 py-3 button is-align-self-center"
+      type="submit"
+      id="submit-button"
+      _="on htmx:trigger from closest <form/> 
+          blur() me
+          add .is-loading to me
+         end "
+    >
+      Send
+    </button>
+    {{else}}
+    <button
+      class="my-5 px-4 py-3 button is-align-self-center"
+      type="submit"
+      hx-get="/email"
+      hx-trigger="Reset"
+      hx-select="#submit-button"
+      hx-target="this"
+      hx-swap="outerHTML"
+      id="submit-button"
+      _="on load wait 2s then send Reset to me"
+    >
+      {{if .IsPostSuccess}} Success! {{else}} Failure {{end}}
+    </button>
+    {{end}}
+  </form>
+</div>

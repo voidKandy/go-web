@@ -147,8 +147,10 @@ html {
 
 .landing-list li:hover {
   color: grey;
+  transform: scale(1.21);
 }
 
 .landing-list li.selected {
+  transform: scale(1.21);
   color: white;
 }

@@ -68,7 +68,7 @@
     gap: 10%;
     overflow: visible;
     width: 100%;
-    animation: albumSlideAnimation 180s linear infinite;
+    animation: albumSlideAnimation 185s linear infinite;
   }
 
   .full-album-slide img {
@@ -112,9 +112,6 @@
 </style>
 
 <div id="background" class="art" hx-swap-oob="true"></div>
-<div id="footer-left" hx-swap-oob="true">
-  <div id="song-player">{{ template "song-player" . }}</div>
-</div>
 
 <div id="art-content" class="page-transition">
   <div class="is-flex is-flex-direction-row is-justify-content-space-between">
@@ -129,14 +126,16 @@
         {{ template "album-images" . }}
       </div>
     </div>
-    <div class="mr-5 ml-3 my-2 is-flex is-flex-direction-column">
+
+    <div
+      class="mr-5 ml-3 my-2 is-flex is-flex-direction-column has-text-centered"
+    >
       <div class="song-list">
         <h1>△⁍⍝ß</h1>
         {{ range .AllSongs }} {{ if .AudioName }}
         <h2
-          hx-get="?song={{.AudioName}}"
-          hx-push-url="true"
-          hx-select="#song-player"
+          hx-get="/player/{{.AudioName}}"
+          hx-push-url="?song={{.AudioName}}"
           hx-target="#song-player"
           hx-swap="innerHTML"
         >
@@ -144,6 +143,7 @@
         </h2>
         {{ end }} {{ end }}
       </div>
+
       <div class="is-align-self-flex-end listen">
         <h1>Listen to more</h1>
         <div
@@ -187,7 +187,8 @@
         </div>
       </div>
     </div>
-    <div hx-swap-oob="true" id="spinny-switcher">
+
+    <div hx-swap-oob="true" id="spinny-switcher" class="is-align-self-center">
       <h1
         id="switch-from-art"
         class="art material-symbols-outlined"
@@ -200,4 +201,15 @@
       <img src="/static/assets/musician-text.svg" alt="SpinnyGuy" />
     </div>
   </div>
+</div>
+<div id="footer-left" hx-swap-oob="true">
+  <div
+    id="song-player"
+    class="song-player-transition"
+    hx-get="/player/{{.CurrentSong.AudioName}}"
+    hx-push-url="?song={{.CurrentSong.AudioName}}"
+    hx-trigger="load once"
+    hx-target="#song-player"
+    hx-swap="innerHTML"
+  ></div>
 </div>

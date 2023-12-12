@@ -12,7 +12,7 @@ type PageVariables struct {
 	Params string
 }
 
-func Middleware(h http.Handler) http.Handler {
+func middleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Hit middleware from", r.URL)
 		hxReq := r.Header.Get("Hx-Request")

@@ -4,7 +4,7 @@
   behavior LandingListItem(path)
       init
           set :c to my textContent
-          if '{{ .Path }}' includes path
+          if '{{ .Path }}' includes path or pathname of the location of the window includes path
           send select to me
       end
       on click
@@ -39,7 +39,7 @@
     hx-swap="innerHtml transition:true"
     hx-get="{{.Path}}{{.Params}}"
     hx-push-url="true"
-    style="overflow: auto"
+    style="overflow-y: auto; overflow-x: hidden"
   ></div>
 
   <div
@@ -87,7 +87,7 @@
     <div hx-swap-oob="true" id="spinny-switcher">
       <h1
         class="material-symbols-outlined"
-        hx-get="/art"
+        hx-get="/art?song=sgitf"
         hx-target="#route-content"
         hx-push-url="true"
         hx-swap="innerHTML transition:true"
