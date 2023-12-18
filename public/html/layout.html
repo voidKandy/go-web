@@ -2,7 +2,8 @@
 <!-- add @hx-get='`path`' to me -->
 <script type="text/hyperscript">
   behavior LandingListItem(path)
-      init
+      on load
+          add .clickable to me
           set :c to my textContent
           if '{{ .Path }}' includes path or pathname of the location of the window includes path
           send select to me
@@ -86,7 +87,8 @@
     </ul>
     <div hx-swap-oob="true" id="spinny-switcher">
       <h1
-        class="material-symbols-outlined"
+        class="material-symbols-outlined clickable"
+        hx-trigger="click delay:100ms"
         hx-get="/art?song=sgitf"
         hx-target="#route-content"
         hx-push-url="true"

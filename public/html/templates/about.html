@@ -5,12 +5,9 @@
 
   .about h1 {
     color: white;
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 600;
-  }
-
-  .about a {
-    color: var(--secondaryColor);
+    text-align: center;
   }
 
   .about section {
@@ -32,18 +29,15 @@
   }
 </style>
 
-<div
-  class="is-flex about is-flex-direction-row m-2 page-transition"
-  style="height: 100%; width: 100vw"
->
+<div class="about m-2 page-transition">
   <div class="is-flex is-flex-direction-column">
     <div
-      class="is-flex is-flex-direction-column is-align-self-center is-align-items-center mt-1"
+      class="is-flex is-flex-direction-column is-align-self-center is-align-content-center mt-1"
     >
-      <h1>My name is Ezra Klitsie</h1>
-      <p>(aka. voidkandy)</p>
+      <h1 class="is-align-self-center">My name is Ezra Klitsie</h1>
+      <p class="is-align-self-center mt-1">(aka. voidkandy)</p>
     </div>
-    <section>
+    <div class="mx-3 my-4">
       <p>
         I spent 5 years as a full time musician, but in 2022 I discovered a
         passion for software:
@@ -51,11 +45,11 @@
       <ul class="mb-4 mt-2">
         <!-- prettier-ignore -->
         <li>I was an intern at a small startup,
-          <a href="https://www.love-together.com/">Love-Together</a> 
+          <a class='clickable' href="https://www.love-together.com/">Love-Together</a> 
         </li>
         <!-- prettier-ignore -->
         <li>I'm the core writer and maintainer of my own LangChain inspired Rust
-            library, <a href="https://github.com/voidKandy/espionox_lib">Espionox</a>
+            library, <a class='clickable' href="https://github.com/voidKandy/espionox_lib">Espionox</a>
         </li>
         <!-- prettier-ignore -->
         <li>I've built / maintained multiple websites using Svelte/React/Htmx</li>
@@ -63,13 +57,15 @@
       </ul>
       <p>
         Since delving into software, I've been
-        <a href="https://voidkandy.substack.com/">keeping a blog</a>
+        <a class="clickable" href="https://voidkandy.substack.com/"
+          >keeping a blog</a
+        >
         of my progress. Despite not being enrolled in any institution, I
         approach my learning as a full-time student. I'm driven completely by a
         deep desire to improve myself and my skills in anything I find
         interesting. I'm most drawn to developing tool driven by AI agents,
         though I've also been known to dabble in web development.<br />
       </p>
-    </section>
+    </div>
   </div>
 </div>

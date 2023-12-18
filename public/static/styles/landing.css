@@ -6,7 +6,7 @@
 
 :root {
   --bgGradient: linear-gradient(265deg, #3d077f, #070d7f);
-  --secondaryColor: #e7c7ff;
+  --secondaryColor: #d632ff;
 }
 
 html,
@@ -22,6 +22,22 @@ body {
 
 html {
   background-color: #1c1c1c;
+}
+
+.clickable {
+  color: #d8d8d8;
+  text-shadow: 1px 1px 1px var(--secondaryColor);
+}
+
+.clickable:hover {
+  cursor: pointer;
+  color: grey;
+  transform: scale(1.11);
+}
+
+.clickable.selected {
+  transform: scale(1.11);
+  color: white;
 }
 
 #spinny-switcher {
@@ -42,41 +58,51 @@ html {
   z-index: 2;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: var(--secondaryColor);
 }
 
-#spinny-switcher h1:hover {
-  color: white;
-  font-size: 2.1em;
-  transform: translateX(-25%);
+@media (max-width: 768px) {
+  #spinny-switcher h1:before {
+    content: "keyboard";
+  }
+  #spinny-switcher h1.art:before {
+    content: "music_note";
+  }
 }
 
-#spinny-switcher h1::before {
-  content: "keyboard";
-  opacity: 1;
-  transition: all 0.2s ease-in-out;
-}
+@media (min-width: 768px) {
+  #spinny-switcher h1:hover {
+    color: white;
+    font-size: 2.1em;
+    transform: translateX(-25%);
+  }
 
-#spinny-switcher h1.art::before {
-  content: "music_note";
-  opacity: 1;
-  transition: all 0.2s ease-in-out;
-}
+  #spinny-switcher h1::before {
+    content: "keyboard";
+    opacity: 1;
+    transition: all 0.2s ease-in-out;
+  }
 
-#spinny-switcher h1:hover::before {
-  opacity: 0;
-}
+  #spinny-switcher h1.art::before {
+    content: "music_note";
+    opacity: 1;
+    transition: all 0.2s ease-in-out;
+  }
 
-#spinny-switcher h1:hover::after {
-  content: "music_note";
-  opacity: 1;
-  visibility: visible;
-}
+  #spinny-switcher h1:hover::before {
+    opacity: 0;
+  }
 
-#spinny-switcher h1.art:hover::after {
-  content: "keyboard";
-  opacity: 1;
-  visibility: visible;
+  #spinny-switcher h1:hover::after {
+    content: "music_note";
+    opacity: 1;
+    visibility: visible;
+  }
+
+  #spinny-switcher h1.art:hover::after {
+    content: "keyboard";
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
 #spinny-switcher img {
@@ -142,15 +168,4 @@ html {
   transition:
     color 0.3s ease,
     transform 0.3s ease;
-  color: var(--secondaryColor);
-}
-
-.landing-list li:hover {
-  color: grey;
-  transform: scale(1.21);
-}
-
-.landing-list li.selected {
-  transform: scale(1.21);
-  color: white;
 }

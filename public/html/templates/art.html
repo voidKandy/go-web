@@ -1,12 +1,21 @@
 <style>
   #background.art {
     background-image: url("/static/assets/art/live-1.jpg");
-    height: 100%;
+    min-height: 125%;
     background-size: 200%; /* Adjust as needed */
-    background-position: 25% 25%; /* Adjust as needed */
     background-repeat: no-repeat; /* Adjust as needed */
+    background-position: 75% 75%;
     /* Other background-related properties can be added here */
     animation: kenBurns 200s infinite linear alternate;
+  }
+
+  @media only screen and (max-width: 767px) {
+    #background.art {
+      background-image: url("/static/assets/art/live-mobile.jpg");
+    }
+    #song-player audio {
+      width: 50vw;
+    }
   }
 
   .listen {
@@ -23,6 +32,7 @@
     margin-right: 0.4rem;
     margin-left: 0.4rem;
   }
+
   .listen img {
     transition: all ease-in-out 200ms;
   }
@@ -39,14 +49,7 @@
 
   .song-list h2 {
     font-size: 1rem;
-    color: var(--secondaryColor);
     transition: all ease-in-out 150ms;
-  }
-
-  .song-list h2:hover {
-    transform: scale(1.02);
-    cursor: pointer;
-    color: grey;
   }
 
   #audio {
@@ -127,9 +130,7 @@
       </div>
     </div>
 
-    <div
-      class="mr-5 ml-3 my-2 is-flex is-flex-direction-column has-text-centered"
-    >
+    <div class="mx-5 my-2 is-flex is-flex-direction-column has-text-centered">
       <div class="song-list">
         <h1>△⁍⍝ß</h1>
         {{ range .AllSongs }} {{ if .AudioName }}
@@ -138,6 +139,27 @@
           hx-push-url="?song={{.AudioName}}"
           hx-target="#song-player"
           hx-swap="innerHTML"
+          class="clickable"
+          _="
+             on load
+                 set :search to search of the location of the window 
+                 if :search includes '{{.AudioName}}'
+                    send select to me
+                 end
+             end 
+             on click
+                if I do not match .selected
+                    send select to me
+                end
+             end
+             on select 
+                send reset to <h2/> in closest parent <div/>
+                add .selected to me
+                wait for reset
+             end
+             on reset
+                remove .selected from me
+             end"
         >
           {{.Name}}
         </h2>
@@ -191,9 +213,10 @@
     <div hx-swap-oob="true" id="spinny-switcher" class="is-align-self-center">
       <h1
         id="switch-from-art"
-        class="art material-symbols-outlined"
+        class="art material-symbols-outlined clickable"
         hx-get="/"
         hx-target="#art-content"
+        hx-trigger="click delay:200ms"
         hx-select="#route-content"
         hx-push-url="true"
         hx-swap="outerHTML transition:true"

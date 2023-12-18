@@ -2,8 +2,9 @@
   behavior ProjectListItem(path)
       init
           if path == '{{ .Path }}'
-          wait 400ms then
-          send select to me
+          add .selected to me
+          wait for a reset
+          remove .selected from me
       end
       on click
           if I do not match .selected then
@@ -62,16 +63,6 @@
       <h1
         class="mb-0 title has-text-weight-bold has-text-white-ter"
         style="font-size: 10vw; cursor: pointer"
-        hx-get="/projects"
-        hx-select="#project-content"
-        hx-swap="innerHTML transition:true"
-        hx-target="#project-content"
-        hx-push-url="true"
-        _="
-            on click
-                send reset to <li/> in .project-list
-            end
-        "
       >
         Projects
       </h1>

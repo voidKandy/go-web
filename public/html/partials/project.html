@@ -7,8 +7,9 @@
   }
 
   .project-tag {
-    font-size: 12px;
+    font-size: 1.2vw;
     color: #5e5e5e;
+    white-space: nowrap;
   }
 
   .project-tag.not-last::after {
@@ -26,7 +27,7 @@
     <a href="{{.Links.GitUrl}}" class="is-flex is-align-items-center">
       <img
         src="/static/assets/github-mark/github-mark-white.svg"
-        class="is-clickable m-0 p-0"
+        class="is-clickable m-0 p-0 is-flex"
         alt="github-icon"
         width="20"
         height="20"
@@ -53,7 +54,11 @@
 
   <p class="subtitle is-6 has-text-white">{{.Description}}</p>
   {{ if .Links.HasWebDemo }}
-  <a href="{{.Links.DemoUrl}}">Check out a demo</a>
+  <div>
+    <a class="clickable is-inline-block" href="{{.Links.DemoUrl}}"
+      >Check out a demo</a
+    >
+  </div>
   {{ end }}
 </div>
 {{ end }}
