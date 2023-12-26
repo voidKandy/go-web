@@ -27,6 +27,7 @@ html {
 .clickable {
   color: #d8d8d8;
   text-shadow: 1px 1px 1px var(--secondaryColor);
+  transition: all 0.2s ease-in-out;
 }
 
 .clickable:hover {

@@ -14,8 +14,8 @@ func SendEmail(from string, body string, subject string) error {
 		"ezra@voidkandy.space",
 	}
 
-	addr := "sandbox.smtp.mailtrap.io:2525"
 	host := "sandbox.smtp.mailtrap.io"
+	addr := "sandbox.smtp.mailtrap.io:2525"
 	msgFormat := "From: %s\r\n" +
 		"To: %s\r\n" +
 		"Subject: %s\r\n\r\n" +
