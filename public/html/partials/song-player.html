@@ -9,3 +9,19 @@
   <source src="/static/assets/art/songs/{{.AudioName}}.wav" type="audio/wav" />
   Your browser does not support the audio element.
 </audio>
+
+{{if .Url}}
+<img
+  src="{{.Url}}"
+  alt="{{.Name}}"
+  id="current-song-cover"
+  hx-swap-oob="outerHTML"
+/>
+{{else}}
+<img
+  src="/static/assets/art/album-art/adab.jpeg"
+  alt="△⁍⍝ß"
+  id="current-song-cover"
+  hx-swap-oob="outerHTML"
+/>
+{{end}}

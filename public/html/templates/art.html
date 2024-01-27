@@ -71,7 +71,6 @@
     gap: 10%;
     overflow: visible;
     width: 100%;
-    animation: albumSlideAnimation 185s linear infinite;
   }
 
   .full-album-slide img {
@@ -123,10 +122,11 @@
       class="is-flex is-flex-direction-column is-justify-content-center"
     >
       <div class="full-album-slide flex-grow is-flex is-flex-direction-column">
-        {{ template "album-images" . }}
-      </div>
-      <div class="full-album-slide is-flex is-flex-direction-column">
-        {{ template "album-images" . }}
+        <img
+          src="/static/assets/art/album-art/adab.jpeg"
+          alt="△⁍⍝ß"
+          id="current-song-cover"
+        />
       </div>
     </div>
 
