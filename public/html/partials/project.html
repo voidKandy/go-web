@@ -19,12 +19,10 @@
 </style>
 
 <div class="is-flex is-flex-direction-column project-transition">
-  <header
-    class="m-0 p-0 is-flex is-justify-content-space-between is-flex-direction-rows"
-  >
+  <header class="m-0 p-0 is-flex is-flex-direction-rows">
     <h2 class="is-flex project-name">{{.Name}}</h2>
     {{ if .Links.HasRepo }}
-    <a href="{{.Links.GitUrl}}" class="is-flex is-align-items-center">
+    <a href="{{.Links.GitUrl}}" class="is-flex is-align-items-center ml-5">
       <img
         src="/static/assets/github-mark/github-mark-white.svg"
         class="is-clickable m-0 p-0 is-flex"
@@ -52,7 +50,9 @@
     {{end}}
   </ul>
 
-  <p class="subtitle is-6 has-text-white">{{.Description}}</p>
+  <p class="subtitle is-6 has-text-white" style="margin-right: 1.25rem">
+    {{.Description}}
+  </p>
   {{ if .Links.HasWebDemo }}
   <div>
     <a class="clickable" href="{{.Links.DemoUrl}}">Check out a demo</a>
