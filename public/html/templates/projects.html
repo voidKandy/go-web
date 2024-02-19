@@ -23,7 +23,7 @@
 
 <style>
   .project-list {
-    font-size: 3vw;
+    font-size: 2.5vw;
     color: #2b2b2b;
     margin-right: 2rem;
     white-space: nowrap;
@@ -63,6 +63,7 @@
       <h1
         class="mb-0 title has-text-weight-bold has-text-white-ter"
         style="font-size: 10vw; cursor: pointer"
+        id="header"
       >
         Projects
       </h1>
@@ -88,11 +89,18 @@
           Espionox
         </li>
         <li
+          _="install ProjectListItem(path: 'coding_assistant')"
+          hx-get="/projects/coding_assistant"
+          hx-trigger="getContent"
+        >
+          Coding Assistant
+        </li>
+        <li
           _="install ProjectListItem(path: 'bureau')"
           hx-get="/projects/bureau"
           hx-trigger="getContent"
         >
-          Espionox Demo
+          Bureau
         </li>
         <li
           _="install ProjectListItem(path: 'showbeam')"

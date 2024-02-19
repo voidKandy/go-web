@@ -5,6 +5,14 @@
     margin: 3rem 0;
     font-weight: 400;
   }
+
+  .contact img {
+    transition: all ease-in-out 200ms;
+  }
+
+  .contact img:hover {
+    transform: scale(105%);
+  }
 </style>
 
 <div
@@ -14,7 +22,7 @@
   <div
     class="is-flex is-flex-direction-column is-align-self-center is-justify-content-space-between"
   >
-    <h1 class="has-text-centered mt-1 mb-3">Get in contact</h1>
+    <h1 id="header" class="has-text-centered mt-1 mb-3">Get in contact</h1>
     <div
       hx-get="/email"
       hx-target="this"
@@ -56,6 +64,24 @@
           />
         </a>
       </div>
+    </div>
+    <div class="is-flex is-justify-content-space-between">
+      <p class="has-text-white is-align-items-center">
+        Subscribe to my Substack -------▶︎
+      </p>
+      <a
+        href="https://voidkandy.substack.com"
+        class="is-flex is-align-items-center"
+      >
+        <img
+          src="/static/assets/substack-logo.svg"
+          class="is-clickable mr-4 p-0"
+          style="filter: invert()"
+          alt="substack-icon"
+          width="20"
+          height="20"
+        />
+      </a>
     </div>
   </div>
 </div>

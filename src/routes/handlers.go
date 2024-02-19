@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"voidkandy-dot-space/src/email"
 	"voidkandy-dot-space/src/views"
 
 	"github.com/gorilla/mux"
@@ -102,27 +101,21 @@ func sendEmailHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodPost {
 
-		err := r.ParseForm()
-		if err != nil {
-			http.Error(w, "Error parsing form", http.StatusInternalServerError)
-			return
-		}
-		from := r.Form.Get("email")
-		subject := r.Form.Get("subject")
-		body := r.Form.Get("message")
-		formattedString := fmt.Sprintf("%s%s%s", from, body, subject)
-		fmt.Println(formattedString)
-		emailErr := email.SendEmail(from, body, subject)
+		r.ParseForm()
+		web3form_url := "https://api.web3forms.com/submit"
+		r.Form.Set("access_key", "b896a032-13cb-4639-a9ad-1fc1aacb1255")
+		res, emailErr := http.PostForm(web3form_url, r.Form)
+		fmt.Println("WEB3 RESPONSE: ", res)
 
 		info := EmailInfo{
 			IsGet:         false,
-			IsPostSuccess: emailErr == nil,
+			IsPostSuccess: res.StatusCode == 200,
 		}
 
 		e := tmpl.Execute(w, info)
 		if e != nil {
-			fmt.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			fmt.Println(emailErr)
+			http.Error(w, emailErr.Error(), http.StatusInternalServerError)
 		}
 		return
 	}

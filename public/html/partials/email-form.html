@@ -8,6 +8,11 @@
     border: 1px solid #ffff;
   }
 
+  #emai-div input {
+    background-color: #1c1c1c;
+    color: white;
+  }
+
   .contact form textarea {
     resize: none;
     background-color: #1c1c1c;
@@ -30,13 +35,25 @@
     hx-swap="outerHTML transition:false"
   >
     <label for="email">Your Email:</label>
-    <input type="email" id="email" name="email" required />
+    <input type="email" id="email" name="email" required autocomplete="off" />
 
     <label for="subject">Subject:</label>
-    <input type="text" id="subject" name="subject" required />
+    <input
+      type="text"
+      id="subject"
+      name="subject"
+      required
+      autocomplete="off"
+    />
 
     <label for="message">Message:</label>
-    <textarea id="message" name="message" rows="4" required></textarea>
+    <textarea
+      id="message"
+      name="message"
+      rows="4"
+      required
+      autocomplete="off"
+    ></textarea>
 
     {{if .IsGet}}
     <button
