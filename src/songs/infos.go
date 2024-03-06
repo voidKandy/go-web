@@ -196,7 +196,7 @@ var LisacSongs = []SongInfo{
 	},
 	{
 		HashUniqueImage: true,
-		FileName:        "s+c",
+		FileName:        "sound_and_color",
 		DisplayName:     "Sound and Color",
 		Album:           "LISAC",
 	},

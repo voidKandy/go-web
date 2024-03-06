@@ -30,6 +30,7 @@
   #art-content {
     height: 100%;
     overflow: hidden;
+    transition: all ease-in-out 200ms;
   }
 
   #song-cover {
@@ -75,12 +76,11 @@
 
 <div
   id="art-content"
-  class="page-transition"
-  _="on load
-        remove .page-transition from me
+  _="init
+         hide me with *opacity
     end
-    on htmx:trigger from #switch-from-art
-        add .page-transition to me
+    on load
+         transition my *opacity to 1
     end"
 >
   <div class="is-flex is-flex-direction-row is-justify-content-space-between">
@@ -89,8 +89,10 @@
       class="is-flex is-flex-direction-column is-justify-content-center"
     >
       <img
+        id="{{.CurrentSong.DisplayName}} Cover"
+        class="{{.CurrentSong.Album}}"
         src="{{.CurrentSong.ImgFilePath}}"
-        alt="{{.CurrentSong.DisplayName}} Cover"
+        alt="{{.CurrentSong.DisplayName}}"
       />
     </div>
 
@@ -149,9 +151,9 @@
       <h1
         id="switch-from-art"
         class="art material-symbols-outlined clickable"
-        hx-get="/"
+        hx-get="/landing"
         hx-target="#art-content"
-        hx-trigger="click delay:200ms"
+        hx-trigger="click delay:20ms"
         hx-select="#route-content"
         hx-push-url="true"
         hx-swap="outerHTML transition:true"

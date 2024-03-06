@@ -25,24 +25,31 @@
     class="clickable"
     _="
      on load 
-         wait 50ms
          set :search to href of the location of the window 
          if :search includes '{{.Album}}?song={{.FileName}}'
-             log :search
-            send select to me
+             if #song-cover does not match .{{.Album}}
+                log 'no match'
+                send select to me
+             else
+                send styleSelect to me
+             end
          end
+         wait 200ms
      end 
      on click
         if I do not match .selected
             send select to me
         end
      end
-     on select 
-        send reset to <h2/> in closest parent <div/>
-        send getSong to me
+     on styleSelect
         add .selected to me
         wait for reset
         remove .selected from me
+     end
+     on select 
+        send reset to <h2/> in closest parent <div/>
+        send getSong to me
+        send styleSelect to me
      end
      "
   >
