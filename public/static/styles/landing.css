@@ -1,44 +1,20 @@
-@font-face {
-  font-family: "space-mono";
-  src: url("/static/space_mono/SpaceMono-Regular.ttf") format("truetype");
-  /* You can also include additional font formats for better browser compatibility */
+.main-tile {
+  background: linear-gradient(10deg, rgba(0, 0, 0, 1), rgba(255, 255, 0, 0));
+  margin: 1%;
+  border: 1px dotted transparent;
+  border-color: white;
+  overscroll-behavior: none;
 }
 
-:root {
-  --bgGradient: linear-gradient(265deg, #3d077f, #070d7f);
-  --secondaryColor: #d632ff;
+.landing-list {
+  display: inline-block;
 }
 
-html,
-body {
-  height: 100%;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  font-family: "space-mono", sans-serif;
-  background-color: white;
-  overflow-x: hidden;
-}
-
-html {
-  background-color: #1c1c1c;
-}
-
-.clickable {
-  color: #d8d8d8;
-  text-shadow: 1px 1px 1px var(--secondaryColor);
-  transition: all 0.2s ease-in-out;
-}
-
-.clickable:hover {
+.landing-list li {
   cursor: pointer;
-  color: grey;
-  transform: scale(1.11);
-}
-
-.clickable.selected {
-  transform: scale(1.11);
-  color: white;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
 }
 
 #spinny-switcher {
@@ -116,57 +92,4 @@ html {
   to {
     transform: rotate(1turn);
   }
-}
-
-[tabindex]:focus {
-  color: #ffffff;
-}
-
-.material-symbols-outlined {
-  font-variation-settings:
-    "FILL" 0,
-    "wght" 400,
-    "GRAD" 0,
-    "opsz" 24;
-}
-
-.noise-bg {
-  white-space: nowrap;
-  display: inline-block;
-  width: 100%;
-  background: linear-gradient(210deg, rgba(0, 0, 0, 1), rgba(255, 255, 0, 0));
-}
-
-.noise-slide {
-  height: 100vh;
-  filter: contrast(10%) brightness(1%);
-  background: url("/static/assets/noise-filter.svg");
-  animation: noiseSlideAnimation 40s linear infinite;
-}
-
-@keyframes noiseSlideAnimation {
-  from {
-    transform: translateY(0%);
-  }
-  to {
-    transform: translateY(-100%);
-  }
-}
-
-.main-tile {
-  background: linear-gradient(10deg, rgba(0, 0, 0, 1), rgba(255, 255, 0, 0));
-  margin: 1%;
-  border: 1px dotted transparent;
-  border-color: white;
-}
-
-.landing-list {
-  display: inline-block;
-}
-
-.landing-list li {
-  cursor: pointer;
-  transition:
-    color 0.3s ease,
-    transform 0.3s ease;
 }

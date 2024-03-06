@@ -9,10 +9,6 @@
     font-weight: 600;
   }
 
-  .about section {
-    margin: 5rem 15rem;
-  }
-
   .about ul {
     list-style: none;
   }
@@ -28,7 +24,7 @@
   }
 </style>
 
-<div class="about m-2 page-transition">
+<div class="about is-flex page-transition">
   <div class="is-flex is-flex-direction-column">
     <div
       class="is-flex is-flex-direction-column is-align-self-center mt-1 px-5"
@@ -38,6 +34,7 @@
         aka. voidkandy
       </p>
     </div>
+
     <div class="mx-3 my-4">
       <h1 class="px-2 is-size-5 has-text-weight-semibold">
         From Music to Code
@@ -81,8 +78,65 @@
         Since then, I've taken multiple online computer science courses and
         decided to learn Rust in the hopes that it's complexity would make other
         languages relatively easier to learn, an assumption which has paid off
-        for the most part. I'm now significantly less inept at programming.
+        for the most part. Since then I've worked on multiple projects and
+        gained experience with multiple languages and technologies.
       </p>
+
+      <hr style="border-top: 1px solid grey" />
+      <h1 class="px-2 mt-3 is-size-5 has-text-weight-semibold">Experiences</h1>
+      <br />
+      <p class="px-6">
+        My introduction to webdev came when I began as an intern for a small
+        startup. I had very little supervision and was thrown into a massive
+        MERN stack codebase, I had never written any Typescript before and was
+        brand new to document based databses like MongoDB. I started slow but
+        eventually became one of the most productive interns on the team, making
+        and implementing design decisions on the frontend as well as
+        contributing to the payment system on the backend. I'm now comfortable
+        developing with JavaScript/TypeScript, but I'm very partial to using
+        HTMX on the frontend with either Go or Rust on the backend.
+        <br />
+        <br />
+        I have built my own Rust crate for creating AI Agents and have utilized
+        it on multiple projects. Building, updating and maintaining the crate
+        has been a great excersize in API and architecture design. I've kept a
+        blog of the process which has been great for documentation and in
+        deepening my understanding of Rust. Because of this crate, Rust has
+        become my language of choice.
+        <br />
+        <br />
+        My favorite personal project by far has been my AI LSP. Building this
+        has deepened my understanding of my editor (NVim btw), LSPs and even
+        client/server relationships in general. The LSP also uses my AI Agent
+        Rust crate under the hood and has informed a lot of API and quality of
+        life changes to the library. I'm still actively developing the LSP,
+        there is something so satisfying about building a tool that is so
+        broadly applicable.
+        <br />
+        <br />
+        Check out the projects page for more information on my personal
+        projects.
+      </p>
+    </div>
+
+    <div class="is-flex is-align-self-center is-flex-direction-column">
+      <h1 class="px-2 mt-3 is-size-5 has-text-weight-semibold">
+        Read more on my blog
+      </h1>
+      <a
+        href="https://voidkandy.substack.com"
+        class="is-align-self-center is-align-items-center"
+        style="display: inline-flex"
+      >
+        <img
+          src="/static/assets/substack-logo.svg"
+          class="is-flex is-clickable my-3"
+          style="filter: invert()"
+          alt="substack-icon"
+          width="30"
+          height="30"
+        />
+      </a>
     </div>
   </div>
 </div>

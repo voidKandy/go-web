@@ -4,24 +4,15 @@
     color: white;
   }
 </style>
-<h1 class="song-name ml-2">{{.Name}}</h1>
+<h1 class="song-name ml-2">{{.DisplayName}}</h1>
 <audio id="audio" controls-list="nodownload noplaybackrate" controls>
-  <source src="/static/assets/art/songs/{{.AudioName}}.wav" type="audio/wav" />
+  <source src="{{ .SongFilePath}}" type="audio/wav" />
   Your browser does not support the audio element.
 </audio>
 
-{{if .Url}}
 <img
-  src="{{.Url}}"
-  alt="{{.Name}}"
+  src="{{ .ImgFilePath}}"
+  alt="{{.DisplayName}} Cover"
   id="current-song-cover"
   hx-swap-oob="outerHTML"
 />
-{{else}}
-<img
-  src="/static/assets/art/album-art/adab.jpeg"
-  alt="△⁍⍝ß"
-  id="current-song-cover"
-  hx-swap-oob="outerHTML"
-/>
-{{end}}

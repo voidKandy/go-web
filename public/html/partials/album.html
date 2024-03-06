@@ -1,0 +1,81 @@
+{{ define "album" }}
+<style>
+  .song-list h1 {
+    font-size: 3rem;
+    color: white;
+    border-bottom: 0.5px dotted white;
+  }
+
+  .song-list h2 {
+    font-size: 1rem;
+    transition: all ease-in-out 150ms;
+  }
+</style>
+<div class="song-list">
+  <h1>{{.CurrentAlbumName}}</h1>
+  {{$albumName := .CurrentAlbumName}} {{ range .AlbumSongs }}
+  <h2
+    hx-get="/player/{{$albumName}}/{{.FileName}}"
+    hx-push-url="?song={{.FileName}}"
+    hx-target="#song-player"
+    hx-swap="innerHTML transition:true"
+    class="clickable"
+    _="
+             on load
+                 set :search to search of the location of the window 
+                 if :search includes '{{.FileName}}'
+                    send select to me
+                 end
+             end 
+             on click
+                if I do not match .selected
+                    send select to me
+                end
+             end
+             on select 
+                send reset to <h2/> in closest parent <div/>
+                add .selected to me
+                wait for reset
+             end
+             on reset
+                remove .selected from me
+             end"
+  >
+    {{.DisplayName}}
+  </h2>
+  {{ end }}
+</div>
+
+<div
+  id="album-nav"
+  class="is-flex is-flex-direction-row is-align-self-center"
+  _="
+        on load
+            {{ if not .PrevAlbumName }}
+            hide #nav-before with *opacity
+            remove .is-clickable from #nav-before
+            {{ end }}
+            {{ if not .NextAlbumName }}
+            hide #nav-next with *opacity
+            remove .is-clickable from #nav-next
+            {{ end }}
+        end
+    "
+>
+  <h2
+    id="nav-before"
+    class="is-clickable material-symbols-outlined has-text-white is-align-self-center"
+    hx-get="{{.PrevAlbumName}}"
+  >
+    navigate_before
+  </h2>
+  <h2
+    id="nav-next"
+    class="is-clickable material-symbols-outlined has-text-white is-align-self-center"
+    hx-get="{{.NextAlbumName}}"
+  >
+    navigate_next
+  </h2>
+</div>
+
+{{ end }}

@@ -5,49 +5,84 @@ import (
 	"html/template"
 	"net/http"
 	"voidkandy-dot-space/src/views"
+	"voidkandy-dot-space/src/views/songs"
 
 	"github.com/gorilla/mux"
 )
 
 func artHandler(w http.ResponseWriter, r *http.Request) {
 	queryParams := r.URL.Query()
+	vars := mux.Vars(r)
+
+	album, ok := vars["albumName"]
+	if !ok {
+		album = "△⁍⍝ß"
+	}
 	playing := queryParams.Get("song")
 	if playing == "" {
-		playing = "sgitf"
+		switch album {
+		case songs.AlbumNames[0]:
+			playing = songs.AlbumMap[songs.AlbumNames[0]][0].FileName
+		case songs.AlbumNames[1]:
+			playing = songs.AlbumMap[songs.AlbumNames[1]][0].FileName
+		case songs.AlbumNames[2]:
+			playing = songs.AlbumMap[songs.AlbumNames[2]][0].FileName
+		case songs.AlbumNames[3]:
+			playing = songs.AlbumMap[songs.AlbumNames[3]][0].FileName
+		}
 	}
-	currentSong, _ := views.FilterSongsByAudioName(playing)
+	albumSongs, _ := songs.AlbumMap[album]
+	currentSong := songs.GetSongInList(albumSongs, playing)
+	if currentSong != nil {
+		tmpl := template.Must(template.ParseFiles("public/html/templates/art.html", "public/html/partials/album.html"))
 
-	tmpl := template.Must(template.ParseFiles("public/html/templates/art.html", "public/html/partials/album-images.html"))
+		type ArtPageInfo struct {
+			CurrentAlbumName string
+			NextAlbumName    *string
+			PrevAlbumName    *string
+			AlbumSongs       []songs.SongInfo
+			CurrentSong      songs.SongInfo
+		}
 
-	type ArtPageInfo struct {
-		AllSongs    []views.SongInfo
-		CurrentSong views.SongInfo
-	}
+		// pageInfo := ArtPageInfo{AllSongs: views.SongInfos, CurrentSong: currentSong}
+		pageInfo := ArtPageInfo{
+			CurrentAlbumName: album,
+			NextAlbumName:    songs.NextAlbum(album),
+			PrevAlbumName:    songs.PrevAlbum(album),
+			AlbumSongs:       albumSongs,
+			CurrentSong:      *currentSong,
+		}
 
-	info := ArtPageInfo{AllSongs: views.SongInfos, CurrentSong: currentSong}
-
-	err := tmpl.Execute(w, info)
-	if err != nil {
-		fmt.Println("ERR: ", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		err := tmpl.Execute(w, pageInfo)
+		if err != nil {
+			fmt.Println("ERR: ", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 	}
 }
 
 func songPlayerHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
+	album, ok := vars["albumName"]
+	if !ok {
+		album = "△⁍⍝ß"
+	}
+	albumSongs, _ := songs.AlbumMap[album]
 	playing, ok := vars["songName"]
 	if !ok {
 		playing = "sgitf"
 	}
-	song, _ := views.FilterSongsByAudioName(playing)
+	song := songs.GetSongInList(albumSongs, playing)
+	if song != nil {
 
-	tmpl := template.Must(template.ParseFiles("public/html/partials/song-player.html"))
+		tmpl := template.Must(template.ParseFiles("public/html/partials/song-player.html"))
 
-	err := tmpl.Execute(w, song)
-	if err != nil {
-		fmt.Println("ERR: ", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		err := tmpl.Execute(w, *song)
+		if err != nil {
+			fmt.Println("ERR: ", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 	}
 }
 

@@ -2,11 +2,12 @@
 <!-- add @hx-get='`path`' to me -->
 <script type="text/hyperscript">
   behavior LandingListItem(path)
-      on load
+     init
           add .clickable to me
           set :c to my textContent
           if '{{ .Path }}' includes path or pathname of the location of the window includes path
-          send select to me
+              send select to me
+          end
       end
       on click
           if I do not match .selected then
@@ -40,18 +41,17 @@
     hx-swap="innerHtml transition:true"
     hx-get="{{.Path}}{{.Params}}"
     hx-push-url="true"
-    style="overflow-y: auto; overflow-x: hidden"
   ></div>
 
   <div
     hx-swap="outerHTML"
     class="mx-4 my-2 is-flex is-flex-direction-row is-justify-content-space-between"
+    style="backdrop-filter: blur(50)"
   >
     <ul
       id="footer-left"
       hx-swap-oob="true"
       class="is-flex is-flex-direction-column landing-list is-justify-content-center"
-      hx-trigger="getContent"
       hx-target="#route-content"
       hx-swap="innerHtml transition:true"
       hx-push-url="true"
@@ -59,6 +59,7 @@
       <li
         tabindex="0"
         _="install LandingListItem(path: '/landing')"
+        hx-trigger="getContent"
         hx-get="/landing"
       >
         /.
@@ -66,6 +67,7 @@
       <li
         tabindex="1"
         _="install LandingListItem(path: '/projects/')"
+        hx-trigger="getContent"
         hx-get="/projects/espionox"
       >
         /projects
@@ -73,6 +75,7 @@
       <li
         tabindex="2"
         _="install LandingListItem(path: '/about')"
+        hx-trigger="getContent"
         hx-get="/about"
       >
         /about
@@ -80,6 +83,7 @@
       <li
         tabindex="3"
         _="install LandingListItem(path: '/contact')"
+        hx-trigger="getContent"
         hx-get="/contact"
       >
         /contact
@@ -89,7 +93,7 @@
       <h1
         class="material-symbols-outlined clickable"
         hx-trigger="click"
-        hx-get="/art?song=sgitf"
+        hx-get="/art/△⁍⍝ß"
         hx-target="#route-content"
         hx-push-url="true"
         hx-swap="innerHTML transition:true"

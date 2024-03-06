@@ -14,8 +14,8 @@ func InitializePageRoutes() {
 	r.HandleFunc("/about", aboutHandler)
 	r.HandleFunc("/contact", contactHandler)
 	r.HandleFunc("/projects/{name}", projectsHandler)
-	r.HandleFunc("/art", artHandler)
-	r.HandleFunc("/player/{songName}", songPlayerHandler)
+	r.HandleFunc("/art/{albumName}", artHandler)
+	r.HandleFunc("/player/{albumName}/{songName}", songPlayerHandler)
 	r.HandleFunc("/email", sendEmailHandler)
 	http.Handle("/", middleware(r))
 }
