@@ -56,7 +56,7 @@ var AdabSongs = []SongInfo{
 		Album:           "△⁍⍝ß",
 	},
 	{
-		HashUniqueImage: true,
+		HashUniqueImage: false,
 		FileName:        "losing",
 		DisplayName:     "Lσsing",
 		Album:           "△⁍⍝ß",
@@ -161,7 +161,7 @@ var ToywSongs = []SongInfo{
 		Album:           "TOYW",
 	},
 	{
-		HashUniqueImage: true,
+		HashUniqueImage: false,
 		FileName:        "clarity",
 		DisplayName:     "Clarity",
 		Album:           "TOYW",
@@ -257,7 +257,7 @@ var AbstractSongs = []SongInfo{
 		Album:           "Abstract",
 	},
 	{
-		HashUniqueImage: true,
+		HashUniqueImage: false,
 		FileName:        "lose_it",
 		DisplayName:     "Lose It",
 		Album:           "Abstract",

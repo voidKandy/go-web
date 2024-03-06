@@ -3,6 +3,9 @@ package routes
 import (
 	"html/template"
 	"net/http"
+	"voidkandy-dot-space/src/email"
+	"voidkandy-dot-space/src/projects"
+	"voidkandy-dot-space/src/songs"
 
 	"github.com/gorilla/mux"
 )
@@ -13,10 +16,10 @@ func InitializePageRoutes() {
 	r.HandleFunc("/landing", landingHandler)
 	r.HandleFunc("/about", aboutHandler)
 	r.HandleFunc("/contact", contactHandler)
-	r.HandleFunc("/projects/{name}", projectsHandler)
-	r.HandleFunc("/art/{albumName}", artHandler)
-	r.HandleFunc("/player/{albumName}/{songName}", songPlayerHandler)
-	r.HandleFunc("/email", sendEmailHandler)
+	r.HandleFunc("/projects/{name}", projects.ProjectsHandler)
+	r.HandleFunc("/art/{albumName}", songs.ArtHandler)
+	r.HandleFunc("/player/{albumName}/{songName}", songs.SongPlayerHandler)
+	r.HandleFunc("/email", email.SendEmailHandler)
 	http.Handle("/", middleware(r))
 }
 

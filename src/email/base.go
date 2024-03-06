@@ -2,33 +2,50 @@ package email
 
 import (
 	"fmt"
-	"log"
-	"net/smtp"
+	"html/template"
+	"net/http"
 )
 
-func SendEmail(from string, body string, subject string) error {
-	user := "3acd3f59956324"
-	password := "00c8117ea308fe"
-
-	to := []string{
-		"ezra@voidkandy.space",
+func SendEmailHandler(w http.ResponseWriter, r *http.Request) {
+	type EmailInfo struct {
+		IsGet         bool
+		IsPostSuccess bool
 	}
 
-	host := "sandbox.smtp.mailtrap.io"
-	addr := "sandbox.smtp.mailtrap.io:2525"
-	msgFormat := "From: %s\r\n" +
-		"To: %s\r\n" +
-		"Subject: %s\r\n\r\n" +
-		"%s\r\n"
-
-	msg := []byte(fmt.Sprintf(msgFormat, from, to, subject, body))
-	auth := smtp.PlainAuth("", user, password, host)
-	err := smtp.SendMail(addr, auth, from, to, msg)
-	if err != nil {
-		log.Fatal(err)
-		return err
+	tmpl := template.Must(template.ParseFiles("public/html/partials/email-form.html"))
+	if r.Method == http.MethodGet {
+		info := EmailInfo{
+			IsGet:         true,
+			IsPostSuccess: false,
+		}
+		err := tmpl.Execute(w, info)
+		if err != nil {
+			fmt.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
 	}
 
-	fmt.Println("Email sent successfully")
-	return nil
+	if r.Method == http.MethodPost {
+
+		r.ParseForm()
+		web3form_url := "https://api.web3forms.com/submit"
+		r.Form.Set("access_key", "b896a032-13cb-4639-a9ad-1fc1aacb1255")
+		res, emailErr := http.PostForm(web3form_url, r.Form)
+		fmt.Println("WEB3 RESPONSE: ", res)
+
+		info := EmailInfo{
+			IsGet:         false,
+			IsPostSuccess: res.StatusCode == 200,
+		}
+
+		e := tmpl.Execute(w, info)
+		if e != nil {
+			fmt.Println(emailErr)
+			http.Error(w, emailErr.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 }
