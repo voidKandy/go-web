@@ -1,81 +1,79 @@
 {{ define "album" }}
 <style>
-  .song-list h1 {
+  #album-nav h1 {
     font-size: 3rem;
     color: white;
     border-bottom: 0.5px dotted white;
   }
 
-  .song-list h2 {
+  #album-nav h2 {
     font-size: 1rem;
     transition: all ease-in-out 150ms;
   }
 </style>
-<div class="song-list">
-  <h1>{{.CurrentAlbumName}}</h1>
-  {{$albumName := .CurrentAlbumName}} {{ range .AlbumSongs }}
+
+<div id="album-nav">
+  <h1>{{.AlbumDisplayName}}</h1>
+  {{ range .AlbumSongs }}
   <h2
-    hx-get="/player/{{$albumName}}/{{.FileName}}"
-    hx-push-url="?song={{.FileName}}"
-    hx-target="#song-player"
-    hx-swap="innerHTML transition:true"
+    hx-get="/art/{{.Album}}?song={{.FileName}}"
+    hx-push-url="/art/{{.Album}}?song={{.FileName}}"
+    hx-select="#footer-left, #song-cover"
+    hx-trigger="getSong"
+    hx-target="#footer-left, #song-cover"
+    hx-swap="outerHTML transition:true"
     class="clickable"
     _="
-             on load
-                 set :search to search of the location of the window 
-                 if :search includes '{{.FileName}}'
-                    send select to me
-                 end
-             end 
-             on click
-                if I do not match .selected
-                    send select to me
-                end
-             end
-             on select 
-                send reset to <h2/> in closest parent <div/>
-                add .selected to me
-                wait for reset
-             end
-             on reset
-                remove .selected from me
-             end"
+     on load 
+         wait 50ms
+         set :search to href of the location of the window 
+         if :search includes '{{.Album}}?song={{.FileName}}'
+             log :search
+            send select to me
+         end
+     end 
+     on click
+        if I do not match .selected
+            send select to me
+        end
+     end
+     on select 
+        send reset to <h2/> in closest parent <div/>
+        send getSong to me
+        add .selected to me
+        wait for reset
+        remove .selected from me
+     end
+     "
   >
     {{.DisplayName}}
   </h2>
+
   {{ end }}
-</div>
 
-<div
-  id="album-nav"
-  class="is-flex is-flex-direction-row is-align-self-center"
-  _="
-        on load
-            {{ if not .PrevAlbumName }}
-            hide #nav-before with *opacity
-            remove .is-clickable from #nav-before
-            {{ end }}
-            {{ if not .NextAlbumName }}
-            hide #nav-next with *opacity
-            remove .is-clickable from #nav-next
-            {{ end }}
-        end
-    "
->
-  <h2
-    id="nav-before"
-    class="is-clickable material-symbols-outlined has-text-white is-align-self-center"
-    hx-get="{{.PrevAlbumName}}"
+  <div
+    class="is-flex is-flex-direction-row is-align-self-center"
+    hx-select=" #album-nav"
+    hx-target=" #album-nav"
+    hx-swap="outerHTML"
   >
-    navigate_before
-  </h2>
-  <h2
-    id="nav-next"
-    class="is-clickable material-symbols-outlined has-text-white is-align-self-center"
-    hx-get="{{.NextAlbumName}}"
-  >
-    navigate_next
-  </h2>
+    {{ if .PrevAlbum }}
+    <h3
+      id="nav-before"
+      class="is-clickable material-symbols-outlined has-text-white is-align-self-center"
+      hx-get="/art/{{.PrevAlbum.AlbumName}}?song={{.PrevAlbum.FirstSong}}"
+    >
+      navigate_before
+    </h3>
+    {{ end }} {{ if .NextAlbum }}
+    <h3
+      id="nav-next"
+      class="is-clickable material-symbols-outlined has-text-white is-align-self-center"
+      hx-get="/art/{{.NextAlbum.AlbumName}}?song={{.NextAlbum.FirstSong}}"
+    >
+      navigate_next
+    </h3>
+    {{ end }}
+  </div>
 </div>
-
 {{ end }}

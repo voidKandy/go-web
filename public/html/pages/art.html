@@ -32,18 +32,13 @@
     overflow: hidden;
   }
 
-  #album-slide-container {
-    width: auto;
-    white-space: nowrap;
-  }
-
-  .full-album-slide {
+  #song-cover {
     gap: 10%;
     overflow: visible;
     width: 100%;
   }
 
-  .full-album-slide img {
+  #song-cover img {
     margin: 3% 0 2.5% 2.5%;
     width: 75vh;
     transition: all ease-in-out 400ms;
@@ -90,14 +85,13 @@
 >
   <div class="is-flex is-flex-direction-row is-justify-content-space-between">
     <div
-      id="album-slide-container"
+      id="song-cover"
       class="is-flex is-flex-direction-column is-justify-content-center"
     >
-      <div
-        class="full-album-slide flex-grow is-flex is-flex-direction-column project-trans"
-      >
-        <img hx-swap="transition:true" src="" alt="" id="current-song-cover" />
-      </div>
+      <img
+        src="{{.CurrentSong.ImgFilePath}}"
+        alt="{{.CurrentSong.DisplayName}} Cover"
+      />
     </div>
 
     <div class="mx-5 my-2 is-flex is-flex-direction-column has-text-centered">
@@ -146,7 +140,12 @@
       </div>
     </div>
 
-    <div hx-swap-oob="true" id="spinny-switcher" class="is-align-self-center">
+    <div
+      id="spinny-switcher"
+      class="is-align-self-center"
+      hx-swap="innerHTML"
+      hx-swap-oob="true"
+    >
       <h1
         id="switch-from-art"
         class="art material-symbols-outlined clickable"
@@ -161,14 +160,13 @@
     </div>
   </div>
 </div>
-<div id="footer-left" hx-swap-oob="true">
-  <div
-    id="song-player"
-    class="song-player-transition"
-    hx-get="/player/{{.CurrentAlbumName}}/{{.CurrentSong.FileName}}"
-    hx-push-url="?song={{.CurrentSong.FileName}}"
-    hx-trigger="load once"
-    hx-target="#song-player"
-    hx-swap="innerHTML transition:true"
-  ></div>
+<div
+  id="footer-left"
+  class="is-flex is-flex-direction-column is-justify-content-center"
+  hx-swap="innerHTML"
+  hx-swap-oob="true"
+>
+  <div id="song-player" class="song-player-transition">
+    {{ template "song-player" . }}
+  </div>
 </div>

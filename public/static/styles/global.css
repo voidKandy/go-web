@@ -6,6 +6,7 @@
 
 :root {
   --bgGradient: linear-gradient(265deg, #3d077f, #070d7f);
+  --primaryGrey: #1c1c1c;
   --secondaryColor: #d632ff;
 }
 
@@ -25,7 +26,7 @@ body {
 }
 
 html {
-  background-color: #1c1c1c;
+  background-color: var(--primaryGrey);
 }
 
 #background {
@@ -37,6 +38,25 @@ html {
 #route-content {
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.main-tile {
+  background: linear-gradient(10deg, rgba(0, 0, 0, 1), rgba(255, 255, 0, 0));
+  margin: 1%;
+  border: 1px dotted transparent;
+  border-color: white;
+  overscroll-behavior: none;
+}
+
+.landing-list {
+  display: inline-block;
+}
+
+.landing-list li {
+  cursor: pointer;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
 }
 
 .clickable {

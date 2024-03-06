@@ -22,15 +22,22 @@ func (song SongInfo) SongFilePath() string {
 	return fmt.Sprintf("/static/assets/art/%s/songs/%s.wav", song.Album, song.FileName)
 }
 
+func (song SongInfo) AlbumDisplayName() string {
+	if song.Album == "△⁍⍝ß" {
+		return "ADAB"
+	}
+	return song.Album
+}
+
 var AlbumMap = map[string][]SongInfo{
-	"△⁍⍝ß":     AdabSongs,
+	"ADAB":     AdabSongs,
 	"TOYW":     ToywSongs,
 	"LISAC":    LisacSongs,
 	"Abstract": AbstractSongs,
 }
 
 var AlbumNames = []string{
-	"△⁍⍝ß",
+	"ADAB",
 	"TOYW",
 	"LISAC",
 	"Abstract",
@@ -41,85 +48,85 @@ var AdabSongs = []SongInfo{
 		HashUniqueImage: true,
 		FileName:        "sgitf",
 		DisplayName:     "SGITF",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: true,
 		FileName:        "made_and_forgotten",
 		DisplayName:     "Made&Forgotten",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: true,
 		FileName:        "self_control",
 		DisplayName:     "Self◁Control",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: false,
 		FileName:        "losing",
 		DisplayName:     "Lσsing",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: false,
 		FileName:        "on_track",
 		DisplayName:     "On¿Track",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: true,
 		FileName:        "criminal",
 		DisplayName:     "Crimi∩al ",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: true,
 		FileName:        "siekg",
 		DisplayName:     "SIEKG",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: true,
 		FileName:        "too_far",
 		DisplayName:     "†°°Far",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: false,
 		FileName:        "up_with_them",
 		DisplayName:     "With↑Them",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: true,
 		FileName:        "curl_away",
 		DisplayName:     "CurLªway",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: true,
 		FileName:        "making_myself",
 		DisplayName:     "MakingMy²Self",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: false,
 		FileName:        "no_one",
 		DisplayName:     "No❍ne",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: false,
 		FileName:        "becoming",
 		DisplayName:     "ℬecoming",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 	{
 		HashUniqueImage: true,
 		FileName:        "ydkyg",
 		DisplayName:     "YDKYG",
-		Album:           "△⁍⍝ß",
+		Album:           "ADAB",
 	},
 }
 

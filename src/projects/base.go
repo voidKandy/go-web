@@ -28,7 +28,7 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("Project: ", p)
 
-	tmpl := template.Must(template.ParseFiles("public/html/templates/projects.html", "public/html/partials/project.html"))
+	tmpl := template.Must(template.ParseFiles("public/html/pages/projects.html", "public/html/partials/project.html"))
 	err := tmpl.Execute(w, p)
 	if err != nil {
 		fmt.Println(err)
