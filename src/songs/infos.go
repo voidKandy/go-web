@@ -23,8 +23,13 @@ func (song SongInfo) SongFilePath() string {
 }
 
 func (song SongInfo) AlbumDisplayName() string {
-	if song.Album == "△⁍⍝ß" {
+	switch song.Album {
+	case "△⁍⍝ß":
 		return "ADAB"
+	case "LISAC":
+		return "Lost in Sound and Color"
+	case "TOYW":
+		return "The One You Want"
 	}
 	return song.Album
 }

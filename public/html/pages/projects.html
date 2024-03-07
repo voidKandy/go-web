@@ -44,20 +44,40 @@
     transform: scale(105%);
   }
 
-  .project-list li:hover {
-    color: white !important;
-    transform: scale(105%) !important;
+  #project-display {
+    flex-direction: row;
+    justify-content: space-between;
   }
 
-  .project-list li:has(+ li:hover),
-  .project-list li:hover + li {
-    color: #a7a7a7 !important;
-    transform: scale(102%);
+  @media only screen and (min-width: 600px) {
+    .project-list li:hover {
+      color: white !important;
+      transform: scale(105%) !important;
+    }
+
+    .project-list li:has(+ li:hover),
+    .project-list li:hover + li {
+      color: #a7a7a7 !important;
+      transform: scale(102%);
+    }
+
+    .project-list ul:hover li {
+      /* Styles for all li elements within the ul when ul is hovered */
+      color: #2b2b2b; /* Example style */
+    }
   }
 
-  .project-list ul:hover li {
-    /* Styles for all li elements within the ul when ul is hovered */
-    color: #2b2b2b; /* Example style */
+  @media only screen and (max-width: 600px) {
+    .project-list {
+      font-size: 3.5vw;
+      margin-left: 2rem;
+    }
+    .project-list li {
+      color: #a7a7a7;
+    }
+    #project-display {
+      flex-direction: column-reverse;
+    }
   }
 </style>
 
@@ -82,7 +102,7 @@
       <hr style="color: white" />
     </div>
   </header>
-  <div class="is-flex is-flex-direction-row is-justify-content-space-between">
+  <div id="project-display" class="is-flex">
     <section id="project-content" class="m-4">
       {{ template "project" . }}
     </section>

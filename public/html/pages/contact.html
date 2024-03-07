@@ -15,69 +15,115 @@
   }
 </style>
 
-<div
-  class="is-flex contact is-flex-direction-column page-transition"
-  style="height: 100%"
->
-  <div
-    class="is-flex is-flex-direction-column is-align-self-center is-justify-content-space-between"
-  >
-    <h1 id="header" class="has-text-centered mt-1 mb-3">Get in contact</h1>
+<div class="is-flex is-flex-direction-column">
+  <div class="is-flex contact is-flex-direction-column page-transition">
     <div
-      hx-get="/email"
-      hx-target="this"
-      hx-swap="outerHTML"
-      hx-trigger="load"
-      hx-push-url="false"
-    ></div>
-
-    <div class="is-flex mx-2 is-justify-content-space-between">
-      <h2
-        class="is-flex has-text-white is-justify-content-center is-align-items-center"
+      class="is-flex is-flex-direction-column is-align-self-center is-justify-content-space-between"
+    >
+      <h1 id="header" class="has-text-centered mt-1 mb-3">Get in contact</h1>
+      <div
+        hx-get="/email"
+        hx-target="this"
+        hx-swap="outerHTML"
+        hx-trigger="load"
+        hx-push-url="false"
+      ></div>
+    </div>
+  </div>
+  <div
+    class="is-flex mx-2 is-justify-content-space-between is-align-self-center mt-4"
+  >
+    <div class="m-4 is-flex is-flex-direction-row">
+      <a
+        href="https://github.com/voidKandy"
+        class="is-flex is-align-items-center"
       >
-        Follow me ------▶︎
-      </h2>
+        <img
+          src="/static/assets/github-mark/github-mark-white.svg"
+          class="is-clickable mr-2 p-0"
+          alt="github-icon"
+          width="20"
+          height="20"
+        />
+      </a>
+      <a
+        href="https://twitter.com/KandyVoid"
+        class="is-flex is-align-items-center"
+      >
+        <img
+          src="/static/assets/twitter-logo/logo.svg"
+          class="is-clickable mr-2 p-0"
+          alt="twitter-icon"
+          width="20"
+          height="20"
+        />
+      </a>
 
-      <div class="m-4 is-flex is-flex-direction-row">
-        <a
-          href="https://github.com/voidKandy"
-          class="is-flex is-align-items-center"
-        >
-          <img
-            src="/static/assets/github-mark/github-mark-white.svg"
-            class="is-clickable mr-2 p-0"
-            alt="github-icon"
-            width="20"
-            height="20"
-          />
-        </a>
-        <a
-          href="https://twitter.com/KandyVoid"
-          class="is-flex is-align-items-center"
-        >
-          <img
-            src="/static/assets/twitter-logo/logo.svg"
-            class="is-clickable mr-2 p-0"
-            alt="twitter-icon"
-            width="20"
-            height="20"
-          />
-        </a>
+      <a
+        href="https://voidkandy.substack.com"
+        class="is-flex is-align-items-center"
+      >
+        <img
+          src="/static/assets/substack-logo.svg"
+          class="is-clickable mr-2 p-0"
+          style="filter: invert()"
+          alt="substack-icon"
+          width="20"
+          height="20"
+        />
+      </a>
 
-        <a
-          href="https://voidkandy.substack.com"
-          class="is-flex is-align-items-center"
-        >
-          <img
-            src="/static/assets/substack-logo.svg"
-            class="is-clickable m-0 p-0"
-            style="filter: invert()"
-            alt="substack-icon"
-            width="20"
-            height="20"
-          />
-        </a>
-      </div>
+      <a
+        href="https://open.spotify.com/artist/19BbMfHJwXYA8zKWAs8cel?si=G4H6q3RNTiKU8OcWtUk0rg"
+        class="is-flex is-align-items-center"
+      >
+        <img
+          src="/static/assets/streaming-logos/spotify-logo.svg"
+          class="is-clickable mr-2 p-0"
+          style="filter: invert(100%)"
+          alt="SpotifyLogo"
+          width="25"
+          height="25"
+        />
+      </a>
+      <a
+        href="https://music.apple.com/us/artist/void-kandy/1517903121"
+        class="is-flex is-align-items-center"
+      >
+        <img
+          src="/static/assets/streaming-logos/apple-logo.svg"
+          class="is-clickable mr-2 p-0"
+          style="filter: invert(100%)"
+          alt="AppleLogo"
+          width="25"
+          height="25"
+        />
+      </a>
+      <a
+        href="https://voidkandy.bandcamp.com/?from=search&search_item_id=3990916999&search_item_type=b&search_match_part=?&search_page_id=3011954228&search_page_no=1&search_rank=3&search_sig=62ec632d0b1dd1a0a90e1bde5b7139d3"
+        class="is-flex is-align-items-center"
+      >
+        <img
+          src="/static/assets/streaming-logos/bandcamp-logo.png"
+          class="is-clickable mr-2 p-0"
+          alt="BandCampLogo"
+          width="25"
+          height="25"
+        />
+      </a>
+      <a
+        href="https://www.youtube.com/@Voidkandy"
+        class="is-flex is-align-items-center"
+      >
+        <img
+          src="/static/assets/streaming-logos/youtube-logo.svg"
+          class="is-clickable m-0 p-0"
+          style="filter: invert(100%)"
+          alt="YoutubeLogo"
+          width="25"
+          height="25"
+        />
+      </a>
     </div>
   </div>
 </div>

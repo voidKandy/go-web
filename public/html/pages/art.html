@@ -1,174 +1,56 @@
 <style>
-  .listen {
-    margin-top: 7em;
-  }
-
-  .listen h1 {
-    font-size: 1rem;
-    color: white;
-    border-bottom: 0.5px dotted white;
-  }
-
-  .listen a {
-    margin-right: 0.4rem;
-    margin-left: 0.4rem;
-  }
-
-  .listen img {
-    transition: all ease-in-out 200ms;
-  }
-
-  .listen img:hover {
-    transform: scale(1.08);
-  }
-
-  #audio {
-    filter: invert(100%);
-    mix-blend-mode: difference;
-  }
-
   #art-content {
     height: 100%;
-    overflow: hidden;
     transition: all ease-in-out 200ms;
+    overscroll-behavior-block: contain;
   }
 
-  #song-cover {
-    gap: 10%;
-    overflow: visible;
-    width: 100%;
+  #art-content header {
+    font-size: 5rem;
+    color: white;
   }
 
-  #song-cover img {
-    margin: 3% 0 2.5% 2.5%;
-    width: 75vh;
-    transition: all ease-in-out 400ms;
-  }
-
-  @keyframes kenBurns {
-    0% {
-      background-position: 75% 25%;
-      background-size: 200%; /* Adjust as needed */
-    }
-    25% {
-      background-position: 45% 75%;
-      background-size: 300%; /* Adjust as needed */
-    }
-    75% {
-      background-position: 25% 15%;
-      background-size: 250%; /* Adjust as needed */
-    }
-    100% {
-      background-position: 90% 75%; /* Adjust as needed */
-      background-size: 200%; /* Adjust as needed */
-    }
-  }
-
-  @keyframes albumSlideAnimation {
-    from {
-      transform: translateY(0%);
-    }
-    to {
-      transform: translateY(-100%);
+  @media only screen and (max-width: 600px) {
+    #song-player {
+      transform: scale(80%);
     }
   }
 </style>
 
 <div
   id="art-content"
-  _="init
-         hide me with *opacity
-    end
-    on load
-         transition my *opacity to 1
-    end"
+  class="is-flex is-flex-direction-column"
+  style="opacity: 0"
+  _="on load
+        wait 180ms
+        then transition my *opacity to 1
+     end"
 >
-  <div class="is-flex is-flex-direction-row is-justify-content-space-between">
-    <div
-      id="song-cover"
-      class="is-flex is-flex-direction-column is-justify-content-center"
-    >
-      <img
-        id="{{.CurrentSong.DisplayName}} Cover"
-        class="{{.CurrentSong.Album}}"
-        src="{{.CurrentSong.ImgFilePath}}"
-        alt="{{.CurrentSong.DisplayName}}"
-      />
-    </div>
+  {{ template "album" . }}
 
-    <div class="mx-5 my-2 is-flex is-flex-direction-column has-text-centered">
-      {{ template "album" . }}
-      <div class="is-align-self-flex-end listen">
-        <h1>Listen to more</h1>
-        <div
-          class="m-2 is-flex is-flex-direction-row is-justify-content-space-evenly is-align-items-center"
-        >
-          <a
-            href="https://open.spotify.com/artist/19BbMfHJwXYA8zKWAs8cel?si=G4H6q3RNTiKU8OcWtUk0rg"
-          >
-            <img
-              src="/static/assets/streaming-logos/spotify-logo.svg"
-              width="20rem"
-              style="filter: invert(100%)"
-              alt="SpotifyLogo"
-            />
-          </a>
-          <a href="https://music.apple.com/us/artist/void-kandy/1517903121">
-            <img
-              src="/static/assets/streaming-logos/apple-logo.svg"
-              width="20rem"
-              style="filter: invert(100%)"
-              alt="AppleLogo"
-            />
-          </a>
-          <a
-            href="https://voidkandy.bandcamp.com/?from=search&search_item_id=3990916999&search_item_type=b&search_match_part=?&search_page_id=3011954228&search_page_no=1&search_rank=3&search_sig=62ec632d0b1dd1a0a90e1bde5b7139d3"
-          >
-            <img
-              src="/static/assets/streaming-logos/bandcamp-logo.png"
-              width="20rem"
-              alt="BandCampLogo"
-            />
-          </a>
-          <a href="https://www.youtube.com/@Voidkandy">
-            <img
-              src="/static/assets/streaming-logos/youtube-logo.svg"
-              width="20rem"
-              style="filter: invert(100%)"
-              alt="YoutubeLogo"
-            />
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div
-      id="spinny-switcher"
-      class="is-align-self-center"
-      hx-swap="innerHTML"
-      hx-swap-oob="true"
-    >
-      <h1
-        id="switch-from-art"
-        class="art material-symbols-outlined clickable"
-        hx-get="/landing"
-        hx-target="#art-content"
-        hx-trigger="click delay:20ms"
-        hx-select="#route-content"
-        hx-push-url="true"
-        hx-swap="outerHTML transition:true"
-      ></h1>
-      <img src="/static/assets/musician-text.svg" alt="SpinnyGuy" />
-    </div>
+  <div
+    id="spinny-switcher"
+    class="is-align-self-center"
+    hx-swap="innerHTML"
+    hx-swap-oob="true"
+  >
+    <h1
+      id="switch-from-art"
+      class="art material-symbols-outlined clickable"
+      hx-get="/landing"
+      hx-target="#art-content"
+      hx-trigger="click"
+      hx-select="#route-content"
+      hx-push-url="true"
+      hx-swap="outerHTML transition:true"
+    ></h1>
+    <img src="/static/assets/musician-text.svg" alt="SpinnyGuy" />
   </div>
 </div>
 <div
   id="footer-left"
-  class="is-flex is-flex-direction-column is-justify-content-center"
-  hx-swap="innerHTML"
-  hx-swap-oob="true"
+  class="is-flex is-flex-direction-column is-justify-content-center song-player-transition"
+  hx-swap-oob="innerHTML transition:true"
 >
-  <div id="song-player" class="song-player-transition">
-    {{ template "song-player" . }}
-  </div>
+  <div id="song-player">{{ template "song-player" . }}</div>
 </div>

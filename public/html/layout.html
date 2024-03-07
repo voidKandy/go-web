@@ -37,10 +37,15 @@
   <div
     id="route-content"
     hx-target="this"
-    hx-trigger="load"
+    hx-trigger="init, getArt"
     hx-swap="innerHtml transition:true"
     hx-get="{{.Path}}{{.Params}}"
     hx-push-url="true"
+    _="init
+            if '{{.Path}}' includes '/art/'
+                send getArt to me
+            end
+       end"
   ></div>
 
   <div
@@ -51,7 +56,7 @@
       id="footer-left"
       class="is-flex is-flex-direction-column landing-list is-justify-content-center"
       hx-target="#route-content"
-      hx-swap-oob="true"
+      hx-swap-oob="outerHTML"
       hx-swap="innerHtml transition:true"
       hx-push-url="true"
     >
@@ -92,7 +97,7 @@
         /contact
       </li>
     </ul>
-    <div id="spinny-switcher" hx-swap="innerHTML" hx-swap-oob="true">
+    <div id="spinny-switcher" hx-swap-oob="innerHTML">
       <h1
         class="material-symbols-outlined clickable"
         hx-trigger="click"
