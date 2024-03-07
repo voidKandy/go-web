@@ -1,0 +1,151 @@
+<script type="text/hyperscript">
+  behavior ProjectListItem
+      init
+          set :path to my id
+          if :path == '{{ .Path }}'
+              send styleSelected to me
+          end
+      end
+      on styleSelected
+              send reset to <li/> in closest parent <ul/>
+              add .selected to me
+              wait for a reset
+              remove .selected from me
+      end
+      on click
+          send select to me
+      end
+      on select
+          if I do not match .selected
+              send styleSelected
+              send getContent to me
+          end
+      end
+  end
+</script>
+
+<style>
+  .project-list {
+    font-size: 2.5vw;
+    color: #2b2b2b;
+    margin-right: 2rem;
+    white-space: nowrap;
+  }
+
+  .project-list li {
+    cursor: pointer;
+    transition:
+      transform 0.2s ease-in-out,
+      color 0.1s ease-in-out;
+  }
+
+  .project-list li.selected {
+    color: white;
+    transform: scale(105%);
+  }
+
+  #project-display {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  @media only screen and (min-width: 600px) {
+    .project-list li:hover {
+      color: white !important;
+      transform: scale(105%) !important;
+    }
+
+    .project-list li:has(+ li:hover),
+    .project-list li:hover + li {
+      color: #a7a7a7 !important;
+      transform: scale(102%);
+    }
+
+    .project-list ul:hover li {
+      /* Styles for all li elements within the ul when ul is hovered */
+      color: #2b2b2b; /* Example style */
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    .project-list {
+      font-size: 3.5vw;
+      margin-left: 2rem;
+    }
+    .project-list li {
+      color: #a7a7a7;
+    }
+    #project-display {
+      flex-direction: column-reverse;
+    }
+  }
+</style>
+
+<div
+  class="page-transition"
+  _="on load
+        remove .page-transition from me
+    end
+    on htmx:trigger from .landing-list
+        add .page-transition to me
+    end"
+>
+  <header class="is-flex is-flex-direction-column m-4">
+    <div style="width: max-content">
+      <h1
+        class="mb-0 title has-text-weight-bold has-text-white-ter"
+        style="font-size: 10vw"
+        id="header"
+      >
+        Projects
+      </h1>
+      <hr style="color: white" />
+    </div>
+  </header>
+  <div id="project-display" class="is-flex">
+    <section id="project-content" class="m-4">
+      {{ template "project" . }}
+    </section>
+    <section class="project-list is-flex is-align-self-flex-start">
+      <ul
+        hx-target="#project-content"
+        hx-select="#project-content"
+        hx-push-url="true"
+        hx-swap="outerHTML transition:true"
+      >
+        <li
+          id="espionox"
+          _="install ProjectListItem"
+          hx-get="/projects/espionox"
+          hx-trigger="getContent"
+        >
+          Espionox
+        </li>
+        <li
+          id="coding_assistant"
+          _="install ProjectListItem"
+          hx-get="/projects/coding_assistant"
+          hx-trigger="getContent"
+        >
+          Coding Assistant
+        </li>
+        <li
+          id="bureau"
+          _="install ProjectListItem"
+          hx-get="/projects/bureau"
+          hx-trigger="getContent"
+        >
+          Bureau
+        </li>
+        <li
+          id="showbeam"
+          _="install ProjectListItem"
+          hx-get="/projects/showbeam"
+          hx-trigger="getContent"
+        >
+          Showbeam
+        </li>
+      </ul>
+    </section>
+  </div>
+</div>

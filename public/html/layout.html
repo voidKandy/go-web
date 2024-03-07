@@ -1,11 +1,12 @@
 {{ define "layout" }}
 <!-- add @hx-get='`path`' to me -->
 <script type="text/hyperscript">
-  behavior LandingListItem(path)
+  behavior LandingListItem
      init
+          set :path to my id
           add .clickable to me
           set :c to my textContent
-          if '{{ .Path }}' includes path or pathname of the location of the window includes path
+          if '{{ .Path }}' includes :path or pathname of the location of the window includes :path
               send select to me
           end
       end
@@ -17,7 +18,6 @@
       on select
           send reset to <li/> in closest parent <ul/>
           send getContent to me
-          log 'got content for {{ .Path }}'
           add .selected to me
           put '◉' into me
           wait for a reset
@@ -36,62 +36,73 @@
 >
   <div
     id="route-content"
-    hx-trigger="load"
     hx-target="this"
+    hx-trigger="init, getArt"
     hx-swap="innerHtml transition:true"
     hx-get="{{.Path}}{{.Params}}"
     hx-push-url="true"
-    style="overflow-y: auto; overflow-x: hidde"
+    _="init
+            if '{{.Path}}' includes '/art/'
+                send getArt to me
+            end
+       end"
   ></div>
 
   <div
-    hx-swap="outerHTML"
+    id="footer"
     class="mx-4 my-2 is-flex is-flex-direction-row is-justify-content-space-between"
     style="backdrop-filter: blur(50)"
   >
     <ul
       id="footer-left"
-      hx-swap-oob="true"
       class="is-flex is-flex-direction-column landing-list is-justify-content-center"
-      hx-trigger="getContent"
       hx-target="#route-content"
+      hx-swap-oob="outerHTML"
       hx-swap="innerHtml transition:true"
       hx-push-url="true"
     >
       <li
         tabindex="0"
-        _="install LandingListItem(path: '/landing')"
+        id="landing"
+        _="install LandingListItem"
+        hx-trigger="getContent"
         hx-get="/landing"
       >
         /.
       </li>
       <li
         tabindex="1"
-        _="install LandingListItem(path: '/projects/')"
+        id="projects"
+        _="install LandingListItem"
+        hx-trigger="getContent"
         hx-get="/projects/espionox"
       >
         /projects
       </li>
       <li
         tabindex="2"
-        _="install LandingListItem(path: '/about')"
+        id="about"
+        _="install LandingListItem"
+        hx-trigger="getContent"
         hx-get="/about"
       >
         /about
       </li>
       <li
         tabindex="3"
-        _="install LandingListItem(path: '/contact')"
+        id="contact"
+        _="install LandingListItem"
+        hx-trigger="getContent"
         hx-get="/contact"
       >
         /contact
       </li>
     </ul>
-    <div hx-swap-oob="true" id="spinny-switcher">
+    <div id="spinny-switcher" hx-swap-oob="innerHTML">
       <h1
         class="material-symbols-outlined clickable"
         hx-trigger="click"
-        hx-get="/art?song=sgitf"
+        hx-get="/art/ADAB?song=sgitf"
         hx-target="#route-content"
         hx-push-url="true"
         hx-swap="innerHTML transition:true"

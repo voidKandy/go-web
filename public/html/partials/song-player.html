@@ -1,27 +1,19 @@
+{{ define "song-player" }}
 <style>
   .song-name {
-    font-size: 4vh;
+    font-size: 3vh;
     color: white;
   }
+
+  #audio {
+    filter: invert(100%);
+    mix-blend-mode: difference;
+  }
 </style>
-<h1 class="song-name ml-2">{{.Name}}</h1>
+<h1 class="song-name ml-2">{{.CurrentSong.DisplayName}}</h1>
 <audio id="audio" controls-list="nodownload noplaybackrate" controls>
-  <source src="/static/assets/art/songs/{{.AudioName}}.wav" type="audio/wav" />
+  <source src="{{.CurrentSong.SongFilePath}}" type="audio/wav" />
   Your browser does not support the audio element.
 </audio>
 
-{{if .Url}}
-<img
-  src="{{.Url}}"
-  alt="{{.Name}}"
-  id="current-song-cover"
-  hx-swap-oob="outerHTML"
-/>
-{{else}}
-<img
-  src="/static/assets/art/album-art/adab.jpeg"
-  alt="△⁍⍝ß"
-  id="current-song-cover"
-  hx-swap-oob="outerHTML"
-/>
-{{end}}
+{{ end }}

@@ -1,0 +1,56 @@
+<style>
+  #art-content {
+    height: 100%;
+    transition: all ease-in-out 200ms;
+    overscroll-behavior-block: contain;
+  }
+
+  #art-content header {
+    font-size: 5rem;
+    color: white;
+  }
+
+  @media only screen and (max-width: 600px) {
+    #song-player {
+      transform: scale(80%);
+    }
+  }
+</style>
+
+<div
+  id="art-content"
+  class="is-flex is-flex-direction-column"
+  style="opacity: 0"
+  _="on load
+        wait 180ms
+        then transition my *opacity to 1
+     end"
+>
+  {{ template "album" . }}
+
+  <div
+    id="spinny-switcher"
+    class="is-align-self-center"
+    hx-swap="innerHTML"
+    hx-swap-oob="true"
+  >
+    <h1
+      id="switch-from-art"
+      class="art material-symbols-outlined clickable"
+      hx-get="/landing"
+      hx-target="#art-content"
+      hx-trigger="click"
+      hx-select="#route-content"
+      hx-push-url="true"
+      hx-swap="outerHTML transition:true"
+    ></h1>
+    <img src="/static/assets/musician-text.svg" alt="SpinnyGuy" />
+  </div>
+</div>
+<div
+  id="footer-left"
+  class="is-flex is-flex-direction-column is-justify-content-center song-player-transition"
+  hx-swap-oob="innerHTML transition:true"
+>
+  <div id="song-player">{{ template "song-player" . }}</div>
+</div>
