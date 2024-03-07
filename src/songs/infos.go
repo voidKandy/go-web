@@ -15,7 +15,7 @@ func (song SongInfo) ImgFilePath() string {
 	if song.HashUniqueImage {
 		return fmt.Sprintf("/static/assets/art/%s/%s.png", song.Album, song.FileName)
 	}
-	return fmt.Sprintf("/static/assets/art/%s/Album.png", song.Album)
+	return fmt.Sprintf("/static/assets/art/%s/album.png", song.Album)
 }
 
 func (song SongInfo) SongFilePath() string {
