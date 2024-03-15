@@ -30,7 +30,7 @@ func SendEmailHandler(w http.ResponseWriter, r *http.Request) {
 
 		r.ParseForm()
 		web3form_url := "https://api.web3forms.com/submit"
-		r.Form.Set("access_key", "b896a032-13cb-4639-a9ad-1fc1aacb1255")
+		r.Form.Set("access_key", "145d9a7c-79aa-40b7-bb08-9d75c3f333db")
 		res, emailErr := http.PostForm(web3form_url, r.Form)
 		fmt.Println("WEB3 RESPONSE: ", res)
 
