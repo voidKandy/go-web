@@ -1,10 +1,18 @@
 <style>
   .about p {
     color: white;
+    font-size: 1.3rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
   }
 
   .about h1 {
     color: white;
+    font-size: 3.5rem;
+    font-weight: 600;
+  }
+
+  .abt-container h1 {
     font-size: 2rem;
     font-weight: 600;
   }
@@ -22,6 +30,12 @@
     content: "•";
     margin-right: 0.5rem;
   }
+  @media only screen and (max-width: 600px) {
+    .about p {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+  }
 </style>
 
 <div class="about is-flex">
@@ -30,17 +44,15 @@
       class="is-flex is-flex-direction-column is-align-self-center mt-1 px-5"
     >
       <h1 class="is-align-self-center" id="header">Ezra Klitsie</h1>
-      <p class="is-flex mt-1 is-align-self-flex-end pl-6 is-size-7">
+      <p class="is-flex mt-1 is-align-self-flex-end pl-6 is-size-6">
         aka. voidkandy
       </p>
     </div>
 
-    <div class="mx-3 my-4">
-      <h1 class="px-2 is-size-5 has-text-weight-semibold">
-        From Music to Code
-      </h1>
+    <div class="mx-3 my-4 abt-container">
+      <h1 class="px-2 has-text-weight-semibold">From Music to Code</h1>
       <br />
-      <p class="px-6">
+      <p>
         What began as a love for guitar and music composition became a passion
         for production and sound design. Ableton was an excellent gateway drug
         into software. Looking back, it's hard to tell if I was more interested
@@ -51,11 +63,9 @@
         career I naively thought it would, something had to change.
       </p>
       <hr style="border-top: 1px solid grey" />
-      <h1 class="px-2 mt-3 is-size-5 has-text-weight-semibold">
-        Self Taught Developer
-      </h1>
+      <h1 class="px-2 mt-3 has-text-weight-semibold">Self Taught Developer</h1>
       <br />
-      <p class="px-6">
+      <p>
         I had always been interested by programming, but I believed it was 'too
         complicated' for the likes of a grug brain like myself. The
         accessibility that ChatGPT brought to programming was the push I needed
@@ -83,9 +93,9 @@
       </p>
 
       <hr style="border-top: 1px solid grey" />
-      <h1 class="px-2 mt-3 is-size-5 has-text-weight-semibold">Experiences</h1>
+      <h1 class="px-2 mt-3 has-text-weight-semibold">Experiences</h1>
       <br />
-      <p class="px-6">
+      <p>
         My introduction to webdev came when I began as an intern for a small
         startup. I had very little supervision and was thrown into a massive
         MERN stack codebase, I had never written any Typescript before and was

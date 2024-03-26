@@ -1,7 +1,7 @@
 {{ define "album" }}
 
 <style>
-  #album {
+  #album-info {
     display: flex;
     flex-direction: row; /* Default style for larger screens */
     justify-content: space-between;
@@ -25,20 +25,43 @@
     align-self: center;
   }
 
+  header {
+    width: 100vw;
+  }
+
+  .album-nav button {
+    font-size: 3rem;
+    line-height: 2rem;
+    transition: all 200ms ease-in-out;
+    padding: none;
+    white-space: nowrap;
+    color: white;
+    border: none;
+    background: transparent;
+  }
+
+  .album-nav button.trans {
+    pointer-events: none;
+    color: transparent;
+  }
+
+  .album-nav button:hover {
+    cursor: pointer !important;
+    transform: scale(1.2);
+  }
+
   #album-songs h2 {
-    font-size: 1rem;
+    font-size: 1.4rem;
     text-align: right;
     transition: all ease-in-out 150ms;
   }
 
   #album-name {
-    font-size: 4rem;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    font-size: 5rem;
   }
 
   @media only screen and (max-width: 600px) {
-    #album {
+    #album-info {
       flex-direction: column; /* Apply this style for screens narrower than 600px */
     }
     #album-name {
@@ -68,39 +91,43 @@
   }
 </style>
 
-<div id="album">
-  <div id="album-info">
-    <header
-      id="album-nav-and-name"
-      class="is-flex is-justify-content-center has-text-center"
-    >
-      <div
-        class="is-flex is-flex-direction-row is-align-self-center"
-        hx-select="#album"
-        hx-target="#album"
-        hx-swap="outerHTML transition:true"
+<div id="album" class="is-flex is-flex-direction-column">
+  <header
+    id="album-nav-and-name"
+    class="is-flex is-justify-content-space-between is-align-self-center"
+    hx-select="#album"
+    hx-target="#album"
+    hx-swap="outerHTML transition:true"
+  >
+    <div id="nav-prev" class="album-nav ml-3">
+      {{ if .PrevAlbum }}
+      <button
+        hx-get="/art/{{.PrevAlbum.AlbumName}}?song={{.PrevAlbum.FirstSong}}"
       >
-        {{ if .PrevAlbum }}
-        <h3
-          id="nav-before"
-          class="is-size-4 is-clickable has-text-white is-align-self-center"
-          hx-get="/art/{{.PrevAlbum.AlbumName}}?song={{.PrevAlbum.FirstSong}}"
-        >
-          ◀︎
-        </h3>
-        {{ end }}
-        <h1 id="album-name">{{.AlbumDisplayName}}</h1>
-        {{ if .NextAlbum }}
-        <h3
-          id="nav-next"
-          class="is-size-4 is-clickable has-text-white is-align-self-center"
-          hx-get="/art/{{.NextAlbum.AlbumName}}?song={{.NextAlbum.FirstSong}}"
-        >
-          ▶︎
-        </h3>
-        {{ end }}
-      </div>
-    </header>
+        ◀︎
+      </button>
+      {{else}}
+      <button class="trans">◀︎</button>
+      {{ end }}
+    </div>
+
+    <h1 id="album-name">{{.AlbumDisplayName}}</h1>
+
+    <div id="nav-next" class="album-nav mr-3">
+      {{ if .NextAlbum }}
+
+      <button
+        hx-get="/art/{{.NextAlbum.AlbumName}}?song={{.NextAlbum.FirstSong}}"
+      >
+        ▶︎
+      </button>
+      {{else}}
+      <button class="trans">▶︎</button>
+      {{ end }}
+    </div>
+  </header>
+
+  <div id="album-info">
     <div id="song-cover" class="is-flex">
       <img
         class="{{.CurrentSong.Album}}"
@@ -108,19 +135,19 @@
         alt="{{.CurrentSong.DisplayName}}"
       />
     </div>
-  </div>
-  <div id="album-songs" class="is-flex is-flex-direction-column">
-    {{ range .AlbumSongs }}
-    <h2
-      hx-get="/art/{{.Album}}?song={{.FileName}}"
-      hx-push-url="/art/{{.Album}}?song={{.FileName}}"
-      hx-select=" #song-cover"
-      hx-trigger="getSong"
-      hx-target=" #song-cover"
-      hx-select-oob="#footer-left"
-      hx-swap="outerHTML transition:true"
-      class="clickable"
-      _="
+
+    <div id="album-songs" class="is-flex is-flex-direction-column">
+      {{ range .AlbumSongs }}
+      <h2
+        hx-get="/art/{{.Album}}?song={{.FileName}}"
+        hx-push-url="/art/{{.Album}}?song={{.FileName}}"
+        hx-select=" #song-cover"
+        hx-trigger="getSong"
+        hx-target=" #song-cover"
+        hx-select-oob="#footer-left"
+        hx-swap="outerHTML transition:true"
+        class="clickable"
+        _="
      on load 
          set :search to href of the location of the window 
          if :search includes '{{.Album}}?song={{.FileName}}'
@@ -148,11 +175,12 @@
         send styleSelect to me
      end
      "
-    >
-      {{.DisplayName}}
-    </h2>
+      >
+        {{.DisplayName}}
+      </h2>
 
-    {{ end }}
+      {{ end }}
+    </div>
   </div>
 </div>
 

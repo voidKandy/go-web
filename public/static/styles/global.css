@@ -1,7 +1,7 @@
 @font-face {
-  font-family: "space-mono";
-  src: url("/static/space_mono/SpaceMono-Regular.ttf") format("truetype");
-  /* src: url("/static/void_scrawl/Voidscrawl-Regular.ttf") format("truetype"); */
+  font-family: "void-scrawl";
+  /* src: url("/static/space_mono/SpaceMono-Regular.ttf") format("truetype"); */
+  src: url("/static/void_scrawl/Voidscrawl-Regular.ttf") format("truetype");
   /* You can also include additional font formats for better browser compatibility */
 }
 
@@ -20,7 +20,7 @@ body {
   width: 100%;
   padding: 0;
   margin: 0;
-  font-family: "space-mono", sans-serif;
+  font-family: "void-scrawl", sans-serif;
   background-color: white;
   overflow: hidden;
   scroll-margin: 0;
@@ -54,10 +54,15 @@ html {
 }
 
 .landing-list li {
+  font-size: 1.2rem;
   cursor: pointer;
   transition:
     color 0.3s ease,
     transform 0.3s ease;
+}
+
+.landing-list li.selected {
+  font-size: 1rem;
 }
 
 .clickable {
