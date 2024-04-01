@@ -4,7 +4,7 @@
  .text {
       font-weight: 600;
       letter-spacing: 1.7px;
-  font-family: "void-scrawl", sans-serif;
+      font-family: "void-scrawl", sans-serif;
       text-transform: uppercase;
       font-size: 17px;
       <!-- fill: #111; -->
