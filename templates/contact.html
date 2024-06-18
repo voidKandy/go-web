@@ -1,0 +1,81 @@
+<div
+  class="page-transition"
+  x-style="align-self:center;flex; flex-col; flex-grow; mx:2rem; ty:1rem; lg|m:6rem; lg|p:2; radius:md; backdrop-filter: blur(2px);"
+>
+  <div x-style="color:@desert-sand; mx:2rem; my:1rem; lg|my:6rem; lg|mx:20rem;">
+    <h1
+      x-style="font-size: 3rem; my:0; text-shadow: @bright-pink 2px 1px; text-align:center;"
+    >
+      Get in contact
+    </h1>
+    <div x-style="m:4;" id="email-div">
+      <form
+        x-style="flex; flex-col;"
+        hx-post="/email"
+        hx-push-url="false"
+        hx-target="#email-response"
+        hx-swap="innerHTML transition:false"
+      >
+        {% if let Some(user) = user %}
+        <h2
+          x-style="font-size: 1rem; font-weight: 100;my:2; text-align:center;"
+        >
+          {{user.email}}
+        </h2>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value="{{user.email}}"
+          hidden
+          required
+          autocomplete="off"
+        />
+
+        {% else %}
+        <label x-style="my:2;" for="email">Your Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          autocomplete="off"
+        />
+
+        {% endif %}
+        <label x-style="my:2;" for="subject">Subject:</label>
+        <input
+          type="text"
+          id="subject"
+          name="subject"
+          required
+          autocomplete="off"
+        />
+
+        <label x-style="my:2;" for="message">Message:</label>
+        <textarea
+          style="resize: none"
+          id="message"
+          name="message"
+          rows="4"
+          required
+          autocomplete="off"
+        ></textarea>
+
+        <button
+          x-style="align-self:center; m:4;"
+          class="button"
+          type="submit"
+          id="submit-button"
+          _="on htmx:trigger from closest <form/> 
+                  blur() me
+                  add .is-loading to me
+                 end "
+        >
+          Send
+        </button>
+      </form>
+      <div id="email-response" x-style="text-align:center;"></div>
+    </div>
+  </div>
+</div>

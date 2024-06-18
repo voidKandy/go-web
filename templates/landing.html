@@ -1,0 +1,116 @@
+<style>
+  #header-text {
+    transition: all ease-in-out 500ms;
+    text-shadow: black 7px 9px;
+    color: var(--bright-pink);
+  }
+
+  #header-text.loaded {
+    text-shadow: none;
+  }
+
+  #changing-text-container {
+    filter: url(#threshold) blur(0.2px);
+  }
+
+  #before-text::after {
+    content: " ";
+  }
+
+  #text1,
+  #text2 {
+    text-wrap: nowrap;
+    position: absolute;
+    color: var(--bright-pink);
+    width: 100%;
+    display: inline-block;
+    text-align: left;
+  }
+</style>
+<div
+  class="page-transition"
+  x-style="flex;  flex-col;  justify-content: space-between; flex-grow;"
+  _=" install TransitionGuard(elmt: #player-container)"
+>
+  <section
+    x-style="px:2; pt:2; my:2; mx:2; lg|mx:8; flex; flex-grow; flex-col;"
+  >
+    <h1
+      class="unselectable"
+      x-style="p:0; m:0; align-self: flex-end; color:@bright-pink; "
+    >
+      ∞
+    </h1>
+
+    <h1
+      id="header-text"
+      class="unselectable"
+      x-style="align-text: center; font-size:lg; my:2;"
+      _="on load wait 200ms add .loaded to me end"
+    >
+      VoidKandy
+    </h1>
+    <div x-style="flex; flex-row; ml:1;">
+      <div
+        id="changing-text-container"
+        class="unselectable"
+        x-style="font-size: 1rem; sm|font-size: 2rem; "
+        _="on load call startTextAni() end"
+      >
+        <span id="text1"></span>
+        <span id="text2"></span>
+      </div>
+
+      <svg id="filters">
+        <defs>
+          <filter id="threshold">
+            <feColorMatrix
+              in="SourceGraphic"
+              type="matrix"
+              values="1 0 0 0 0
+                    0 1 0 0 0
+                    0 0 1 0 0
+                    0 0 0 255
+            -140"
+            />
+          </filter>
+        </defs>
+      </svg>
+    </div>
+    <div
+      x-style="flex; flex-col; backdrop-filter: blur(2px);  color:@desert-sand; radius:lg;  w:fit-content; lg|max-w:50vw;text-wrap: pretty;"
+    >
+      <h1 x-style="text-shadow: @bright-pink 2px 1px;">Self Starter Energy</h1>
+      <p>
+        Before becoming a software developer, I spent about five years as a full
+        time multimedia artist. Now, as a freelancer, I bring my unique blend of
+        artistic and technical expertise to any project I am a part of.
+      </p>
+    </div>
+    <button
+      class="button"
+      x-style="align-self:flex-start; mt:5; mx:0;"
+      hx-get="/portfolio/deathwish"
+      hx-push-url="true"
+      hx-trigger="mousedown"
+      hx-target="#route-content"
+      hx-swap="innerHTML transition:true"
+      _="install TransitionGuard(elmt: #player-container)"
+    >
+      Check out my work
+    </button>
+    <button
+      class="button"
+      x-style="align-self:flex-start; mt:5; mx:0;"
+      hx-get="/contact"
+      hx-push-url="true"
+      hx-trigger="mousedown"
+      hx-target="#route-content"
+      hx-swap="innerHTML transition:true"
+      _="install TransitionGuard(elmt: #player-container)"
+    >
+      Get In Contact
+    </button>
+  </section>
+  <div x-style="flex; align-self: left;"></div>
+</div>

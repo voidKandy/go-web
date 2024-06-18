@@ -1,0 +1,54 @@
+<script type="text/hyperscript">
+  behavior HideShowForm(otherSection)
+      init
+        set :form to next <form/>
+        set :sec to closest parent <section/>
+        set :t to my textContent
+      end
+      on mousedown
+        if :form matches .hidden
+          remove .hidden from :form
+          add .hidden to otherSection
+          set my textContent to 'x'
+          add .form-open to :sec
+        else
+          add .hidden to :form
+          remove .hidden from otherSection
+          remove .form-open from :sec
+          set my textContent to :t
+        end
+      end
+  end
+</script>
+
+<div x-style="flex; flex-row;">
+  {% if let Some(user) = user %}
+  <button
+    x-style="align-self:center;"
+    class="button"
+    hx-get="/data/auth/logout"
+    hx-push-url="false"
+    _="on htmx:afterRequest reload() the location of the window end"
+  >
+    Logout
+  </button>
+  {% else %}
+  <button
+    x-style="mr:1;"
+    class="button"
+    hx-get="/user/register"
+    hx-target="#route-content"
+    _="install NavListChoice(path: '/user/register')"
+  >
+    Register
+  </button>
+  <button
+    class="button"
+    hx-get="/user/login"
+    hx-target="#route-content"
+    _="install NavListChoice(path: '/user/login')"
+  >
+    Login
+  </button>
+  {% endif %}
+</div>

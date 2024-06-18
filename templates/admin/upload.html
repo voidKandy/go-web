@@ -1,0 +1,82 @@
+<div x-style="flex; flex-col; justify-content:center; align-self: center;">
+  <form
+    x-style="flex; flex-col; align-self:center;"
+    hx-post="/admin/upload"
+    hx-push-url="false"
+    hx-target="#upload-response"
+    hx-swap="innerHTML transition:false"
+    enctype="multipart/form-data"
+    _="
+      init
+        set :target to .form-response in me
+      end
+      on htmx:beforeSwap(event) from <span.form-response/> in me
+        set :resObj to (event.detail.serverResponse as an Object)
+        log :resObj
+        if :resObj.status contains 'success'
+          remove .error from :target
+          set :target.textContent to `Post uploaded`
+          halt the event
+          wait 500ms then
+          reload() the location of the window
+        else
+          add .error to :target
+          set :target.textContent to :resObj.message
+        end
+      end
+
+    "
+  >
+    <label x-style="my:2;" for="title">Title:</label>
+    <input type="text" id="title" name="title" required autocomplete="off" />
+
+    <label x-style="my:2;" for="subtitle">Subtitle:</label>
+    <input
+      type="text"
+      id="subtitle"
+      name="subtitle"
+      required
+      autocomplete="off"
+    />
+
+    <label x-style="my:2;" for="subtitle">Category:</label>
+    <input type="text" id="category" name="category" autocomplete="off" />
+    <div x-style="flex; flex-row; justify-content:space-between;">
+      <label
+        for="files"
+        class="button"
+        x-style="my:2; align-self:center; font-size:0.5rem;"
+      >
+        Select files to upload
+        <input
+          hidden
+          multiple
+          x-style="border:none; background: transparent;"
+          type="file"
+          id="files"
+          name="files"
+          accept=".md, image/png, image/jpg"
+          _="on change
+            set :span to next <span/>
+            set :span.textContent to `${length of me.files} selected` 
+         end"
+        />
+      </label>
+      <span x-style="font-size: .5rem; align-self:center;">No file chosen</span>
+    </div>
+
+    <button
+      x-style="align-self:center; m:4;"
+      class="button"
+      type="submit"
+      id="submit-button"
+      _="on htmx:trigger from closest <form/> 
+          blur() me
+          add .is-loading to me
+         end "
+    >
+      Upload
+    </button>
+  </form>
+  <div id="upload-response" x-style="text-align:center;"></div>
+</div>

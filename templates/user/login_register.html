@@ -1,0 +1,109 @@
+<script type="text/hyperscript">
+  behavior UserFormHandler(successMessage)
+      init
+        set :target to .form-response in me
+      end
+      js
+        function goToLanding() {
+          window.location.replace("/landing")
+        }
+      end
+      on htmx:beforeSwap(event) from <span.form-response/> in me
+        set :resObj to (event.detail.serverResponse as an Object)
+        log :resObj
+        if :resObj.status contains "success"
+          remove .error from :target
+          set :target.textContent to `$successMessage`
+          halt the event
+          wait 500ms then
+          call goToLanding()
+        else
+          add .error to :target
+          set :target.textContent to :resObj.message
+        end
+      end
+   end
+</script>
+
+<style>
+  .form-response {
+    color: var(--cambridge-blue);
+  }
+
+  .form-response.error {
+    color: red;
+  }
+
+  #login-or-register {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    backdrop-filter: blur(2px);
+  }
+
+  #login-or-register form {
+    margin: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+  }
+
+  #login-or-register form * {
+    margin: 0.5rem;
+  }
+  #login-or-register form button {
+    align-self: center;
+  }
+</style>
+<div id="login-or-register" class="page-transition">
+  {% if login %}
+  <form
+    hx-post="/data/auth/login"
+    hx-include="[name='email'], [name='password']"
+    hx-push-url="false"
+    hx-target="find .form-response"
+    _="install UserFormHandler(successMessage: 'Signed in successfully')"
+  >
+    <h1>Login</h1>
+    <input type="email" placeholder="your email" name="email" />
+    <input
+      type="text"
+      placeholder="password"
+      name="password"
+      autocomplete="off"
+    />
+    <button class="button">Submit</button>
+    <span class="form-response"></span>
+  </form>
+
+  {% else %}
+
+  <form
+    hx-post="/data/auth/register"
+    hx-push-url="false"
+    hx-include="[name='email'], [name='password'], [name='name']"
+    hx-target="find .form-response"
+    _="install UserFormHandler(successMessage: 'Your account has been made')"
+  >
+    <h1>Register</h1>
+    <input type="text" placeholder="your name" name="name" />
+    <input type="email" placeholder="your email" name="email" />
+    <input
+      type="text"
+      placeholder="password"
+      name="password"
+      autocomplete="off"
+    />
+    <label
+      for="subscribed"
+      x-style="color:@desert-sand; flex; align-items:center; font-size:0.75rem;"
+    >
+      <input type="checkbox" name="subscribed" value="off" />
+      <span x-style="ml:4;"> Sign me up for the newsletter </span>
+    </label>
+    <button class="button" x-style="mt:4; mb:0;">Submit</button>
+    <span class="form-response"></span>
+  </form>
+  {% endif %}
+</div>

@@ -1,0 +1,72 @@
+<script type="text/hyperscript">
+  behavior MarkdownBlock
+    init immediately
+      measure me then set :w to the result.width
+      measure me then set :h to the result.height
+      log :w
+      log :h
+      log <img/> in me
+      set @width of <img/> in me to :w * 0.60
+      add .img to <img/> in me
+    end
+  end
+</script>
+
+<style>
+  .img {
+    align-self: center;
+  }
+</style>
+
+{% if let Some(post) = post_opt %}
+<div
+  x-style="flex; flex-col; justify-content:center;
+  color:@desert-sand; background-color: @dim-grey;
+  p:1.5rem;"
+>
+  {% if user.admin %}
+  <button
+    class="material-symbols-outlined material-symbols-button"
+    hx-get="/admin/update/{{post.title}}"
+    hx-push-url="false"
+    hx-target="this"
+    hx-swap="outerHTML"
+  >
+    edit
+  </button>
+  {% endif %}
+  <div x-style="flex; flex-col; justify-content:space-between;">
+    <button
+      class="material-symbols-button material-symbols-outlined"
+      x-style="align-self:flex-start;"
+      hx-get="/blog"
+      hx-target="#blogs-content"
+      hx-select="#blogs-content"
+      hx-swap="outerHTML"
+      hx-push-url="true"
+      hx-trigger="mousedown"
+    >
+      arrow_back
+    </button>
+    {% if let Some(cat) = post.category %}
+    <h2
+      x-style="font-size: 0.7rem; align-self:flex-end; px:0.5rem;
+    width:fit-content; radius:lg; background-color:@desert-sand;
+    color: @dim-grey;  mt:0; mb:1;"
+    >
+      {{cat}}
+    </h2>
+    {% endif %}
+  </div>
+  <h1
+    x-style=" font-size: 2rem;text-align:center; mb:0; mt:1; text-shadow: 0 0 2px @desert-sand;"
+  >
+    {{post.title}}
+  </h1>
+  <h2 x-style="font-size:1.5rem; font-weight:0;text-align:center; mt:0; mb:1;">
+    {{post.subtitle}}
+  </h2>
+  <div x-style="mx:4;" _="install MarkdownBlock">{{post.content|safe}}</div>
+</div>
+
+{% endif %}

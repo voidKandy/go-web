@@ -1,0 +1,43 @@
+<style>
+  #blogs-content {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--dim-grey) transparent;
+    margin: 0 4rem;
+  }
+  @media only screen and (min-width: 600px) {
+    #blogs-content {
+      margin: 0 2rem;
+    }
+  }
+</style>
+<div
+  x-style="flex; flex-col; flex-grow; overflow:hidden; backdrop-filter:blur(5px); m:4; pb:6; radius:lg;"
+  class="page-transition"
+>
+  <div id="blogs-content">
+    {% if let Some(post) = post_opt %} {% include "blog/post.html" %} {% else %}
+    <div x-style="flex; flex-row; justify-content:right; mx:6;">
+      {% if user.admin %}
+      <button
+        class="material-symbols-outlined material-symbols-button"
+        hx-get="/admin/upload"
+        hx-push-url="false"
+        hx-target="this"
+        hx-swap="outerHTML"
+      >
+        add
+      </button>
+      {% endif %}
+    </div>
+    <span
+      hidden
+      hx-get="blog/latest"
+      hx-push-url="false"
+      hx-trigger="load once"
+      hx-target="this"
+      hx-swap="outerHTML"
+    ></span>
+    {% endif %}
+  </div>
+</div>

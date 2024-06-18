@@ -1,0 +1,123 @@
+<script type="text/hyperscript">
+  behavior ShowHide
+    init
+      add .showhide to me
+    end
+    on intersection(intersecting) having threshold 0.7
+       if intersecting
+          remove .invisible from me
+          add .visible to me
+       else
+          remove .visible from me
+          add .invisible to me
+       end
+    end
+  end
+</script>
+
+<style>
+  #work-container nav button {
+    align-self: center;
+    margin: 0.25rem 0rem;
+  }
+  .showhide {
+    transition:
+      opacity ease-in-out 250ms,
+      transform ease-in-out 350ms,
+      border-radius ease-in-out 300ms;
+  }
+  .showhide.invisible {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  .showhide.visible {
+    opacity: 1;
+  }
+</style>
+
+<div
+  class="page-transition"
+  id="work-container"
+  x-style="lg|m:5; m:2; flex; flex-col; lg|flex-row;  justify-content:top; overflow:hidden; w:100%; backdrop-filter:blur(5px); lg|py:6; lg|px:4; px:2; py:4; radius:lg"
+  _=" install TransitionGuard(elmt: #player-container)"
+>
+  <div
+    x-style="flex; lg|flex-col; lg|justify-content:top; flex-col; justify-content:center; flex-start; mb:4;"
+    _="init
+        set :mobile to window.innerWidth < 1024
+        if :mobile
+            add .hidden to #links
+        else 
+          remove .hidden from #links
+          add .hidden to #menu-button 
+        end
+      end"
+  >
+    <button
+      id="menu-button"
+      _="
+        on mousedown
+          if #links matches .hidden
+            remove .hidden from #links
+            set my textContent to 'close'
+          else 
+            add .hidden to #links
+            set my textContent to 'menu'
+          end
+        end
+        "
+      x-style="mb:4;"
+      class="material-symbols-outlined material-symbols-button"
+    >
+      menu
+    </button>
+    <nav
+      id="links"
+      class="hidden"
+      x-style="flex; flex-col;"
+      hx-target="#work-type"
+      hx-select="#work-type"
+      hx-swap="outerHTML"
+      hx-push-url="true"
+    >
+      <button
+        _="install WorkNavigation"
+        hx-trigger="getContent"
+        hx-get="deathwish"
+        class="button"
+      >
+        Deathwish Powersports
+      </button>
+      <button
+        _="install WorkNavigation"
+        hx-trigger="getContent"
+        hx-get="espx-ls"
+        class="button"
+      >
+        Ai Language Server
+      </button>
+      <button
+        _="install WorkNavigation"
+        hx-trigger="getContent"
+        hx-get="espionox"
+        class="button"
+      >
+        Espionox
+      </button>
+    </nav>
+  </div>
+
+  <section
+    id="work-type"
+    style="
+      align-content: center;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: var(--dim-grey) transparent;
+      width: 100%;
+    "
+  >
+    {% block item %} {% endblock %}
+  </section>
+</div>

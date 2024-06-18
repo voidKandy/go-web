@@ -1,0 +1,66 @@
+<style>
+  #music-selection {
+    transition: all ease-in-out 400ms;
+  }
+
+  #music-selection.hidden {
+    transition: all ease-in-out 400ms;
+    transform: translateY(50px);
+  }
+</style>
+
+<div id="music-selection" class="hidden minifyable" x-style="flex; flex-col;">
+  <div x-style="flex; flex-row; justify-content:center;">
+    <button
+      class="material-symbols-button material-symbols-outlined"
+      hx-get="{{ Self::prev_album_url(self) }}?selection_view=true&visible=true"
+      hx-target="#player-container"
+      _="install TransitionGuard(elmt: #route-content)"
+      hx-swap="outerHTML"
+      hx-trigger="mousedown"
+    >
+      arrow_left
+    </button>
+    <img
+      x-style="w:15vw; h:15vw; mx:2; my:4; "
+      src="{{ self::img_file_path(current_song) }}"
+    />
+    <button
+      class="material-symbols-button material-symbols-outlined"
+      hx-get="{{ Self::next_album_url(self) }}?selection_view=true&visible=true"
+      _="install TransitionGuard(elmt: #route-content)"
+      hx-target="#player-container"
+      hx-swap="outerHTML "
+      hx-trigger="mousedown"
+    >
+      arrow_right
+    </button>
+  </div>
+
+  <div x-style="flex; flex-col;">
+    {% for (i, song) in album_songs.iter().enumerate() %}
+    <div
+      x-style="
+      flex; 
+      {% if current_song.display_name ==  song.display_name %}
+          background-color:rgb(75,75,75,0.4);
+          text-decoration: underline;
+          pointer-events:none;
+      {% else %}
+          cursor.hover:pointer; 
+      {% endif %}
+      text-decoration.hover: underline;
+      background-color.hover:rgb(75,75,75,0.4);"
+      hx-get="/music/{{ current_album_name }}/{{ i }}?selection_view=true&visible=true"
+      _="install TransitionGuard(elmt: #route-content)"
+      hx-target="#player-container"
+      hx-trigger="mousedown"
+      hx-swap="outerHTML transition:true"
+    >
+      <h1 x-style="my:0; font-weight:0; font-size:1rem;">
+        {{ song.display_name }}
+      </h1>
+    </div>
+    {% endfor %}
+  </div>
+</div>

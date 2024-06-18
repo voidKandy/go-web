@@ -1,0 +1,326 @@
+<script type="text/hyperscript">
+  behavior NavListChoice(path)
+   on load
+        add .navlistchoice to me
+        send checkCurrentUrl to me
+    end
+    on checkCurrentUrl
+        set :current to the pathname of the location of the window
+        if path is in :current
+          add .selected to me
+        else
+          remove .selected from me
+        end
+    end
+    on mousedown
+        if I do not match .selected
+          send getContent to me
+          add .selected to me
+        end
+    end
+  end
+
+  behavior SignInWarning
+    init
+      set :tooltip to previous <span.tooltiptext/>
+    end
+    on htmx:responseError
+        remove .selected from me
+        log event.detail.error
+        add .shake to me
+        transition element :tooltip's opacity to 0
+        add .vis to element :tooltip
+        transition element :tooltip's opacity to 1 over 200ms
+        wait 1000ms
+        remove .shake from me
+        transition element :tooltip's opacity to 0 over 200ms
+        remove .vis from element :tooltip
+    end
+  end
+
+
+  behavior FormHandler(successMessage)
+      init
+        set :target to .form-response in me
+      end
+      on htmx:beforeSwap(event) from <span.form-response/> in me
+        set :resObj to (event.detail.serverResponse as an Object)
+        log :resObj
+        if :resObj.status contains "success"
+          remove .error from :target
+          set :target.textContent to `$successMessage`
+          halt the event
+          wait 500ms then
+          reload() the location of the window
+        else
+          add .error to :target
+          set :target.textContent to :resObj.message
+        end
+      end
+  end
+
+  behavior RouteContent
+      install TransitionGuard(elmt: #player-container)
+      on htmx:afterSwap
+        set :target to first <div/> in me
+        send checkCurrentUrl to <button.navlistchoice/>
+      end
+      on removeTransition
+        if :target != null
+          if :target matches .page-transition
+            remove .page-transition from :target
+          end
+        end
+      end
+      on addTransition
+        if :target != null
+          if :target does not match .page-transition
+            add .page-transition to :target
+          end
+        end
+      end
+  end
+
+  behavior TransitionGuard(elmt)
+    on htmx:beforeRequest
+     send removeTransition to elmt
+    end
+    on htmx:afterSettle
+     wait 1s
+      send addTransition to elmt
+    end
+  end
+
+  behavior WorkNavigation
+     init
+        set :path to my @hx-get
+        if '{{path}}' includes :path or pathname of the location of the window includes :path
+            send select to me
+        end
+      end
+      on mousedown
+        if I do not match .selected then
+            send select to me
+        end
+      end
+      on select
+        send reset to <button/> in closest parent <nav/>
+        send getContent to me
+        add .selected to me
+        wait for a reset
+        remove .selected from me
+      end
+  end
+
+  behavior OnClickOpenUrlInNewTab(url)
+      js
+          function openInNewTab(url) {
+                window.open(url, '_blank').focus();
+          }
+      end
+      on mousedown
+          call openInNewTab(url)
+      end
+  end
+</script>
+
+<style>
+  footer nav a {
+    display: inline-block;
+    align-items: center;
+  }
+
+  #main-nav div .tooltiptext {
+    transform: translate(0%, 150%);
+  }
+</style>
+
+<div>
+  <section
+    x-style="
+  h:100vh;
+   align-self:center;
+  overflow:hidden; flex; flex-col; "
+  >
+    <nav
+      x-style="mx:2; mt:4; flex; lg|flex-row; col-reverse; align-content:center; justify-content: space-between;"
+      hx-swap="innerHTML transition:true"
+      hx-target="#route-content"
+      hx-push-url="true"
+      id="main-nav"
+    >
+      <div x-style="justify-content:left">
+        <button
+          class="material-symbols-outlined material-symbols-button"
+          hx-get="/landing"
+          hx-trigger="getContent"
+          _="
+        install NavListChoice(path: '/landing')
+        install TransitionGuard(elmt: #player-container)
+          "
+        >
+          home
+        </button>
+
+        <span class="tooltiptext">You need be signed in</span>
+        <button
+          _="install NavListChoice(path: '/blog')
+          install SignInWarning
+          "
+          hx-trigger="getContent"
+          class="light-button"
+          x-style="
+          ml:2;align-self:center
+          "
+          hx-get="/blog"
+        >
+          Blog
+        </button>
+        <button
+          _="install NavListChoice(path: '/portfolio')
+          "
+          hx-trigger="getContent"
+          class="light-button"
+          x-style="align-self:center"
+          hx-get="/portfolio/deathwish"
+        >
+          Portfolio
+        </button>
+        <button
+          _="install NavListChoice(path: '/contact')
+          "
+          hx-trigger="getContent"
+          class="light-button"
+          x-style="align-self:center"
+          hx-get="/contact"
+        >
+          Contact
+        </button>
+      </div>
+
+      <div
+        class="material-symbols-outlined material-symbols-button"
+        hx-get="/user"
+        hx-push-url="false"
+        hx-trigger="getUser"
+        hx-target="this"
+        hx-swap="outerHTML"
+        x-style="align-self:flex-end;"
+        _="on mousedown
+            send getUser to me
+           end"
+      >
+        account_circle
+      </div>
+    </nav>
+
+    <div
+      _="install RouteContent"
+      x-style="overflow:hidden; flex; flex-grow;"
+      id="route-content"
+      hx-target="this"
+      hx-trigger="load"
+      hx-swap="innerHtml transition:true"
+      hx-get="{{path}}{{params}}"
+      hx-push-url="true"
+    ></div>
+
+    <div
+      id="music-container"
+      hx-get="/music/ADAB/0?visible=false"
+      hx-push-url="false"
+      hx-trigger="load once"
+      hx-target="#player-container"
+      hx-swap="outerHTML transition:true"
+    >
+      <div id="player-container"></div>
+    </div>
+  </section>
+
+  <footer x-style="flex; flex-col;">
+    <nav
+      x-style="flex; flex-row; align-self: center; mx:2; justify-content:space-between;"
+    >
+      <a>
+        <img
+          class="external-link-svg"
+          _="install OnClickOpenUrlInNewTab(url: 'https://github.com/voidKandy')"
+          src="/public/assets/logos/github-mark-white.svg"
+          alt="github-icon"
+          width="20"
+          height="20"
+        />
+      </a>
+
+      <a>
+        <img
+          class="external-link-svg"
+          _="install OnClickOpenUrlInNewTab(url:'https://twitter.com/KandyVoid')"
+          src="/public/assets/logos/twitter-logo.svg"
+          alt="twitter-icon"
+          width="20"
+          height="20"
+        />
+      </a>
+
+      <a>
+        <img
+          class="external-link-svg"
+          _="install OnClickOpenUrlInNewTab(url: 'https://voidkandy.substack.com')"
+          src="/public/assets/logos/substack-logo.svg"
+          style="filter: invert()"
+          alt="substack-icon"
+          width="20"
+          height="20"
+        />
+      </a>
+
+      <a>
+        <img
+          class="external-link-svg"
+          _="install OnClickOpenUrlInNewTab(url: 'https://open.spotify.com/artist/19BbMfHJwXYA8zKWAs8cel?si=G4H6q3RNTiKU8OcWtUk0rg')"
+          src="/public/assets/logos/spotify-logo.svg"
+          style="filter: invert(100%)"
+          alt="SpotifyLogo"
+          width="25"
+          height="25"
+        />
+      </a>
+
+      <a>
+        <img
+          class="external-link-svg"
+          _="install OnClickOpenUrlInNewTab(url: 'https://music.apple.com/us/artist/void-kandy/1517903121')"
+          src="/public/assets/logos/apple-logo.svg"
+          style="filter: invert(100%)"
+          alt="AppleLogo"
+          width="25"
+          height="25"
+        />
+      </a>
+
+      <a>
+        <img
+          class="external-link-svg"
+          _="install OnClickOpenUrlInNewTab(url: 'https://voidkandy.bandcamp.com/?from=search&search_item_id=3990916999&search_item_type=b&search_match_part=?&search_page_id=3011954228&search_page_no=1&search_rank=3&search_sig=62ec632d0b1dd1a0a90e1bde5b7139d3')"
+          src="/public/assets/logos/bandcamp-logo.png"
+          alt="BandCampLogo"
+          width="25"
+          height="25"
+        />
+      </a>
+
+      <a>
+        <img
+          class="external-link-svg"
+          _="install OnClickOpenUrlInNewTab(url: 'https://www.youtube.com/@Voidkandy')"
+          src="/public/assets/logos/youtube-logo.svg"
+          style="filter: invert(100%)"
+          alt="YoutubeLogo"
+          width="25"
+          height="25"
+        />
+      </a>
+    </nav>
+  </footer>
+</div>

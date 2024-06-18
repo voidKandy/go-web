@@ -1,0 +1,62 @@
+{% extends "portfolio/layout.html" %} {% block item %}
+<script type="text/hyperscript">
+  behavior MarkdownBlock
+    init immediately
+      measure me then set :w to the result.width
+      measure me then set :h to the result.height
+      log :w
+      log :h
+      repeat for img in <img/> in me
+        log img
+        set :alt to @alt of img
+        log :alt
+        add .img to img
+        if :alt contains 'small'
+          set @width of img to 20
+        else if :alt contains 'medium'
+          set @width of img to :w * 0.40
+        else
+          set @width of img to :w * 0.60
+        end
+      end
+    end
+  end
+</script>
+
+<style>
+  .img {
+    align-self: center;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  code {
+    color: ghostwhite;
+  }
+  hr {
+    border-color: var(--desert-sand);
+  }
+  a {
+    color: var(--cambridge-blue);
+  }
+</style>
+
+<div
+  x-style="flex; flex-col; justify-content:center;
+  color:@desert-sand; background-color: @dim-grey;
+  p:1.5rem;"
+>
+  <h1
+    x-style=" font-size: 2rem;text-align:center; mb:0; mt:1; text-shadow: 0 0 2px @desert-sand;"
+  >
+    {{title}}
+  </h1>
+  <h2 x-style="font-size:1.5rem; font-weight:0;text-align:center; mt:0; mb:1;">
+    {{subtitle}}
+  </h2>
+  <div x-style="mx:4;" _="install MarkdownBlock">{{content|safe}}</div>
+</div>
+{% endblock %}

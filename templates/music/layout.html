@@ -1,0 +1,362 @@
+<div
+  id="player-container"
+  style="transition: all ease-in-out 200ms"
+  _="install TransitionGuard(elmt: #route-content) 
+    on removeTransition
+      if #player-transition matches .player-container-child-transition
+        remove .player-container-child-transition from #player-transition
+      end
+    end
+    on addTransition
+      if #player-transition does not match .player-container-child-transition
+        add .player-container-child-transition to  #player-transition
+      end
+    end
+   "
+>
+  <script>
+    function updateParams(str, bool, param) {
+      const p = `${param}=${bool}`;
+      const hasQuery = str.includes("?");
+      const regex = new RegExp(`([?&])${param}=[^&]*`);
+      if (regex.test(str)) {
+        return str.replace(regex, `$1${p}`);
+      } else if (hasQuery) {
+        return `${str}&${p}`;
+      } else {
+        return `${str}?${p}`;
+      }
+    }
+  </script>
+
+  <script type="text/hyperscript">
+    def ChangeSongUrls(bool, param)
+       set :c to @hx-get of #prev-song
+       call updateParams(:c, bool, param) then set :c to the result
+       set @hx-get of #prev-song to :c
+
+       set :c to @hx-get of #next-song
+       call updateParams(:c, bool, param) then set :c to the result
+       set @hx-get of #next-song to :c
+
+       then call htmx.process(#next-song)
+       then call htmx.process(#prev-song)
+    end
+
+    behavior MusicToggler
+      init
+        send setSizes to me
+        set :defaultText to my textContent
+        send default to me
+      end
+      on changeUrls
+        call ChangeSongUrls($playerVisible, "visible")
+      end
+
+      on setSizes
+        measure me
+        set :ogY to the result.height
+        set :ogX to the result.width
+
+        measure  #player-container
+        set :hiddenY to the result.scrollHeight
+        set :hiddenX to the result.scrollWidth
+      end
+
+      on mousedown
+        if $playerVisible
+          send makeInvis to me
+        else
+          send makeVis to me
+        end
+      end
+
+      on makeInvis
+        send setSizes to me
+        send shrink to me
+        then settle
+        wait 20ms then
+        add .hidden to #init-hide-audio
+        send invisState to me
+      end
+      on makeVis
+        send grow to me
+        then settle
+        wait 20ms then
+        remove .hidden from #init-hide-audio
+        send visState to me
+      end
+
+      on default
+        {% if visible %}
+          remove .hidden from #init-hide-audio
+          send visState to me
+        {% else %}
+          add .hidden to #init-hide-audio
+          send invisState to me
+        {% endif %}
+        set #player-container's style.width to `fit-content`
+        set #player-container's style.height to `fit-content`
+      end
+
+      on shrink
+        transition #init-hide-audio's opacity to 0 over 50ms
+        transition #player-container's *width to `${:ogX}px`
+        transition #player-container's *height to `${:ogY}px`
+        transition my opacity to 1 over 10ms
+        then settle
+        set #player-container's style.width to `fit-content`
+        set #player-container's style.height to `fit-content`
+      end
+      on grow
+        transition my opacity to 0
+        transition #player-container's *width to `${:hiddenX - :ogX}px`
+        transition #player-container's *height to `${:hiddenY - :ogY}px`
+        then settle
+        transition #init-hide-audio's opacity to 1 over 50ms
+        transition my opacity to 1 over 50ms
+        then settle
+        set #player-container's style.width to `fit-content`
+        set #player-container's style.height to `fit-content`
+      end
+
+      on visState
+        set $playerVisible to true
+        set my textContent to 'close'
+        send changeUrls to me
+        show #minifyer
+      end
+      on invisState
+        set $playerVisible to false
+        set my textContent to :defaultText
+        send changeUrls to me
+        hide #minifyer
+      end
+    end
+
+    behavior MinifyMusicPlayer
+      init immediately
+        add .mini to .minifyable
+      end
+       init
+        {% if is_mini %}
+          send minify to me
+        {% else %}
+          send expand to me
+        {% endif %}
+      end
+      on changeUrls
+        call ChangeSongUrls($mini, "mini")
+      end
+      on minify
+        set $mini to true
+        add .no-pointer-events to #hide-show-selector
+        add .shrinking to .minifyable
+        then wait 350ms
+        add .mini to .minifyable
+        set my textContent to "keyboard_arrow_up"
+        send changeUrls to me
+      end
+      on expand
+        set $mini to false
+        remove .no-pointer-events from #hide-show-selector
+        remove .shrinking from .minifyable
+        remove .mini from .minifyable
+        set my textContent to "keyboard_arrow_down"
+        send changeUrls to me
+      end
+      on mousedown
+        set #player-container's style.width to `fit-content`
+        set #player-container's style.height to `fit-content`
+        if $mini
+          send expand to me
+        else
+          send minify to me end
+      end
+    end
+
+    behavior HideShowSelection
+      init
+          send hideSelection to me
+         {% if selection_view %}
+          send showSelection to me
+        {% endif %}
+      end
+      on changeUrls
+        call ChangeSongUrls($selectionVisible, "selection")
+      end
+      on showSelection
+        set $selectionVisible to true
+        add .hidden to #audio-info
+        remove .hidden from #music-selection
+        send changeUrls to me
+      end
+      on hideSelection
+        set $selectionVisible to false
+        add .hidden to #music-selection
+        remove .hidden from #audio-info
+        send changeUrls to me
+      end
+      on mousedown
+        set #player-container's style.width to `fit-content`
+        set #player-container's style.height to `fit-content`
+        if $selectionVisible
+          send hideSelection to me
+         else
+          send showSelection to me
+         end
+      end
+    end
+
+
+    behavior ShuffleButton
+    init
+        set :on to false
+        set my textContent to 'shuffle'
+        {% if shuffle %} send mousedown to me {% endif %}
+     end
+     on mousedown
+        set :params to `selection_view=${$selectionVisible}&mini=${$mini}&visible=${$playerVisible}`
+        if :on
+          set my textContent to 'shuffle'
+          set @hx-get of #prev-song to `{{ Self::prev_song_url(self) }}?${:params}`
+          set @hx-get of #next-song to `{{ Self::next_song_url(self) }}?${:params}`
+          set :on to false
+        else
+          set my textContent to 'shuffle_on'
+          set @hx-get of #prev-song to `{{ Self::random_song_url(self) }}&${:params}`
+          set @hx-get of #next-song to `{{ Self::random_song_url(self) }}&${:params}`
+          set :on to true
+        end
+        then call htmx.process(#next-song)
+        then call htmx.process(#prev-song)
+     end
+    end
+  </script>
+
+  <style>
+    #hide-show-selector {
+      text-align: center;
+      width: fit-content;
+      align-content: center;
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+    }
+    #hide-show-selector:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    #init-hide-audio {
+      transition: all 800ms ease-in;
+      min-width: 85vw;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+    }
+
+    .minifyable {
+      transition: all ease-in-out 300ms;
+    }
+
+    .minifyable.shrinking {
+      transform: translateY(50px);
+      opacity: 0;
+      transform-origin: bottom;
+    }
+    .minifyable.mini {
+      display: none !important;
+    }
+
+    #player-container {
+      z-index: 5;
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      margin: 0.8rem;
+      padding: 0.8rem;
+      background-color: rgb(0, 0, 0, 0.4);
+      color: white;
+      backdrop-filter: blur(20px);
+      border-radius: 1rem;
+    }
+
+    @media only screen and (min-width: 600px) {
+      #init-hide-audio {
+        min-width: 35vw;
+      }
+    }
+  </style>
+
+  {% if let None = user %}
+
+  <span class="tooltiptext">You need be signed in</span>
+  <button
+    class="material-symbols-button material-symbols-outlined"
+    _="
+    init
+      set :tooltip to previous <span.tooltiptext/>
+    end
+    on mousedown
+      add .shake to me
+      transition element :tooltip's opacity to 0
+      add .vis to element :tooltip
+      transition element :tooltip's opacity to 1 over 200ms
+      wait 1000ms
+      remove .shake from me
+      transition element :tooltip's opacity to 0 over 200ms
+      remove .vis from element :tooltip
+    end"
+  >
+    music_note
+  </button>
+  {% else %} {% let current_song = album_songs[current_song_idx] %}
+  <div x-style="flex; flex-row; justify-content:space-between;">
+    <button
+      id="minifyer"
+      _="install MinifyMusicPlayer"
+      class="material-symbols-button material-symbols-outlined"
+    >
+      keyboard_arrow_down
+    </button>
+    <button
+      id="toggle-music-button"
+      _="install SignInWarning install MusicToggler "
+      class="material-symbols-button material-symbols-outlined"
+    >
+      music_note
+    </button>
+  </div>
+  <div id="init-hide-audio">
+    <div
+      id="player-transition"
+      class="player-container-child-transition"
+      style="display: flex; flex-direction: column"
+    >
+      <div _="install HideShowSelection" id="hide-show-selector">
+        <h1 x-style="m:0; text-align:center;">
+          {{ current_song.display_name }}
+        </h1>
+        <h3 x-style="m:0; text-align:center;">
+          {{ Self::album_display_name(self) }}
+        </h3>
+      </div>
+      <div
+        class="minifyable"
+        x-style="flex; flex-grow-1; flex-row;"
+        style="justify-content: center; display: flex"
+        id="audio-info"
+      >
+        <img
+          x-style="mx:1; my:2; w:50vw; h: 50vw;
+        lg|w:25vw; lg|h:25vw;"
+          src="{{ self::img_file_path(current_song) }}"
+        />
+      </div>
+    </div>
+
+    {% include "music/selection.html" %} {% include "music/player.html" %}
+  </div>
+  {% endif %}
+</div>

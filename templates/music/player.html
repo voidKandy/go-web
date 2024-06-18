@@ -1,0 +1,227 @@
+<script type="text/hyperscript">
+  def formatTime(seconds)
+         set :minutes to Math.floor(seconds / 60)
+         set :secs to `00${Math.floor(seconds mod 60)}`
+         set :secs to `${:secs}`.slice(-2)
+         return `${:minutes}:${:secs}`
+   end
+
+   behavior AudioElement
+       init
+         set my @id to 'audio'
+       end
+       on toggle
+         if :p
+           call me.pause()
+           set :p to false
+           remove .pause from #play-toggle
+           add .play to #play-toggle
+         else
+           call me.play()
+           set :p to true
+           remove .play from #play-toggle
+           add .pause to #play-toggle
+       end
+       on timeupdate
+         set #progress-bar.value to ((me.currentTime / me.duration) * 100)
+         set textContent of #progress-text to `${formatTime(me.currentTime)} / ${formatTime(me.duration)}`
+       end
+       on ended
+          send mousedown to #next-song
+          wait 200ms then send mousedown to #play-toggle
+       end
+   end
+
+   behavior TogglePlayButton
+     init
+        add .play to me
+     end
+     on mousedown
+       send toggle to #audio
+     end
+   end
+
+   behavior ProgressBarContainer
+     init
+       set :bar to <input/> in me
+     end
+     on intersection
+       send updateProgress to me
+     end
+     on updateProgress
+       set textContent of <p/> in me to `${formatTime(#audio.currentTime)} / ${formatTime(#audio.duration)}`
+     end
+     on change from <input/> in me
+       set #audio.currentTime to ((:bar.value /100) * #audio.duration)
+       send updateProgress to me
+     end
+   end
+
+   behavior VolumeBarContainer
+     init
+       set :bar to <input/> in me
+       set :muted to false
+       send updateVolumeSymbol to me
+     end
+     on updateVolumeSymbol
+        if (#audio.volume * 100 > 50)
+          set textContent of <p/> in me to 'volume_up'
+        else if (#audio.volume * 100 > 0)
+          set textContent of <p/> in me to 'volume_down'
+        else
+          set textContent of <p/> in me to 'no_sound'
+        end
+     end
+     on mouseenter
+      remove @hidden from :bar
+     end
+     on mouseleave
+      add @hidden to :bar
+     end
+     on change from <input/> in me
+       set #audio.volume to (:bar.value / 100)
+        send updateVolumeSymbol to me
+     end
+     on mousedown from <p/> in me
+        if :muted
+          set :bar.value to :savedLevel
+          set :muted to false
+        else
+          set :savedLevel to :bar.value
+          set :bar.value to 0
+          set :muted to true
+        end
+        send change to :bar
+        send updateVolumeSymbol to me
+     end
+   end
+</script>
+
+<style>
+  :root {
+    --width: 1.5rem;
+    --half-width: calc(var(--width) / 2);
+  }
+
+  #audio-player {
+    flex-direction: column;
+    display: flex;
+    transition: all ease-in-out 500ms;
+    transform: translateY(50px);
+    opacity: 0;
+  }
+
+  #audio-player.revealed {
+    opacity: 1;
+    transform: translateY(0);
+    height: 100%;
+  }
+
+  #play-toggle {
+    border: 0;
+    align-self: center;
+    background: transparent;
+    box-sizing: border-box;
+    margin-left: 0.75rem;
+    width: var(--width);
+    height: var(--width);
+    transition: 100ms all ease;
+    border-color: transparent transparent transparent var(--cambridge-blue);
+    cursor: pointer;
+  }
+
+  #play-toggle:hover {
+    border-color: transparent transparent transparent var(--bright-pink);
+  }
+
+  #play-toggle.play {
+    border-style: solid;
+    border-width: var(--half-width) 0px var(--half-width) var(--width);
+  }
+
+  #play-toggle.pause {
+    border-style: double;
+    border-width: 0px 0px 0px var(--width);
+  }
+
+  #volume-symbol {
+    width: fit-content;
+    height: fit-content;
+    margin: 0rem 0rem;
+    cursor: pointer;
+    transition: 100ms ease-in-out all;
+  }
+
+  #volume-symbol:hover {
+    color: white;
+  }
+
+  #audio-player input[type="range"] {
+    accent-color: transparent;
+  }
+
+  #progress-text {
+    font-size: 0.75rem;
+    align-self: center;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+</style>
+
+<div
+  id="audio-player"
+  _="on load
+      add .revealed to me
+     end"
+>
+  <audio _="install AudioElement" controls-list="nodownload noplaybackrate">
+    <source src="{{ self::song_file_path(current_song) }}" type="audio/wav" />
+    Your browser does not support the audio element.
+  </audio>
+
+  <div
+    x-style="flex; flex-row; mx:1rem; justify-content:space-between; filter: saturate(180%); my:2;"
+    hx-target="#player-container"
+    hx-select="#player-container"
+    hx-swap="outerHTML transition:true"
+  >
+    <button
+      id="prev-song"
+      hx-trigger="mousedown"
+      class="material-symbols-button material-symbols-outlined"
+      x-style="font-size: 2rem"
+      hx-get="{{ Self::prev_song_url(self) }}?selection_view={{ selection_view }}&mini={{ is_mini }}&visible={{ visible }}"
+      _="install TransitionGuard(elmt: #route-content)"
+    >
+      skip_previous
+    </button>
+    <button id="play-toggle" _="install TogglePlayButton"></button>
+    <button
+      id="next-song"
+      hx-trigger="mousedown"
+      class="material-symbols-button material-symbols-outlined"
+      x-style="font-size: 2rem"
+      hx-get="{{ Self::next_song_url(self) }}?selection_view={{ selection_view }}&mini={{ is_mini }}&visible={{ visible }}"
+      _="install TransitionGuard(elmt: #route-content)"
+    >
+      skip_next
+    </button>
+  </div>
+  <div x-style="flex; flex-row; justify-content:space-between; m:2;">
+    <div
+      _="install VolumeBarContainer"
+      x-style="flex; flex-row; flex-grow; w:fit-content; h:fit-content; align-self:center;"
+    >
+      <p id="volume-symbol" class="material-symbols-outlined"></p>
+      <input id="volume-bar" hidden type="range" value="100" />
+    </div>
+    <button
+      _="install ShuffleButton"
+      class="material-symbols-outlined material-symbols-button"
+    ></button>
+  </div>
+  <div _="install ProgressBarContainer" x-style="flex; flex-col;">
+    <input id="progress-bar" type="range" value="0" />
+    <p class="minifyable" id="progress-text"></p>
+  </div>
+</div>

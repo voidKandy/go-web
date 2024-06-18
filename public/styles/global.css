@@ -1,0 +1,171 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap");
+
+:root {
+  --font-size-xs: 0.75rem !important;
+  --font-size-sm: 0.825rem !important;
+  --font-size-base: 1rem !important;
+  --font-size-lg: 4rem !important;
+  --font-size-xl: 5rem !important;
+
+  --misty-rose: #fae1df;
+  --desert-sand: #e4c3ad;
+  --dim-grey: #434048;
+  --cambridge-blue: #7cacf8;
+  --bright-pink: #ff4d80;
+  --transparent-grey: rgb(0, 0, 0, 0.15);
+
+  input#file-upload-button,
+  .button {
+    color: var(--cambridge-blue);
+    background: var(--dim-grey);
+    border: 2px inset var(--cambridge-blue);
+    font-family: "DM Mono", sans-serif;
+    padding: 0.5rem 1rem;
+    transition: all ease-in-out 250ms;
+    width: fit-content;
+  }
+
+  .button:hover,
+  .button.selected {
+    cursor: pointer;
+    color: var(--bright-pink);
+    border-color: rgb(70, 70, 70);
+  }
+
+  .button.selected {
+    cursor: default !important;
+  }
+
+  .light-button {
+    font-family: "DM Mono", sans-serif;
+    background: transparent;
+    color: var(--cambridge-blue);
+    border: none;
+    transition: all ease-in-out 250ms;
+    width: fit-content;
+    height: fit-content;
+    cursor: pointer;
+  }
+
+  .light-button:hover,
+  .light-button.selected {
+    color: var(--bright-pink);
+  }
+
+  .light-button.selected {
+    cursor: default !important;
+  }
+
+  .tooltiptext {
+    visibility: hidden;
+    width: fit-content;
+    background-color: transparent;
+    text-wrap: nowrap;
+    color: var(--bright-pink);
+    text-align: center;
+    padding: 2px;
+    position: absolute;
+    z-index: 1;
+    transform: translate(-80%, -150%);
+  }
+
+  .tooltiptext.vis {
+    visibility: visible;
+  }
+
+  .shake {
+    animation: horizontal-shaking 400ms infinite;
+  }
+
+  .material-symbols-button {
+    background: transparent;
+    transition: all ease-in-out 250ms;
+    align-self: center;
+    border: none;
+    color: var(--cambridge-blue);
+    cursor: pointer;
+  }
+
+  .material-symbols-button:hover,
+  .material-symbols-button.selected {
+    color: var(--bright-pink);
+    transition: all ease-in-out 250ms;
+    width: fit-content;
+  }
+
+  .material-symbols-button.selected {
+    cursor: default !important;
+  }
+
+  .no-pointer-events {
+    pointer-events: none;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+  .external-link-svg {
+    display: block;
+    margin: 0.5rem;
+    transition: all ease-in-out 200ms;
+  }
+
+  .external-link-svg:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+  }
+  .unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
+
+html {
+  background-color: var(--dim-grey);
+}
+body {
+  font-family: "DM Mono", sans-serif;
+  background-color: var(--dim-grey);
+  background: conic-gradient(
+      from 265deg at 56% 102%,
+      rgba(0, 0, 0, 0.7),
+      var(--desert-sand)
+    ),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence \
+    type='fractalNoise'\
+    baseFrequency='8'\
+    numOctaves='6'\
+    stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+form {
+  font-family: "DM Mono", sans-serif;
+}
+
+form textarea,
+form input {
+  font-family: "DM Mono", sans-serif;
+  color: var(--desert-sand);
+  border: 2px grey inset;
+  font-size: 1rem;
+  background-color: var(--dim-grey);
+}
+
+form input[type="checkbox"] {
+  margin: 0 !important;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--desert-sand);
+}
