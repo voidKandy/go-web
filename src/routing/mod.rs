@@ -86,16 +86,6 @@ pub fn create_router(state: Arc<AppState>) -> Router {
         .nest("/user", user_routes)
         .layer(middleware::from_fn(htmx_request_check))
         .nest("/data", data_routes)
-        // .route("/data/auth/register", post(register_user_handler))
-        // .route("/data/auth/login", post(login_user_handler))
-        // .route(
-        //     "/data/auth/logout",
-        //     get(logout_handler).route_layer(middleware::from_fn_with_state(state.clone(), auth)),
-        // )
-        // .route(
-        //     "/data/users/me",
-        //     get(get_me_handler).route_layer(middleware::from_fn_with_state(state.clone(), auth)),
-        // )
         .nest("/private", private_dir_router)
         .fallback(index::custom_404)
         .with_state(state)
