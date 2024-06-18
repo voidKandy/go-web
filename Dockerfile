@@ -52,4 +52,5 @@ RUN chown -R $APP_USER:$APP_USER ${APP}
 USER $APP_USER
 WORKDIR ${APP}
 
-CMD ["docker-compose up -d; ./voidkandy-dot-space"]
+# CMD ["docker-compose up -d; ./voidkandy-dot-space"]
+CMD ["./voidkandy-dot-space"]
