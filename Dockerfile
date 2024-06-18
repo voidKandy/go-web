@@ -25,10 +25,8 @@ RUN rm src/*.rs
  
 ADD . ./
 
-RUN ls .
-RUN ls ./target/release/
-RUN ls ./target/release/deps/
-RUN rm ./target/release/deps/voidkandy-dot-space
+
+RUN rm ./target/release/voidkandy-dot-space
 RUN cargo build --release
 
 
