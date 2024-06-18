@@ -42,6 +42,10 @@ async fn main() {
     let port = std::env::var("PORT").expect("Failed to get port env variable");
 
     let config = Config::init();
+    tracing::info!(
+        "attempting to connect to database: {:?}",
+        &config.database_url
+    );
     let pool = match PgPoolOptions::new()
         .max_connections(10)
         .connect(&config.database_url)
