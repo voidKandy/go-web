@@ -15,7 +15,7 @@
 # COPY public/ /app/public
 # WORKDIR /app
 # CMD ["./voidkandy-dot-space"]
-FROM rust:1.43 as builder
+FROM rust:latest as builder
 
 RUN USER=root cargo new --bin voidkandy-dot-space
 WORKDIR ./voidkandy-dot-space
