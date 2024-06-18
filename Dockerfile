@@ -13,11 +13,11 @@ RUN rm ./target/release/voidkandy-dot-space
 RUN cargo build --release
 
 
-FROM debian:buster-slim
+FROM linuxcontainers/debian-slim:latest
 ARG APP=/usr/src/app
 
 RUN apt-get update \
-    && apt-get install -y ca-certificates tzdata libssl-dev\
+    && apt-get install -y ca-certificates tzdata libssl3\
     && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8000
