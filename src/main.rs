@@ -22,21 +22,20 @@ use telemetry::{get_subscriber, init_subscriber};
 use tower_http::cors::CorsLayer;
 use tracing::{info, warn};
 
+static TRACING: Lazy<()> = Lazy::new(|| {
+    let default_filter_level = "info".to_string();
+    let subscriber_name = "main".to_string();
+
+    if std::env::var("MAIN_LOG").is_ok() {
+        let subscriber = get_subscriber(subscriber_name, default_filter_level, std::io::stdout);
+        init_subscriber(subscriber);
+    } else {
+        let subscriber = get_subscriber(subscriber_name, default_filter_level, std::io::sink);
+        init_subscriber(subscriber);
+    }
+});
 #[tokio::main]
 async fn main() {
-    static TRACING: Lazy<()> = Lazy::new(|| {
-        let default_filter_level = "info".to_string();
-        let subscriber_name = "main".to_string();
-
-        if std::env::var("MAIN_LOG").is_ok() {
-            let subscriber = get_subscriber(subscriber_name, default_filter_level, std::io::stdout);
-            init_subscriber(subscriber);
-        } else {
-            let subscriber = get_subscriber(subscriber_name, default_filter_level, std::io::sink);
-            init_subscriber(subscriber);
-        }
-    });
-
     Lazy::force(&TRACING);
 
     dotenv::dotenv().ok();
@@ -57,6 +56,11 @@ async fn main() {
             std::process::exit(1);
         }
     };
+
+    sqlx::migrate!("./migrations")
+        .run(&pool)
+        .await
+        .expect("failed to migrate database");
 
     let admin_pass = std::env::var("ADMIN_PASSWORD").expect("Failed to get admin password");
     let admin_name = std::env::var("ADMIN_NAME").expect("Failed to get admin name");
