@@ -27,31 +27,36 @@
   .img {
     align-self: center;
   }
+
   h1 {
     font-size: 2rem;
   }
+
   h2 {
     font-size: 1.5rem;
   }
+
   code {
     color: ghostwhite;
   }
+
   hr {
     border-color: var(--desert-sand);
   }
+
   a {
     color: var(--cambridge-blue);
   }
 </style>
 
-<div
-  x-style="flex; flex-col; justify-content:center;
+<div x-style="flex; flex-col; justify-content:center;
   color:@desert-sand; background-color: @dim-grey;
-  p:1.5rem;"
->
-  <h1
-    x-style=" font-size: 2rem;text-align:center; mb:0; mt:1; text-shadow: 0 0 2px @desert-sand;"
-  >
+  p:1.5rem;" _="
+    on load 
+      go to the top of me
+    end
+  ">
+  <h1 x-style=" font-size: 2rem;text-align:center; mb:0; mt:1; text-shadow: 0 0 2px @desert-sand;">
     {{title}}
   </h1>
   <h2 x-style="font-size:1.5rem; font-weight:0;text-align:center; mt:0; mb:1;">

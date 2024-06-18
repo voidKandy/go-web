@@ -21,7 +21,7 @@
   end
 </script>
 
-<div x-style="flex; flex-row;">
+<div x-style="flex; flex-row; justify-content:center; lg|my:0; my:1; mx:3;">
   {% if let Some(user) = user %}
   <button
     x-style="align-self:center;"
@@ -34,7 +34,7 @@
   </button>
   {% else %}
   <button
-    x-style="mr:1;"
+    x-style="mr:3;"
     class="button"
     hx-get="/user/register"
     hx-target="#route-content"
