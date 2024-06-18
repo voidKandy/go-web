@@ -1,20 +1,3 @@
-# FROM golang:1.21.3-alpine AS builder
-# RUN mkdir /build
-# ADD src/ /build/src/
-# ADD public/ /build/public/
-# ADD private/ /build/private/
-# ADD migrations/ /build/migrations/
-# ADD templates/ /build/template/
-# WORKDIR /build
-# RUN go build
-#
-# FROM alpine
-# RUN adduser -S -D -H -h /app appuser
-# USER appuser
-# COPY --from=builder /build/voidkandy-dot-space /app/
-# COPY public/ /app/public
-# WORKDIR /app
-# CMD ["./voidkandy-dot-space"]
 FROM rust:latest as builder
 
 RUN USER=root cargo new --bin voidkandy-dot-space
@@ -53,7 +36,4 @@ USER $APP_USER
 WORKDIR ${APP}
 
 
-CMD ["sh", "-c", "docker-compose up -d && ./voidkandy-dot-space"]
-
-# CMD ["docker-compose up -d; ./voidkandy-dot-space"]
-# CMD ["./voidkandy-dot-space"]
+CMD ["./voidkandy-dot-space"]
