@@ -34,7 +34,7 @@ FROM debian:buster-slim
 ARG APP=/usr/src/app
 
 RUN apt-get update \
-    && apt-get install -y ca-certificates tzdata \
+    && apt-get install -y ca-certificates tzdata docker-compose-plugin \
     && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8000
@@ -52,5 +52,8 @@ RUN chown -R $APP_USER:$APP_USER ${APP}
 USER $APP_USER
 WORKDIR ${APP}
 
+
+CMD ["sh", "-c", "docker-compose up -d && ./voidkandy-dot-space"]
+
 # CMD ["docker-compose up -d; ./voidkandy-dot-space"]
-CMD ["./voidkandy-dot-space"]
+# CMD ["./voidkandy-dot-space"]
