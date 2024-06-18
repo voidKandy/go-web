@@ -17,7 +17,7 @@ FROM debian:buster-slim
 ARG APP=/usr/src/app
 
 RUN apt-get update \
-    && apt-get install -y ca-certificates tzdata docker-compose-plugin \
+    && apt-get install -y ca-certificates tzdata\
     && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8000
