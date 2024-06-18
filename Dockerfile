@@ -27,7 +27,7 @@ ADD . ./
 
 RUN echo "printing List"
 RUN ls .
-RUN rm ./target/release/deps/voidkandy-dot-space*
+RUN rm ./target/release/deps/voidkandy-dot-space
 RUN cargo build --release
 
 
