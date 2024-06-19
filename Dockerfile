@@ -41,5 +41,7 @@ ADD private ./private
 ADD migrations ./migrations
 ADD templates ./templates
 
+RUN chmod -R 755 ./public ./private 
+
 
 CMD ["./voidkandy-dot-space"]
