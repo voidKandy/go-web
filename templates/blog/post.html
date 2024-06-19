@@ -7,14 +7,17 @@
       log :h
       log <img/> in me
       set @width of <img/> in me to :w * 0.60
-      add .img to <img/> in me
     end
   end
 </script>
 
 <style>
-  .img {
+  #markdown-block img {
     align-self: center;
+  }
+  #markdown-block p {
+    display: flex;
+    flex-direction: column;
   }
 </style>
 
@@ -76,7 +79,9 @@
   <h2 x-style="font-size:1.5rem; font-weight:0;text-align:center; mt:0; mb:1;">
     {{post.subtitle}}
   </h2>
-  <div x-style="mx:4;" _="install MarkdownBlock">{{post.content|safe}}</div>
+  <div x-style="mx:4;" id="markdown-block" _="install MarkdownBlock">
+    {{post.content|safe}}
+  </div>
 </div>
 
 {% endif %}
