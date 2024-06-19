@@ -38,13 +38,16 @@ WORKDIR ${APP}
 USER root
 
 ADD public ./public
+
+RUN chown -R $APP_USER:$APP_USER ./public
+
+
+USER $APP_USER
+RUN chmod -R 755 ./public  
+
 ADD private ./private
 ADD migrations ./migrations
 ADD templates ./templates
 
-RUN chown -R $APP_USER:$APP_USER ./public
-RUN chmod -R 755 ./public  
-
-USER $APP_USER
 
 CMD ["./voidkandy-dot-space"]
