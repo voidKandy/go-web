@@ -35,13 +35,14 @@ RUN chown -R $APP_USER:$APP_USER ${APP}
 
 WORKDIR ${APP}
 
-USER root 
+USER root
 
 ADD public ./public
 ADD private ./private
 ADD migrations ./migrations
 ADD templates ./templates
 
+RUN chown -R $APP_USER:$APP_USER ./public
 RUN chmod -R 755 ./public  
 
 USER $APP_USER
