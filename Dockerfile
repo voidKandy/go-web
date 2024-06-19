@@ -33,15 +33,17 @@ COPY --from=builder /voidkandy-dot-space/target/release/voidkandy-dot-space ${AP
 
 RUN chown -R $APP_USER:$APP_USER ${APP}
 
-USER $APP_USER
 WORKDIR ${APP}
+
+USER root 
 
 ADD public ./public
 ADD private ./private
 ADD migrations ./migrations
 ADD templates ./templates
 
-RUN chmod -R 755 ./public ./private 
+RUN chmod -R 755 ./public  
 
+USER $APP_USER
 
 CMD ["./voidkandy-dot-space"]
