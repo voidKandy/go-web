@@ -17,11 +17,17 @@ pub(super) fn save_all_attachments_to_filesystem(
     mut vec: Vec<Attachment>,
 ) -> anyhow::Result<Option<String>> {
     let path_str = format!("./{}", &POSTS_DIRECTORY_PATH);
+    let parent_path_str = path_str.rsplit_once('/').unwrap().0;
+
+    let parent_metadata = fs::metadata(parent_path_str)?;
+    let mut perms = parent_metadata.permissions();
+    perms.set_readonly(false);
+
     let path = Path::new(&path_str);
     if !path.exists() {
         fs::create_dir(path).map_err(|err| {
             error!(
-                "there was an error when creating the posts assets directory: {:?}",
+                "there s an error when creating the posts assets directory: {:?}",
                 err
             );
             anyhow!(
