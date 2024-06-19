@@ -52,7 +52,10 @@ pub async fn post_upload_form(
             err.into_data_api_return()
         })?;
     if let Some(content) = save_all_attachments_to_filesystem(post.attachments.drain(..).collect())
-        .map_err(|err| RouterError::from(err).into_data_api_return())?
+        .map_err(|err| {
+            error!("an error occurred when saving attachments: {:?}", err);
+            RouterError::from(err).into_data_api_return()
+        })?
     {
         post.content = content;
     }

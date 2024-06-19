@@ -87,7 +87,7 @@ pub async fn post_blog_post(pool: &Pool<Postgres>, post: UploadBlogPost) -> Data
     .bind(&post.content)
     .fetch_one(pool)
     .await?;
-    info!("Post posted to database successfully");
+    info!("blog post posted to database successfully");
     Ok(post)
 }
 
