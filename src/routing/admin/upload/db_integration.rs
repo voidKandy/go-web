@@ -17,11 +17,17 @@ pub(super) fn save_all_attachments_to_filesystem(
     mut vec: Vec<Attachment>,
 ) -> anyhow::Result<Option<String>> {
     let path_str = format!("./{}", &POSTS_DIRECTORY_PATH);
+
     let parent_path_str = path_str.rsplit_once('/').unwrap().0;
+    let public_path_str = parent_path_str.rsplit_once('/').unwrap().0;
+
+    let public_metadata = fs::metadata(public_path_str)?;
+    let mut public_perms = public_metadata.permissions();
+    public_perms.set_readonly(false);
 
     let parent_metadata = fs::metadata(parent_path_str)?;
-    let mut perms = parent_metadata.permissions();
-    perms.set_readonly(false);
+    let mut parent_perms = parent_metadata.permissions();
+    parent_perms.set_readonly(false);
 
     let path = Path::new(&path_str);
     if !path.exists() {
@@ -39,38 +45,41 @@ pub(super) fn save_all_attachments_to_filesystem(
 
     let mut ret: Option<String> = None;
     for attachment in vec.iter_mut() {
-        let path_str = format!(".{}/{}", POSTS_DIRECTORY_PATH, attachment.filename);
-        let path = Path::new(&path_str);
-
-        match path.exists() {
-            false => {
-                warn!("file: {:?} does not exist, writing", path);
-                let mut file = File::create_new(path).map_err(|err| anyhow!(err))?;
-                file.write_all(&attachment.bytes)
-                    .map_err(|err| anyhow!(err))?;
-            }
-            true => {
-                warn!("file: {:?} already exists, overwriting", path);
-                fs::write(path, &attachment.bytes).map_err(|err| {
-                    error!(
-                        "there was a problem overriting the file: {:?}\n: {:?}",
-                        path, err
-                    );
-                    anyhow!(
-                        "there was a problem overriting the file: {:?}\n: {:?}",
-                        path,
-                        err
-                    )
-                })?;
-            }
-        }
         if attachment.filename.split_once('.').unwrap().1 == "md" {
             if ret.is_some() {
                 warn!("don't pass multiple markdown files to save_all")
             }
             ret = Some(String::from_utf8(attachment.bytes.drain(..).collect())?);
+        } else {
+            let path_str = format!(".{}/{}", POSTS_DIRECTORY_PATH, attachment.filename);
+            let path = Path::new(&path_str);
+            match path.exists() {
+                false => {
+                    warn!("file: {:?} does not exist, writing", path);
+                    let mut file = File::create_new(path).map_err(|err| anyhow!(err))?;
+                    file.write_all(&attachment.bytes)
+                        .map_err(|err| anyhow!(err))?;
+                }
+                true => {
+                    warn!("file: {:?} already exists, overwriting", path);
+                    fs::write(path, &attachment.bytes).map_err(|err| {
+                        error!(
+                            "there was a problem overriting the file: {:?}\n: {:?}",
+                            path, err
+                        );
+                        anyhow!(
+                            "there was a problem overriting the file: {:?}\n: {:?}",
+                            path,
+                            err
+                        )
+                    })?;
+                }
+            }
         }
     }
+
+    public_perms.set_readonly(true);
+    parent_perms.set_readonly(true);
     match ret {
         Some(text) => {
             warn!("content returned from save_all: {}", text);
