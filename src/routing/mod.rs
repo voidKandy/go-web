@@ -18,7 +18,7 @@ use axum::{
     http::{HeaderMap, StatusCode},
     middleware::{self, Next},
     response::{Html, IntoResponse, Response},
-    routing::{get, post},
+    routing::{delete, get, post},
     Router,
 };
 use pages::{blog, contact, landing, portfolio};
@@ -31,7 +31,7 @@ pub fn create_router(state: Arc<AppState>) -> Router {
     let blog_routes = Router::new()
         .route("/", get(blog::index))
         .route("/latest", get(blog::latest))
-        .layer(middleware::from_fn_with_state(state.clone(), auth));
+        .layer(middleware::from_fn_with_state(state.clone(), soft_auth));
 
     let admin_routes = Router::new()
         .route(
@@ -42,6 +42,7 @@ pub fn create_router(state: Arc<AppState>) -> Router {
             "/update/:title",
             get(admin::upload::get_update_form).patch(admin::upload::patch_upload_form),
         )
+        .route("/delete/:title", delete(admin::upload::delete_post))
         .route_layer(middleware::from_fn_with_state(state.clone(), admin_auth));
 
     let user_routes = Router::new()

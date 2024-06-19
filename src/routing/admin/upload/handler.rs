@@ -4,7 +4,7 @@ use super::{
 };
 use crate::{
     database::{
-        handlers::{patch_blog_post, post_blog_post},
+        handlers::{delete_post_by_title, patch_blog_post, post_blog_post},
         model::{UpdateBlogPost, UploadBlogPost},
     },
     error::{DataApiReturn, IntoDataApiReturn},
@@ -101,5 +101,20 @@ pub async fn patch_upload_form(
         })?;
     let response =
         Response::new(json!({"status": "success", "message": "blog post updated!"}).to_string());
+    Ok(response)
+}
+
+pub async fn delete_post(
+    State(data): State<Arc<AppState>>,
+    Path(title): Path<String>,
+) -> Result<impl IntoResponse, DataApiReturn> {
+    delete_post_by_title(&data.db, &title)
+        .await
+        .map_err(|err| {
+            warn!("Encountered an error trying to delete post: {:?}", err);
+            err.into_data_api_return()
+        })?;
+    let response =
+        Response::new(json!({"status": "success", "message": "blog post deleted!"}).to_string());
     Ok(response)
 }

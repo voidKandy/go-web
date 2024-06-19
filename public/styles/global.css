@@ -167,5 +167,5 @@ form input[type="checkbox"] {
 }
 
 input[type="checkbox"]:checked {
-  background-color: var(--desert-sand);
+  background-color: var(--bright-pink);
 }

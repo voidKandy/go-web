@@ -24,17 +24,27 @@
   color:@desert-sand; background-color: @dim-grey;
   p:1.5rem;"
 >
-  {% if user.admin %}
-  <button
-    class="material-symbols-outlined material-symbols-button"
-    hx-get="/admin/update/{{post.title}}"
-    hx-push-url="false"
-    hx-target="this"
-    hx-swap="outerHTML"
-  >
-    edit
-  </button>
-  {% endif %}
+  {% if let Some(user) = user_opt %} {% if user.admin %}
+  <div x-style="flex; flex-row; justify-content:space-between;">
+    <div
+      hx-get="/admin/update/{{post.title}}"
+      hx-push-url="false"
+      hx-target="this"
+      hx-swap="outerHTML"
+      hx-trigger="load"
+    ></div>
+    <button
+      class="material-symbols-outlined material-symbols-button"
+      hx-delete="/admin/delete/{{post.title}}"
+      hx-push-url="false"
+      hx-target="this"
+      hx-swap="outerHTML"
+    >
+      close
+    </button>
+  </div>
+  {% endif %} {% endif %}
+
   <div x-style="flex; flex-col; justify-content:space-between;">
     <button
       class="material-symbols-button material-symbols-outlined"

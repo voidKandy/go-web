@@ -18,17 +18,15 @@
   <div id="blogs-content">
     {% if let Some(post) = post_opt %} {% include "blog/post.html" %} {% else %}
     <div x-style="flex; flex-row; justify-content:right; mx:6;">
-      {% if user.admin %}
-      <button
-        class="material-symbols-outlined material-symbols-button"
+      {% if let Some(user) = user_opt %} {% if user.admin %}
+      <div
         hx-get="/admin/upload"
         hx-push-url="false"
         hx-target="this"
+        hx-trigger="load"
         hx-swap="outerHTML"
-      >
-        add
-      </button>
-      {% endif %}
+      ></div>
+      {% endif %} {% endif %}
     </div>
     <span
       hidden

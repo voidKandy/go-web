@@ -1,5 +1,5 @@
 use crate::{
-    auth::model::FilteredUser,
+    auth::{middleware::SoftAuthExtension, model::FilteredUser},
     database::{
         self,
         handlers::{get_most_recent_posts, get_post_by_title},
@@ -23,7 +23,7 @@ use tracing::warn;
 #[derive(Template)]
 #[template(path = "blog/layout.html")]
 pub struct BlogTemplate {
-    user: FilteredUser,
+    user_opt: Option<FilteredUser>,
     post_opt: Option<PostTemplate>,
 }
 
@@ -43,7 +43,7 @@ pub struct PostTemplate {
 pub async fn index(
     Query(params): Query<BlogParams>,
     State(data): State<Arc<AppState>>,
-    Extension(user): Extension<User>,
+    Extension(soft_auth_ext): Extension<SoftAuthExtension>,
 ) -> HandlerResult<Html<String>> {
     let mut post_opt: Option<PostTemplate> = None;
     if let Some(title) = params.post {
@@ -54,7 +54,7 @@ pub async fn index(
         post_opt = Some(post.into());
     }
     let tmpl = BlogTemplate {
-        user: (&user).into(),
+        user_opt: soft_auth_ext.user,
         post_opt,
     };
     match tmpl.render() {

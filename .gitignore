@@ -2,6 +2,6 @@
 .env
 espx-ls.toml
 .espx-ls
-/private/posts
+/public/assets/posts
 /upload_test
 /target

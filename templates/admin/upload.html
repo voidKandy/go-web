@@ -1,5 +1,26 @@
 <div x-style="flex; flex-col; justify-content:center; align-self: center;">
+  <button
+    class="material-symbols-outlined material-symbols-button"
+    _="
+    init
+      set :form to next <form/>
+      set :t to my textContent
+    end
+    on mousedown
+      if :form matches .hidden 
+          remove .hidden from :form
+          set my textContent to 'close'
+      else
+          add .hidden to :form
+          set my textContent to :t
+      end
+    end
+    "
+  >
+    add
+  </button>
   <form
+    class="hidden"
     x-style="flex; flex-col; align-self:center;"
     hx-post="/admin/upload"
     hx-push-url="false"
@@ -45,7 +66,7 @@
       <label
         for="files"
         class="button"
-        x-style="my:2; align-self:center; font-size:0.5rem;"
+        x-style="m:2; align-self:center; font-size:0.5rem;"
       >
         Select files to upload
         <input

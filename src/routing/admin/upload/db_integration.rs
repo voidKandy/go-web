@@ -9,6 +9,8 @@ use axum::extract::Multipart;
 use std::{fs::File, io::Write, ops::Deref};
 use tracing::{error, info, warn};
 
+const POSTS_DIRECTORY_PATH: &str = "/public/assets/posts";
+
 /// saves all attachments and returns the content of the markdown file
 #[tracing::instrument(name = "save all attachments")]
 pub(super) fn save_all_attachments_to_filesystem(
@@ -16,8 +18,9 @@ pub(super) fn save_all_attachments_to_filesystem(
 ) -> anyhow::Result<Option<String>> {
     let mut ret: Option<String> = None;
     for attachment in vec.iter_mut() {
-        let mut file = File::create_new(format!("./private/posts/{}", attachment.filename))
-            .map_err(|err| anyhow!(err))?;
+        let mut file =
+            File::create_new(format!(".{}/{}", POSTS_DIRECTORY_PATH, attachment.filename))
+                .map_err(|err| anyhow!(err))?;
         file.write_all(&attachment.bytes)
             .map_err(|err| anyhow!(err))?;
         if attachment.filename.split_once('.').unwrap().1 == "md" {
@@ -50,7 +53,7 @@ fn change_attachments_links(text: &str) -> anyhow::Result<String> {
                         let start = idx + start + 1; // position of '('
                         let end = idx + end; // position of ')'
                         let url = &line[start + 1..end]; // extract URL
-                        let new_url = format!("/private/posts{}", url); // create new URL
+                        let new_url = format!("{}{}", POSTS_DIRECTORY_PATH, url); // create new URL
 
                         let modified_line =
                             format!("{}{}{}", &line[..start + 1], new_url, &line[end..]); // construct modified line
@@ -202,9 +205,9 @@ mod tests {
         let out = change_attachments_links(input).unwrap();
         let expected = r#"this is text
         some more text
-        ![img](./private/posts/img.jpg)
+        ![img](./public/assets/posts/img.jpg)
         
-        ![img](./private/posts/img2.jpg)
+        ![img](./public/assets/posts/img2.jpg)
         [img](./not-an-img)
 
         this is just me! talking (with parentheses)

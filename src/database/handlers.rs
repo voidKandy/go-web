@@ -63,9 +63,17 @@ pub async fn get_most_recent_posts(
         .bind(cat),
         None => sqlx::query_as::<_, Post>("SELECT * FROM posts ORDER BY created_at DESC LIMIT 5"),
     };
-
     let post = query.fetch_all(pool).await?;
     Ok(post)
+}
+
+#[instrument(name = "delete post", skip(pool))]
+pub async fn delete_post_by_title(pool: &Pool<Postgres>, title: &str) -> DatabaseResult<()> {
+    sqlx::query("DELETE FROM posts WHERE title = $1")
+        .bind(title)
+        .execute(pool)
+        .await?;
+    Ok(())
 }
 
 // ⧗

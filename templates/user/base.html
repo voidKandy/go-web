@@ -1,26 +1,3 @@
-<script type="text/hyperscript">
-  behavior HideShowForm(otherSection)
-      init
-        set :form to next <form/>
-        set :sec to closest parent <section/>
-        set :t to my textContent
-      end
-      on mousedown
-        if :form matches .hidden
-          remove .hidden from :form
-          add .hidden to otherSection
-          set my textContent to 'x'
-          add .form-open to :sec
-        else
-          add .hidden to :form
-          remove .hidden from otherSection
-          remove .form-open from :sec
-          set my textContent to :t
-        end
-      end
-  end
-</script>
-
 <div x-style="flex; flex-row; justify-content:center; lg|my:0; my:1; mx:3;">
   {% if let Some(user) = user %}
   <button
