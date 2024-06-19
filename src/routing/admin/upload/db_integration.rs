@@ -1,11 +1,11 @@
-use crate::database::model::Attachment;
-use crate::routing::error::RouterError;
 use crate::{
-    database::model::{UpdateBlogPost, UploadBlogPost},
-    routing::error::RouterResult,
+    database::model::{Attachment, UpdateBlogPost, UploadBlogPost},
+    routing::error::{RouterError, RouterResult},
 };
 use anyhow::anyhow;
 use axum::extract::Multipart;
+use std::fs;
+use std::path::Path;
 use std::{fs::File, io::Write, ops::Deref};
 use tracing::{error, info, warn};
 
@@ -16,22 +16,58 @@ const POSTS_DIRECTORY_PATH: &str = "/public/assets/posts";
 pub(super) fn save_all_attachments_to_filesystem(
     mut vec: Vec<Attachment>,
 ) -> anyhow::Result<Option<String>> {
+    let path_str = format!("./{}", &POSTS_DIRECTORY_PATH);
+    let path = Path::new(&path_str);
+    if !path.exists() {
+        fs::create_dir_all(path).map_err(|err| {
+            error!(
+                "there was an error when creating the posts assets directory: {:?}",
+                err
+            );
+            anyhow!(
+                "there was an error when creating the posts assets directory: {:?}",
+                err
+            )
+        })?;
+    }
+
     let mut ret: Option<String> = None;
     for attachment in vec.iter_mut() {
-        let mut file =
-            File::create_new(format!(".{}/{}", POSTS_DIRECTORY_PATH, attachment.filename))
-                .map_err(|err| anyhow!(err))?;
-        file.write_all(&attachment.bytes)
-            .map_err(|err| anyhow!(err))?;
+        let path_str = format!(".{}/{}", POSTS_DIRECTORY_PATH, attachment.filename);
+        let path = Path::new(&path_str);
+
+        match path.exists() {
+            false => {
+                warn!("file: {:?} does not exist, writing", path);
+                let mut file = File::create_new(path).map_err(|err| anyhow!(err))?;
+                file.write_all(&attachment.bytes)
+                    .map_err(|err| anyhow!(err))?;
+            }
+            true => {
+                warn!("file: {:?} already exists, overwriting", path);
+                fs::write(path, &attachment.bytes).map_err(|err| {
+                    error!(
+                        "there was a problem overriting the file: {:?}\n: {:?}",
+                        path, err
+                    );
+                    anyhow!(
+                        "there was a problem overriting the file: {:?}\n: {:?}",
+                        path,
+                        err
+                    )
+                })?;
+            }
+        }
         if attachment.filename.split_once('.').unwrap().1 == "md" {
             if ret.is_some() {
-                warn!("for some reason multiple markdown files were passed to save_all")
+                warn!("don't pass multiple markdown files to save_all")
             }
             ret = Some(String::from_utf8(attachment.bytes.drain(..).collect())?);
         }
     }
     match ret {
         Some(text) => {
+            warn!("content returned from save_all: {}", text);
             return Ok(Some(change_attachments_links(&text)?));
         }
         None => {

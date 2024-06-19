@@ -27,6 +27,7 @@ use tower_http::services::ServeDir;
 
 pub type HandlerResult<T> = Result<T, StatusCode>;
 
+#[tracing::instrument(name = "create app router", skip_all)]
 pub fn create_router(state: Arc<AppState>) -> Router {
     let blog_routes = Router::new()
         .route("/", get(blog::index))

@@ -1,7 +1,4 @@
-use super::{
-    super::super::error::RouterResult,
-    db_integration::{save_all_attachments_to_filesystem, TryFromMultipart},
-};
+use super::db_integration::{save_all_attachments_to_filesystem, TryFromMultipart};
 use crate::{
     database::{
         handlers::{delete_post_by_title, patch_blog_post, post_blog_post},
@@ -11,15 +8,14 @@ use crate::{
     routing::error::RouterError,
     state::AppState,
 };
-use anyhow::anyhow;
 use askama::Template;
 use axum::{
     extract::{Multipart, Path, State},
     response::{Html, IntoResponse, Response},
 };
 use serde_json::json;
-use std::{ops::Deref, sync::Arc};
-use tracing::{error, info, warn};
+use std::sync::Arc;
+use tracing::{debug, error, warn};
 
 #[derive(Template)]
 #[template(path = "admin/upload.html")]
@@ -38,6 +34,7 @@ pub async fn get_upload_form() -> Html<String> {
     }
 }
 
+#[tracing::instrument(name = "upload blog post handler", skip_all)]
 pub async fn post_upload_form(
     State(data): State<Arc<AppState>>,
     multipart: Multipart,
@@ -51,6 +48,7 @@ pub async fn post_upload_form(
             );
             err.into_data_api_return()
         })?;
+    debug!("Got post from multipart form: {:?}", post);
     if let Some(content) = save_all_attachments_to_filesystem(post.attachments.drain(..).collect())
         .map_err(|err| {
             error!("an error occurred when saving attachments: {:?}", err);
