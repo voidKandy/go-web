@@ -16,20 +16,20 @@ const POSTS_DIRECTORY_PATH: &str = "/public/assets/posts";
 pub(super) fn save_all_attachments_to_filesystem(
     mut vec: Vec<Attachment>,
 ) -> anyhow::Result<Option<String>> {
-    let path_str = format!("./{}", &POSTS_DIRECTORY_PATH);
-    let path = Path::new(&path_str);
-    if !path.exists() {
-        fs::create_dir_all(path).map_err(|err| {
-            error!(
-                "there was an error when creating the posts assets directory: {:?}",
-                err
-            );
-            anyhow!(
-                "there was an error when creating the posts assets directory: {:?}",
-                err
-            )
-        })?;
-    }
+    // let path_str = format!("./{}", &POSTS_DIRECTORY_PATH);
+    // let path = Path::new(&path_str);
+    // if !path.exists() {
+    //     fs::create_dir_all(path).map_err(|err| {
+    //         error!(
+    //             "there was an error when creating the posts assets directory: {:?}",
+    //             err
+    //         );
+    //         anyhow!(
+    //             "there was an error when creating the posts assets directory: {:?}",
+    //             err
+    //         )
+    //     })?;
+    // }
 
     let mut ret: Option<String> = None;
     for attachment in vec.iter_mut() {
