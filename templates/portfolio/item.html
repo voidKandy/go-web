@@ -4,12 +4,8 @@
     init immediately
       measure me then set :w to the result.width
       measure me then set :h to the result.height
-      log :w
-      log :h
       repeat for img in <img/> in me
-        log img
         set :alt to @alt of img
-        log :alt
         add .img to img
         if :alt contains 'small'
           set @width of img to 20

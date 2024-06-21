@@ -1,5 +1,9 @@
 use axum::{http::StatusCode, Json};
+use once_cell::sync::Lazy;
 use serde::Serialize;
+use tracing::info;
+
+use crate::TRACING;
 
 #[derive(Debug, Serialize)]
 pub struct ErrorResponse {
@@ -46,3 +50,14 @@ pub fn error_chain_fmt(
     }
     Ok(())
 }
+
+pub fn init_test_tracing() {
+    Lazy::force(&TRACING);
+    info!("test tracing initialized");
+}
+
+// static TRACING: Lazy<()> = Lazy::new(|| {
+//     let subscriber_name = "test".to_string();
+//     let sub = get_subscriber(subscriber_name, "debug".to_string(), std::io::stderr);
+//     init_subscriber(sub);
+// });

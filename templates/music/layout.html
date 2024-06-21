@@ -289,29 +289,7 @@
     }
   </style>
 
-  {% if let None = user %}
-
-  <span class="tooltiptext">You need be signed in</span>
-  <button
-    class="material-symbols-button material-symbols-outlined"
-    _="
-    init
-      set :tooltip to previous <span.tooltiptext/>
-    end
-    on mousedown
-      add .shake to me
-      transition element :tooltip's opacity to 0
-      add .vis to element :tooltip
-      transition element :tooltip's opacity to 1 over 200ms
-      wait 1000ms
-      remove .shake from me
-      transition element :tooltip's opacity to 0 over 200ms
-      remove .vis from element :tooltip
-    end"
-  >
-    music_note
-  </button>
-  {% else %} {% let current_song = album_songs[current_song_idx] %}
+  {% let current_song = album_songs[current_song_idx] %}
   <div x-style="flex; flex-row; justify-content:space-between;">
     <button
       id="minifyer"
@@ -358,5 +336,4 @@
 
     {% include "music/selection.html" %} {% include "music/player.html" %}
   </div>
-  {% endif %}
 </div>

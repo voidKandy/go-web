@@ -13,6 +13,28 @@
        end
     end
   end
+
+  behavior EnsureButtonsAreSameSize
+    init
+      set :h to 0
+      set :w to 0
+      repeat for b in <button/> in me
+        if b.offsetWidth > :w
+          set :w to b.offsetWidth
+        end
+        if b.offsetHeight > :h
+          set :h to b.offsetHeight
+        end
+      end
+    end
+    on load
+      repeat for b in <button/> in me
+        set *width of b to `${:w}px`
+        set *height of b to `${:h}px`
+      end
+    end
+
+  end
 </script>
 
 <style>
@@ -73,6 +95,7 @@
     </button>
 
     <nav
+      _="install EnsureButtonsAreSameSize"
       id="links"
       class="hidden"
       x-style="flex; flex-col; m:3;"

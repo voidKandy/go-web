@@ -76,8 +76,7 @@ pub fn create_router(state: Arc<AppState>) -> Router {
         .route("/landing", get(landing::index))
         .route(
             "/music/:current_album_name/:current_song_idx",
-            get(music::music_handler)
-                .route_layer(middleware::from_fn_with_state(state.clone(), soft_auth)),
+            get(music::music_handler),
         )
         .route("/portfolio/:item_name", get(portfolio::index))
         .route("/email", get(contact::send_email))

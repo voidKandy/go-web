@@ -23,7 +23,7 @@ use tower_http::cors::CorsLayer;
 use tracing::{info, warn};
 
 static TRACING: Lazy<()> = Lazy::new(|| {
-    let default_filter_level = "info".to_string();
+    let default_filter_level = "debug".to_string();
     let subscriber_name = "main".to_string();
 
     if std::env::var("MAIN_LOG").is_ok() {
@@ -37,7 +37,6 @@ static TRACING: Lazy<()> = Lazy::new(|| {
 #[tokio::main]
 async fn main() {
     Lazy::force(&TRACING);
-
     dotenv::dotenv().ok();
     let port = std::env::var("PORT").expect("Failed to get port env variable");
 

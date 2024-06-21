@@ -3,10 +3,12 @@
     init immediately
       measure me then set :w to the result.width
       measure me then set :h to the result.height
-      log :w
-      log :h
-      log <img/> in me
       set @width of <img/> in me to :w * 0.60
+      set :codeblocks to <code/> in me
+      repeat for code in :codeblocks
+        set :c to code.textContent
+        set code.outerHTML to :c
+      end
     end
   end
 </script>
@@ -80,7 +82,7 @@
     {{post.subtitle}}
   </h2>
   <div x-style="mx:4;" id="markdown-block" _="install MarkdownBlock">
-    {{post.content|safe}}
+    {% for c in post.content %} {{c|safe}} {% endfor %}
   </div>
 </div>
 

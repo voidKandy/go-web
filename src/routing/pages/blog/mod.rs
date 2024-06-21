@@ -1,9 +1,10 @@
+pub mod error;
+pub mod post;
 use crate::{
     auth::{middleware::SoftAuthExtension, model::FilteredUser},
     database::{
         self,
         handlers::{get_most_recent_posts, get_post_by_title},
-        model::{Post, User},
     },
     error::IntoDataApiReturn,
     routing::HandlerResult,
@@ -20,6 +21,8 @@ use serde::Deserialize;
 use std::sync::Arc;
 use tracing::warn;
 
+use self::post::PostTemplate;
+
 #[derive(Template)]
 #[template(path = "blog/layout.html")]
 pub struct BlogTemplate {
@@ -33,13 +36,6 @@ pub struct BlogParams {
     category: Option<String>,
 }
 
-pub struct PostTemplate {
-    pub title: String,
-    pub subtitle: String,
-    pub category: Option<String>,
-    pub content: String,
-}
-
 pub async fn index(
     Query(params): Query<BlogParams>,
     State(data): State<Arc<AppState>>,
@@ -51,7 +47,10 @@ pub async fn index(
             .await
             .map_err(|err| err.status_code())?
             .ok_or_else(|| StatusCode::NOT_FOUND)?;
-        post_opt = Some(post.into());
+        post_opt = Some(
+            post.try_into()
+                .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?,
+        );
     }
     let tmpl = BlogTemplate {
         user_opt: soft_auth_ext.user,
@@ -62,7 +61,6 @@ pub async fn index(
         Err(err) => Ok(Html(format!("Error rendering Layout: {}", err.to_string()))),
     }
 }
-
 #[derive(Template)]
 #[template(path = "blog/multi-post.html")]
 pub struct MultiPostTemplate {
@@ -74,17 +72,6 @@ pub struct MultiPostTemplate {
 #[derive(Debug, Deserialize)]
 pub struct LatestParams {
     category: Option<String>,
-}
-
-impl From<Post> for PostTemplate {
-    fn from(value: Post) -> Self {
-        Self {
-            title: value.title,
-            subtitle: value.subtitle.unwrap_or(String::new()),
-            category: value.category,
-            content: markdown::to_html(&value.content),
-        }
-    }
 }
 
 mod filters {
@@ -112,7 +99,7 @@ pub async fn latest(
         .await
         .map_err(|err| err.status_code())?
         .into_iter()
-        .map(|p| PostTemplate::from(p))
+        .map(|p| PostTemplate::try_from(p).expect("failed to create post template"))
         .collect();
     let tmpl = MultiPostTemplate {
         posts,
@@ -139,4 +126,3 @@ pub async fn latest(
 //         Ok(r) => Ok(Html(r)),
 //         Err(err) => Ok(Html(format!("Error rendering Layout: {}", err.to_string()))),
 //     }
-//

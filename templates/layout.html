@@ -26,7 +26,6 @@
     end
     on htmx:responseError
         remove .selected from me
-        log event.detail.error
         add .shake to me
         transition element :tooltip's opacity to 0
         add .vis to element :tooltip
@@ -45,7 +44,6 @@
       end
       on htmx:beforeSwap(event) from <span.form-response/> in me
         set :resObj to (event.detail.serverResponse as an Object)
-        log :resObj
         if :resObj.status contains "success"
           remove .error from :target
           set :target.textContent to `$successMessage`

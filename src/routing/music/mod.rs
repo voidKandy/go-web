@@ -24,7 +24,6 @@ pub struct MusicPlayerLayoutTemplate {
     current_album_name: String,
     album_songs: Vec<SongInfo>,
     current_song_idx: usize,
-    user: Option<FilteredUser>,
 }
 
 #[derive(Debug, Deserialize, Clone)]
@@ -44,7 +43,6 @@ pub struct SongInfo {
 }
 
 pub async fn music_handler(
-    Extension(soft_auth_ext): Extension<SoftAuthExtension>,
     Path((current_album_name, current_song_idx)): Path<(String, usize)>,
     Query(params): Query<MusicPlayerParams>,
 ) -> HandlerResult<Html<String>> {
@@ -65,7 +63,6 @@ pub async fn music_handler(
         current_album_name,
         album_songs,
         current_song_idx,
-        user: soft_auth_ext.user,
     };
 
     Ok(match tmpl.render() {
@@ -155,18 +152,18 @@ impl MusicPlayerLayoutTemplate {
     }
 
     fn album_img_url(&self) -> String {
-        format!("/private/music/{}/imgs/album.png", self.current_album_name)
+        format!("/public/music/{}/imgs/album.png", self.current_album_name)
     }
 }
 
 fn song_file_path(info: &&SongInfo) -> String {
-    format!("/private/music/{}/wavs/{}.wav", info.album, info.file_name)
+    format!("/public/music/{}/wavs/{}.wav", info.album, info.file_name)
 }
 
 fn img_file_path(info: &&SongInfo) -> String {
     if info.has_unique_image {
-        format!("/private/music/{}/imgs/{}.png", info.album, info.file_name)
+        format!("/public/music/{}/imgs/{}.png", info.album, info.file_name)
     } else {
-        format!("/private/music/{}/imgs/album.png", info.album)
+        format!("/public/music/{}/imgs/album.png", info.album)
     }
 }

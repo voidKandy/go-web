@@ -33,7 +33,6 @@
       end
       on htmx:beforeSwap(event) from <span.form-response/> in me
         set :resObj to (event.detail.serverResponse as an Object)
-        log :resObj
         if :resObj.status contains 'success'
           remove .error from :target
           set :target.textContent to `Post uploaded`
