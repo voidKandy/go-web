@@ -19,7 +19,7 @@ use axum::{
 };
 use serde::Deserialize;
 use std::sync::Arc;
-use tracing::warn;
+use tracing::{debug, warn};
 
 use self::post::PostTemplate;
 
@@ -91,6 +91,7 @@ pub async fn latest(
             warn!("error getting categories: {:?}", err);
             err.status_code()
         })?;
+    debug!("got categories: {:?}", categories);
     let category = params
         .category
         .clone()
@@ -99,7 +100,10 @@ pub async fn latest(
         .await
         .map_err(|err| err.status_code())?
         .into_iter()
-        .map(|p| PostTemplate::try_from(p).expect("failed to create post template"))
+        .map(|p| {
+            debug!("processing: {:?}", p);
+            PostTemplate::try_from(p).expect("failed to create post template")
+        })
         .collect();
     let tmpl = MultiPostTemplate {
         posts,
@@ -111,18 +115,3 @@ pub async fn latest(
         Err(err) => Ok(Html(format!("Error rendering Layout: {}", err.to_string()))),
     }
 }
-
-// pub async fn by_title(
-//     Path(encoded_title): Path<String>,
-//     State(data): State<Arc<AppState>>,
-// ) -> HandlerResult<Html<String>> {
-//     let title = encoded_title.replace("%20", " ");
-//     let post = get_post_by_title(&data.db, &title)
-//         .await
-//         .map_err(|err| err.status_code())?
-//         .ok_or_else(|| StatusCode::NOT_FOUND)?;
-//     let tmpl = PostTemplate::from(post);
-//     match tmpl.render() {
-//         Ok(r) => Ok(Html(r)),
-//         Err(err) => Ok(Html(format!("Error rendering Layout: {}", err.to_string()))),
-//     }

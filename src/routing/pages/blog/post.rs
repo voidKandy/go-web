@@ -1,8 +1,10 @@
 use super::error::{BlogError, BlogResult};
 use crate::database::model::Post;
 use anyhow::anyhow;
+use rand::seq::IteratorRandom;
 use tracing::{debug, info, warn};
 
+#[derive(Debug)]
 pub struct PostTemplate {
     pub title: String,
     pub subtitle: String,
@@ -19,16 +21,16 @@ pub(super) enum PostContent {
 impl TryFrom<Post> for PostTemplate {
     type Error = BlogError;
     fn try_from(value: Post) -> Result<Self, Self::Error> {
-        // i do not like the return of this
         let mut content = vec![];
         if !value.content.is_empty() {
             let mut parser = HighlighterParser::new(&value.content);
-
+            info!("created parser");
             for pc in parser
                 .highlight_code_blocks()
                 .map_err(|_| anyhow!("problem highlighting code blocks"))?
                 .into_iter()
             {
+                info!("pushing: {:?}", pc);
                 content.push(pc.into_html()?);
             }
         }
@@ -86,6 +88,7 @@ impl PostContent {
     }
 }
 
+#[derive(Debug)]
 struct HighlighterParser {
     current_char: char,
     next_char: Option<char>,
@@ -112,15 +115,15 @@ impl HighlighterParser {
             Some(ch) => self.current_char = ch,
             None => return Err(BlogError::parser_error("next char is none")),
         }
-        self.next_char = self.text.chars().next();
+        let mut chs = self.text.chars();
+        self.next_char = chs.next();
 
-        if !self.text.is_empty() {
-            self.text = self.text.drain(1..).collect();
-        }
+        self.text = chs.collect();
 
         return Ok(());
     }
 
+    #[tracing::instrument(name = "new highlighter parser")]
     fn new(text: &str) -> HighlighterParser {
         let mut chars = text.chars();
         let current_char = chars
@@ -143,7 +146,8 @@ impl HighlighterParser {
 
             if current_buffer.len() >= 3 {
                 let i = current_buffer.len() - 3;
-                if current_buffer[i..] == *"```" {
+                let last_three_chars: String = current_buffer.chars().rev().take(3).collect();
+                if *last_three_chars == *"```" {
                     return_vec.push(PostContent::Regular(current_buffer.drain(..i).collect()));
                     if !self.text.contains("```") {
                         // break;
@@ -226,6 +230,22 @@ mod tests {
 
         let language = PostContent::parse_str_for_language_tag(&input).unwrap();
         assert_eq!(Some("rust"), language.as_deref());
+    }
+
+    #[test]
+    fn drain() {
+        let expected = "";
+        let inp: String = "a".to_string().drain(1..).collect();
+
+        assert_eq!(inp, expected.to_owned());
+
+        let inp = "sadfasdfaaa".to_owned();
+        let dr: String = inp[inp.len() - 3..].to_owned();
+        assert_eq!(String::from("aaa"), dr);
+
+        let mut inp = "aaa".to_owned();
+        let dr: String = inp.drain(..inp.len() - 3).collect();
+        assert_eq!(String::new(), dr);
     }
 
     #[test]

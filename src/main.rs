@@ -14,7 +14,7 @@ use database::handlers::register_new_user;
 use error::IntoDataApiReturn;
 use once_cell::sync::Lazy;
 use reqwest::StatusCode;
-use sqlx::postgres::PgPoolOptions;
+use sqlx::postgres::{PgConnectOptions, PgPoolOptions};
 use state::AppState;
 use state::*;
 use std::sync::Arc;

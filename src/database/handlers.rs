@@ -44,11 +44,11 @@ pub async fn register_new_user(
 
 #[tracing::instrument(name = "Get post by title", skip(pool))]
 pub async fn get_post_by_title(pool: &Pool<Postgres>, title: &str) -> DatabaseResult<Option<Post>> {
-    let user = sqlx::query_as::<_, Post>("SELECT * FROM posts WHERE title = $1")
+    let post = sqlx::query_as::<_, Post>("SELECT * FROM posts WHERE title = $1")
         .bind(title)
         .fetch_optional(pool)
         .await?;
-    Ok(user)
+    Ok(post)
 }
 
 #[instrument(name = "get recent post")]
@@ -97,32 +97,34 @@ pub async fn patch_blog_post(
     title: &str,
     post: UpdateBlogPost,
 ) -> DatabaseResult<Option<Post>> {
-    // First, fetch the post by its title
     let id: Uuid = sqlx::query_scalar("SELECT id FROM posts WHERE title = $1")
-        .bind(&post.title)
+        .bind(&title)
         .fetch_one(pool)
         .await?;
     info!("got id: {:?}", id);
     let mut updates = Vec::new();
     let mut params = Vec::new();
 
-    if let Some(title) = post.title {
-        updates.push("title = $2");
-        params.push(title);
+    if let Some(t) = post.title {
+        updates.push(format!("title = ${}", updates.len() + 2));
+        params.push(t);
     }
 
     if let Some(subtitle) = post.subtitle {
-        updates.push("subtitle = $3");
+        updates.push(format!("subtitle = ${}", updates.len() + 2));
+        // updates.push("subtitle = $3");
         params.push(subtitle);
     }
 
     if let Some(category) = post.category {
-        updates.push("category = $4");
+        updates.push(format!("category = ${}", updates.len() + 2));
+        // updates.push("category = $4");
         params.push(category);
     }
 
     if let Some(content) = post.content {
-        updates.push("content = $5");
+        updates.push(format!("content = ${}", updates.len() + 2));
+        // updates.push("content = $5");
         params.push(content);
     }
 
@@ -137,6 +139,7 @@ pub async fn patch_blog_post(
     let mut query_builder = sqlx::query_as::<_, Post>(&query).bind(id);
 
     for param in params {
+        info!("binding param to query: {}", param);
         query_builder = query_builder.bind(param);
     }
 

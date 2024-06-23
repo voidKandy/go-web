@@ -1,4 +1,6 @@
-use super::db_integration::{save_all_attachments_to_filesystem, TryFromMultipart};
+use super::db_integration::{
+    change_attachments_links, save_all_attachments_to_filesystem, TryFromMultipart,
+};
 use crate::{
     database::{
         handlers::{delete_post_by_title, patch_blog_post, post_blog_post},
@@ -13,6 +15,7 @@ use axum::{
     extract::{Multipart, Path, State},
     response::{Html, IntoResponse, Response},
 };
+use reqwest::StatusCode;
 use serde_json::json;
 use std::sync::Arc;
 use tracing::{debug, error, warn};
@@ -49,18 +52,18 @@ pub async fn post_upload_form(
             err.into_data_api_return()
         })?;
     debug!("Got post from multipart form: {:?}", post);
-    if let Some(content) = save_all_attachments_to_filesystem(post.attachments.drain(..).collect())
-        .map_err(|err| {
-            error!("an error occurred when saving attachments: {:?}", err);
-            RouterError::from(err).into_data_api_return()
-        })?
-    {
-        post.content = content;
-    }
-    post_blog_post(&data.db, post).await.map_err(|err| {
+    post.content =
+        change_attachments_links(&post.content).map_err(|err| err.into_data_api_return())?;
+    save_all_attachments_to_filesystem(post.attachments.drain(..).collect()).map_err(|err| {
+        error!("an error occurred when saving attachments: {:?}", err);
+        err.into_data_api_return()
+    })?;
+    let post = post_blog_post(&data.db, post).await.map_err(|err| {
         warn!("Encountered an error trying to post: {:?}", err);
         err.into_data_api_return()
     })?;
+
+    debug!("posted post: {:?}", post);
     let response =
         Response::new(json!({"status": "success", "message": "blog post uploaded!"}).to_string());
     Ok(response)
@@ -88,11 +91,14 @@ pub async fn patch_upload_form(
             );
             err.into_data_api_return()
         })?;
-    post.content = save_all_attachments_to_filesystem(post.attachments.drain(..).collect())
-        .map_err(|err| {
-            error!("error saving attachments! {:?}", err);
-            RouterError::from(err).into_data_api_return()
-        })?;
+    if let Some(c) = post.content {
+        post.content =
+            Some(change_attachments_links(&c).map_err(|err| err.into_data_api_return())?);
+    }
+    save_all_attachments_to_filesystem(post.attachments.drain(..).collect()).map_err(|err| {
+        error!("an error occurred when saving attachments: {:?}", err);
+        err.into_data_api_return()
+    })?;
 
     patch_blog_post(&data.db, &title, post)
         .await

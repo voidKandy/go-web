@@ -9,8 +9,8 @@ pub enum RouterError {
     #[error(transparent)]
     Undefined(#[from] anyhow::Error),
     Template(#[from] askama::Error),
-    Multipart(#[from] axum::extract::multipart::MultipartError),
-    Utf8(#[from] core::str::Utf8Error),
+    // Multipart(#[from] axum::extract::multipart::MultipartError),
+    // Utf8(#[from] core::str::Utf8Error),
 }
 
 impl Debug for RouterError {
@@ -24,8 +24,8 @@ impl Display for RouterError {
         let display = match self {
             Self::Undefined(err) => err.to_string(),
             Self::Template(err) => err.to_string(),
-            Self::Multipart(err) => err.to_string(),
-            Self::Utf8(err) => err.to_string(),
+            // Self::Multipart(err) => err.to_string(),
+            // Self::Utf8(err) => err.to_string(),
         };
         writeln!(f, "{}", display)
     }
@@ -42,11 +42,10 @@ impl IntoDataApiReturn for RouterError {
             }
             Self::Undefined(err) => {
                 ErrorResponse::fail(&format!("An undefined error occurred: {:?}", err))
-            }
-            Self::Utf8(err) => ErrorResponse::fail(&format!("A UTF8 error occurred: {:?}", err)),
-            Self::Multipart(err) => {
-                ErrorResponse::fail(&format!("A multipart error occurred: {:?}", err))
-            }
+            } // Self::Utf8(err) => ErrorResponse::fail(&format!("A UTF8 error occurred: {:?}", err)),
+              // Self::Multipart(err) => {
+              //     ErrorResponse::fail(&format!("A multipart error occurred: {:?}", err))
+              // }
         }
     }
 }
