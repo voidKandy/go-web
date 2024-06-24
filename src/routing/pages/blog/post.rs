@@ -183,7 +183,8 @@ impl HighlighterParser {
             "javascript" => Some("js"),
             "typescript" => Some("ts"),
             "python" => Some("py"),
-            _ => None,
+            "lua" => Some("lua"),
+            other => Some(other),
         }
     }
 
