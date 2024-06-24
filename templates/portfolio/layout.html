@@ -16,11 +16,9 @@
 
   behavior EnsureButtonsAreSameSize
     init
+      set :notmobile to window.innerWidth > 1024
       set :h to 0
       set :w to 0
-    end
-    on mutation of <button/> in me
-      send setDims to me
     end
     on load
       send setDims to me
@@ -36,9 +34,11 @@
       end
     end
     on load
-      repeat for b in <button/> in me
-        set *width of b to `${:w}px`
-        set *height of b to `${:h}px`
+      if :notmobile
+        repeat for b in <button/> in me
+          set *width of b to `${:w}px`
+          set *height of b to `${:h}px`
+        end
       end
     end
 
@@ -76,7 +76,7 @@
     _="init
         set :mobile to window.innerWidth < 1024
         if :mobile
-            add .hidden to #links
+          add .hidden to #links
         else 
           remove .hidden from #links
           add .hidden to #menu-button 
