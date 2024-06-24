@@ -38,13 +38,13 @@ fn espionox_tmpl() -> anyhow::Result<PortfolioItemTemplate> {
     })
 }
 
-fn ai_language_server_tmpl() -> anyhow::Result<PortfolioItemTemplate> {
-    let content = fs::read_to_string("public/assets/portfolio/ai_language_server.md")?;
+fn lovetogether_tmpl() -> anyhow::Result<PortfolioItemTemplate> {
+    let content = fs::read_to_string("public/assets/portfolio/lovetogether.md")?;
     let content = markdown::to_html(&content);
 
     Ok(PortfolioItemTemplate {
-        title: "AI Powered Language Server".to_string(),
-        subtitle: "My very own copilot".to_string(),
+        title: "LoveTogether".to_string(),
+        subtitle: "Full Stack Intern".to_string(),
         content,
     })
 }
@@ -63,7 +63,7 @@ pub async fn index(Path(work_type): Path<String>) -> HandlerResult<Html<String>>
                 StatusCode::INTERNAL_SERVER_ERROR
             })?
             .render(),
-        "espx-ls" => ai_language_server_tmpl()
+        "lovetogether" => lovetogether_tmpl()
             .map_err(|err| {
                 error!("there was an error getting a portfolio template: {:?}", err);
                 StatusCode::INTERNAL_SERVER_ERROR

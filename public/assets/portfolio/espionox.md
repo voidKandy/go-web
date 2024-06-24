@@ -21,7 +21,7 @@ get_n_day_weather_forecast(location: string, format!: enum('celcius' | 'farenhei
 
 transpiles into:
 
-```
+```json
 {
  "name": "get_n_day_weather_forecast",
       "description": "Get an N-day weather forecast",
