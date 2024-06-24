@@ -58,10 +58,10 @@ pub async fn get_most_recent_posts(
 ) -> DatabaseResult<Vec<Post>> {
     let query = match category_opt {
         Some(cat) => sqlx::query_as::<_, Post>(
-            "SELECT * FROM posts WHERE category = $1 ORDER BY created_at DESC LIMIT 5",
+            "SELECT * FROM posts WHERE category = $1 ORDER BY created_at DESC",
         )
         .bind(cat),
-        None => sqlx::query_as::<_, Post>("SELECT * FROM posts ORDER BY created_at DESC LIMIT 5"),
+        None => sqlx::query_as::<_, Post>("SELECT * FROM posts ORDER BY created_at DESC"),
     };
     let post = query.fetch_all(pool).await?;
     Ok(post)
