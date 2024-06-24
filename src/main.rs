@@ -23,7 +23,7 @@ use tower_http::cors::CorsLayer;
 use tracing::{info, warn};
 
 static TRACING: Lazy<()> = Lazy::new(|| {
-    let default_filter_level = "debug".to_string();
+    let default_filter_level = "info".to_string();
     let subscriber_name = "main".to_string();
 
     if std::env::var("MAIN_LOG").is_ok() {

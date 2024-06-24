@@ -42,7 +42,10 @@ pub async fn index(
     Extension(soft_auth_ext): Extension<SoftAuthExtension>,
 ) -> HandlerResult<Html<String>> {
     let mut post_opt: Option<PostTemplate> = None;
-    if let Some(title) = params.post {
+    if let Some(title) = params
+        .post
+        .and_then(|t| Some(url_escape::decode(&t).to_string()))
+    {
         let post = get_post_by_title(&data.db, &title)
             .await
             .map_err(|err| err.status_code())?
@@ -75,9 +78,10 @@ pub struct LatestParams {
 }
 
 mod filters {
+    use url_escape::encode_path;
     // removes spaces
-    pub fn sanitize_whitespace_filter<T: std::fmt::Display>(s: T) -> ::askama::Result<String> {
-        Ok(s.to_string().replace(" ", "%20"))
+    pub fn sanitize_for_url<T: std::fmt::Display>(s: T) -> ::askama::Result<String> {
+        Ok(encode_path(&s.to_string()).to_string())
     }
 }
 
@@ -100,10 +104,7 @@ pub async fn latest(
         .await
         .map_err(|err| err.status_code())?
         .into_iter()
-        .map(|p| {
-            debug!("processing: {:?}", p);
-            PostTemplate::try_from(p).expect("failed to create post template")
-        })
+        .map(|p| PostTemplate::try_from(p).expect("failed to create post template"))
         .collect();
     let tmpl = MultiPostTemplate {
         posts,
