@@ -18,6 +18,14 @@
     init
       set :h to 0
       set :w to 0
+    end
+    on mutation of <button/> in me
+      send setDims to me
+    end
+    on load
+      send setDims to me
+    end
+    on setDims
       repeat for b in <button/> in me
         if b.offsetWidth > :w
           set :w to b.offsetWidth

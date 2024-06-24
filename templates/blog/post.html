@@ -37,7 +37,7 @@
 <div
   x-style="flex; flex-col; justify-content:center;
   color:@desert-sand; background-color: @dim-grey;
-  p:1.5rem;"
+  lg|p:5rem; p:1rem;"
 >
   {% if let Some(user) = user_opt %} {% if user.admin %}
   <div x-style="flex; flex-row; justify-content:space-between;">
@@ -75,26 +75,30 @@
     </button>
     {% if let Some(cat) = post.category %}
     <h2
-      x-style="font-size: 0.7rem; align-self:flex-end; px:0.5rem;
+      x-style="font-size: 0.7rem; align-self:flex-end; 
     width:fit-content; radius:lg; background-color:@desert-sand;
-    color: @dim-grey;  mt:0; mb:1;"
+    color: @dim-grey;  mt:0; mb:1; px:0.5rem;"
     >
       {{cat}}
     </h2>
     {% endif %}
   </div>
   <h1
-    x-style=" font-size: 2rem;text-align:left; mb:0; mt:3; ml:1;text-shadow: 0 0 2px @desert-sand;"
+    x-style="mb:0; mt:3; ml:1; font-size: 2rem; text-align:left; text-shadow: 0 0 2px @desert-sand;"
   >
     {{post.title}}
   </h1>
   <h2
-    x-style="font-size:1.5rem; font-weight:0;text-align:left; ml:1;mt:0; mb:1;"
+    x-style="ml:1;mt:0; mb:1; font-size:1.5rem; font-weight:0;text-align:left;"
   >
     {{post.subtitle}}
   </h2>
   <hr style="border-color: var(--desert-sand); border-width: 0.25px" />
-  <div x-style="mx:4;" id="markdown-block" _="install MarkdownBlock">
+  <div
+    x-style="lg|mr:15rem; lg|ml:2rem; mr:2rem; ml:1rem;"
+    id="markdown-block"
+    _="install MarkdownBlock"
+  >
     {% for c in post.content %} {{c|safe}} {% endfor %}
   </div>
 </div>

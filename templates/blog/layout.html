@@ -3,21 +3,21 @@
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--dim-grey) transparent;
-    margin: 0 4rem;
+    margin: 0 1rem;
   }
   @media only screen and (min-width: 600px) {
     #blogs-content {
-      margin: 0 2rem;
+      margin: 0 3rem;
     }
   }
 </style>
 <div
-  x-style="flex; flex-col; flex-grow; overflow:hidden; backdrop-filter:blur(5px); m:4; pb:6; radius:lg;"
+  x-style="flex; flex-col; flex-grow; overflow:hidden; backdrop-filter:blur(5px); lg|m:4; m:1; pb:6; radius:lg;"
   class="page-transition"
 >
   <div id="blogs-content">
     {% if let Some(post) = post_opt %} {% include "blog/post.html" %} {% else %}
-    <div x-style="flex; flex-row; justify-content:right; mx:6;">
+    <div x-style="flex; flex-row; justify-content:right; lg|mx:6; mx:2;">
       {% if let Some(user) = user_opt %} {% if user.admin %}
       <div
         hx-get="/admin/upload"
