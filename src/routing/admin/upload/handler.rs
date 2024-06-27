@@ -82,6 +82,7 @@ pub async fn patch_upload_form(
     Path(title): Path<String>,
     multipart: Multipart,
 ) -> Result<impl IntoResponse, DataApiReturn> {
+    let title = url_escape::decode(&title).to_string();
     let mut post = UpdateBlogPost::try_from_multipart(multipart)
         .await
         .map_err(|err| {
@@ -115,6 +116,7 @@ pub async fn delete_post(
     State(data): State<Arc<AppState>>,
     Path(title): Path<String>,
 ) -> Result<impl IntoResponse, DataApiReturn> {
+    let title = url_escape::decode(&title).to_string();
     delete_post_by_title(&data.db, &title)
         .await
         .map_err(|err| {

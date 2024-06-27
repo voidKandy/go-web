@@ -12,7 +12,7 @@ Love Together is a MERN app, meaning the server is written in `Typescript`, the 
 # My Role
 As one of 4 interns, I took on a multitude of tasks as they were divied up between us weekly. My primary contributions to the website were: 
 * implementing the wireframes made by the company's designer in figma in code
-* building the integration with square to allow for subscription plans
+ building the integration with square to allow for subscription plans
 
 
 

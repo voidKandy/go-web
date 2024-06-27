@@ -3,5 +3,5 @@
 espx-ls.toml
 .espx-ls
 /public/assets/posts/*
-/upload_test
+/upload
 /target
