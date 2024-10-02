@@ -57,5 +57,5 @@ Espionox's callback system, called `Listeners` in the crate, make creating thing
 ---
 
 # Links
-- [📦](https://crates.io/crates/espionox) Over 4000 downloads on crates.io 
+- [📦](https://crates.io/crates/espionox) Over 6000 downloads on crates.io 
 - [![small-github-img](/public/assets/logos/github-mark-white.svg)](https://github.com/voidKandy/espionox/tree/master) Check out the code

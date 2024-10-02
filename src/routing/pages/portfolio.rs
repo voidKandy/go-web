@@ -49,6 +49,17 @@ fn lovetogether_tmpl() -> anyhow::Result<PortfolioItemTemplate> {
     })
 }
 
+fn prattl_tmpl() -> anyhow::Result<PortfolioItemTemplate> {
+    let content = fs::read_to_string("public/assets/portfolio/prattl.md")?;
+    let content = markdown::to_html(&content);
+
+    Ok(PortfolioItemTemplate {
+        title: "Prattl".to_string(),
+        subtitle: "Local Transcription CLI tool".to_string(),
+        content,
+    })
+}
+
 pub async fn index(Path(work_type): Path<String>) -> HandlerResult<Html<String>> {
     match match work_type.as_str() {
         "deathwish" => deathwish_tmpl()
@@ -64,6 +75,12 @@ pub async fn index(Path(work_type): Path<String>) -> HandlerResult<Html<String>>
             })?
             .render(),
         "lovetogether" => lovetogether_tmpl()
+            .map_err(|err| {
+                error!("there was an error getting a portfolio template: {:?}", err);
+                StatusCode::INTERNAL_SERVER_ERROR
+            })?
+            .render(),
+        "prattl" => prattl_tmpl()
             .map_err(|err| {
                 error!("there was an error getting a portfolio template: {:?}", err);
                 StatusCode::INTERNAL_SERVER_ERROR
