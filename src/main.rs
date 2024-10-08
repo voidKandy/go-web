@@ -8,6 +8,7 @@ use axum::http::{
     header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE},
     HeaderValue, Method,
 };
+use routing::init_shared_state;
 use telemetry::{get_subscriber, init_subscriber};
 use tower_http::cors::CorsLayer;
 use tracing::{info, warn};
@@ -24,17 +25,13 @@ static TRACING: LazyLock<()> = LazyLock::new(|| {
         init_subscriber(subscriber);
     }
 });
+
 #[tokio::main]
 async fn main() {
     LazyLock::force(&TRACING);
     info!("tracing initialized");
     dotenv::dotenv().ok();
     let port = std::env::var("PORT").expect("Failed to get port env variable");
-
-    // tracing::info!(
-    //     "attempting to connect to database: {:?}",
-    // &config.database_url
-    // );
 
     let allowed_origin = std::env::var("ALLOWED_ORIGIN").unwrap_or_else(|_| {
         warn!("No allowed origin env var, falling back to localhost");
@@ -47,12 +44,8 @@ async fn main() {
         .allow_credentials(true)
         .allow_headers([AUTHORIZATION, ACCEPT, CONTENT_TYPE]);
 
-    // let app = routing::create_router(Arc::new(AppState {
-    //     env: config.clone(),
-    // }))
-    // .layer(cors);
-
-    let app = routing::create_router();
+    let state = init_shared_state();
+    let app = routing::create_router(state).layer(cors);
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port))
         .await
         .unwrap();

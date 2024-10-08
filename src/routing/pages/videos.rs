@@ -1,10 +1,12 @@
 use askama::Template;
-use axum::response::Html;
+use axum::{extract::State, response::Html};
 use dotenv::dotenv;
 use reqwest::Client;
 use serde::Deserialize;
 use std::env;
 use tracing::warn;
+
+use crate::routing::SharedState;
 
 #[derive(Debug, Deserialize)]
 struct VideoItem {
@@ -33,7 +35,7 @@ struct ApiResponse {
 }
 
 #[derive(Debug)]
-struct VideoInfo {
+pub struct VideoInfo {
     url: String,
     title: String,
     // description: String,
@@ -64,9 +66,12 @@ async fn get_video_urls() -> anyhow::Result<Vec<VideoInfo>> {
 
     let response = client.get(&url).send().await?;
 
-    let body: ApiResponse = response.json().await?;
+    let body: serde_json::Value = response.json().await?;
     warn!("got response: {body:#?}");
-    let videos: Vec<VideoInfo> = body
+
+    let api_response: ApiResponse =
+        serde_json::from_value(body).expect("failed to parse json as ApiResponse");
+    let videos: Vec<VideoInfo> = api_response
         .items
         .into_iter()
         .map(|item| VideoInfo::from(item))
@@ -77,18 +82,35 @@ async fn get_video_urls() -> anyhow::Result<Vec<VideoInfo>> {
 
 #[derive(Template, Debug)]
 #[template(path = "videos.html")]
-pub struct VideosTemplate {
-    videos: Vec<VideoInfo>,
+pub struct VideosTemplate<'s> {
+    videos: &'s Vec<VideoInfo>,
 }
 
-pub async fn videos() -> Html<String> {
+pub async fn videos(State(data): State<SharedState>) -> Html<String> {
+    let r = data.read().await;
+    if r.videos_cache.is_some() {
+        warn!("videos are cached");
+        let tmpl = VideosTemplate {
+            videos: r.videos_cache.as_ref().unwrap(),
+        };
+        return match tmpl.render() {
+            Ok(r) => Html(r),
+            Err(err) => Html(format!("Error rendering Layout: {}", err.to_string())),
+        };
+    }
+    drop(r);
+
+    warn!("videos not cached, getting");
+    let videos = get_video_urls().await.expect("Failed to get videos");
+    let mut w = data.write().await;
+    w.videos_cache = Some(videos);
     let tmpl = VideosTemplate {
-        videos: get_video_urls().await.expect("Failed to get videos"),
+        videos: w.videos_cache.as_ref().unwrap(),
     };
-    match tmpl.render() {
+    return match tmpl.render() {
         Ok(r) => Html(r),
         Err(err) => Html(format!("Error rendering Layout: {}", err.to_string())),
-    }
+    };
 }
 
 mod tests {
