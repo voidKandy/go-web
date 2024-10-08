@@ -127,6 +127,13 @@
     display: inline-block;
     align-items: center;
   }
+  footer nav a img {
+    opacity: 50%;
+  }
+
+  footer nav a img:hover {
+    opacity: 100%;
+  }
 
   #main-nav div .tooltiptext {
     transform: translate(0%, 150%);
@@ -147,7 +154,7 @@
       hx-push-url="true"
       id="main-nav"
     >
-      <div x-style="justify-content:left">
+      <div x-style="justify-content:left; align-content:center;">
         <button
           class="material-symbols-outlined material-symbols-button"
           hx-get="/landing"
@@ -160,56 +167,40 @@
           home
         </button>
 
-        <span class="tooltiptext">You need be signed in</span>
-        <button
-          _="install NavListChoice(path: '/blog')
-          install SignInWarning
-          "
-          hx-trigger="getContent"
-          class="light-button"
-          x-style="
-          ml:2;align-self:center
-          "
-          hx-get="/blog"
-        >
-          Blog
-        </button>
         <button
           _="install NavListChoice(path: '/portfolio')
           "
           hx-trigger="getContent"
           class="light-button"
-          x-style="align-self:center"
           hx-get="/portfolio/deathwish"
         >
           Portfolio
+        </button>
+        <button
+          _="install NavListChoice(path: '/videos')
+          "
+          hx-trigger="getContent"
+          class="light-button"
+          hx-get="/videos"
+        >
+          Videos
         </button>
         <button
           _="install NavListChoice(path: '/contact')
           "
           hx-trigger="getContent"
           class="light-button"
-          x-style="align-self:center"
           hx-get="/contact"
         >
           Contact
         </button>
       </div>
-
-      <div
-        class="material-symbols-outlined material-symbols-button"
-        hx-get="/user"
-        hx-push-url="false"
-        hx-trigger="getUser"
-        hx-target="this"
-        hx-swap="outerHTML"
-        x-style="align-self:flex-end;"
-        _="on mousedown
-            send getUser to me
-           end"
+      <h1
+        class="unselectable"
+        x-style="p:0; m:0; mr:1.5rem; align-self: flex-end; color:@bright-pink; "
       >
-        account_circle
-      </div>
+        ∞
+      </h1>
     </nav>
 
     <div
@@ -241,6 +232,7 @@
     >
       <a>
         <img
+          loading="lazy"
           class="external-link-svg"
           _="install OnClickOpenUrlInNewTab(url: 'https://github.com/voidKandy')"
           src="/public/assets/logos/github-mark-white.svg"
@@ -252,6 +244,7 @@
 
       <a>
         <img
+          loading="lazy"
           class="external-link-svg"
           _="install OnClickOpenUrlInNewTab(url:'https://twitter.com/KandyVoid')"
           src="/public/assets/logos/twitter-logo.svg"
@@ -263,6 +256,7 @@
 
       <a>
         <img
+          loading="lazy"
           class="external-link-svg"
           _="install OnClickOpenUrlInNewTab(url: 'https://voidkandy.substack.com')"
           src="/public/assets/logos/substack-logo.svg"
@@ -276,6 +270,7 @@
       <a>
         <img
           class="external-link-svg"
+          loading="lazy"
           _="install OnClickOpenUrlInNewTab(url: 'https://open.spotify.com/artist/19BbMfHJwXYA8zKWAs8cel?si=G4H6q3RNTiKU8OcWtUk0rg')"
           src="/public/assets/logos/spotify-logo.svg"
           style="filter: invert(100%)"
@@ -287,6 +282,7 @@
 
       <a>
         <img
+          loading="lazy"
           class="external-link-svg"
           _="install OnClickOpenUrlInNewTab(url: 'https://music.apple.com/us/artist/void-kandy/1517903121')"
           src="/public/assets/logos/apple-logo.svg"
@@ -299,6 +295,7 @@
 
       <a>
         <img
+          loading="lazy"
           class="external-link-svg"
           _="install OnClickOpenUrlInNewTab(url: 'https://voidkandy.bandcamp.com/?from=search&search_item_id=3990916999&search_item_type=b&search_match_part=?&search_page_id=3011954228&search_page_no=1&search_rank=3&search_sig=62ec632d0b1dd1a0a90e1bde5b7139d3')"
           src="/public/assets/logos/bandcamp-logo.png"
@@ -310,6 +307,7 @@
 
       <a>
         <img
+          loading="lazy"
           class="external-link-svg"
           _="install OnClickOpenUrlInNewTab(url: 'https://www.youtube.com/@Voidkandy')"
           src="/public/assets/logos/youtube-logo.svg"

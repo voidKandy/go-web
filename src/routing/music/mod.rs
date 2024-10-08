@@ -1,5 +1,4 @@
 mod data;
-use crate::auth::{middleware::SoftAuthExtension, model::FilteredUser};
 
 use self::data::album_map;
 use super::HandlerResult;
@@ -7,7 +6,6 @@ use askama::Template;
 use axum::{
     extract::{Path, Query},
     response::Html,
-    Extension,
 };
 use rand::Rng;
 use reqwest::StatusCode;
@@ -152,7 +150,7 @@ impl MusicPlayerLayoutTemplate {
     }
 
     fn album_img_url(&self) -> String {
-        format!("/public/music/{}/imgs/album.png", self.current_album_name)
+        format!("/public/music/{}/imgs/album.webp", self.current_album_name)
     }
 }
 
@@ -162,8 +160,8 @@ fn song_file_path(info: &&SongInfo) -> String {
 
 fn img_file_path(info: &&SongInfo) -> String {
     if info.has_unique_image {
-        format!("/public/music/{}/imgs/{}.png", info.album, info.file_name)
+        format!("/public/music/{}/imgs/{}.webp", info.album, info.file_name)
     } else {
-        format!("/public/music/{}/imgs/album.png", info.album)
+        format!("/public/music/{}/imgs/album.webp", info.album)
     }
 }

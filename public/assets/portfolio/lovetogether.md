@@ -1,3 +1,9 @@
+---
+title: Love Together
+subtitle: Full Stack Intern
+---
+
+
 # Overview
 [Love Together](https://www.love-together.com/) is a relationship support company.
 I worked for the company as a full stack intern, working primarily on the frontend, from February of 2023 to July of 2023.

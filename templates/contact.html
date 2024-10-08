@@ -16,23 +16,6 @@
         hx-target="#email-response"
         hx-swap="innerHTML transition:false"
       >
-        {% if let Some(user) = user %}
-        <h2
-          x-style="font-size: 1rem; font-weight: 100;my:2; text-align:center;"
-        >
-          {{user.email}}
-        </h2>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value="{{user.email}}"
-          hidden
-          required
-          autocomplete="off"
-        />
-
-        {% else %}
         <label x-style="my:2;" for="email">Your Email:</label>
         <input
           type="email"
@@ -42,7 +25,6 @@
           autocomplete="off"
         />
 
-        {% endif %}
         <label x-style="my:2;" for="subject">Subject:</label>
         <input
           type="text"

@@ -33,15 +33,8 @@
   _=" install TransitionGuard(elmt: #player-container)"
 >
   <section
-    x-style="px:2; pt:2; my:2; mx:2; lg|mx:8; flex; flex-grow; flex-col;"
+    x-style="lg|px:4rem; px:2; pt:2; my:5rem; mx:2; lg|mx:8; flex; flex-grow; flex-col;"
   >
-    <h1
-      class="unselectable"
-      x-style="p:0; m:0; align-self: flex-end; color:@bright-pink; "
-    >
-      ∞
-    </h1>
-
     <h1
       id="header-text"
       class="unselectable"
@@ -61,7 +54,7 @@
         <span id="text2"></span>
       </div>
 
-      <svg id="filters">
+      <svg id="filters" viewbox="0 0 width height">
         <defs>
           <filter id="threshold">
             <feColorMatrix

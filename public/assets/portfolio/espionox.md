@@ -1,3 +1,8 @@
+---
+title: Deathwish Powersports
+subtitle: Freelance Full Stack Developer
+---
+
 # Simplifying Writing LLM Applications in Rust
 
 I began working on Espionox in August of 2023, it's an attempt to make

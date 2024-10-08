@@ -5,9 +5,6 @@ use axum::http::{StatusCode, Uri};
 use axum::response::{Html, IntoResponse};
 use axum::Extension;
 
-use crate::auth::middleware::SoftAuthExtension;
-use crate::auth::model::FilteredUser;
-
 #[derive(Template, Debug)]
 #[template(path = "index.html")]
 pub struct IndexTemplate<'a> {
@@ -45,10 +42,7 @@ impl<'a> From<&'a Uri> for IndexTemplate<'a> {
     }
 }
 
-pub async fn index(
-    Extension(soft_auth_ext): Extension<SoftAuthExtension>,
-    req: Request<Body>,
-) -> Html<String> {
+pub async fn index(req: Request<Body>) -> Html<String> {
     let tmpl = IndexTemplate::from(req.uri());
     match tmpl.render() {
         Ok(r) => Html(r),

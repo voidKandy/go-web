@@ -1,4 +1,7 @@
-
+---
+title: Prattl
+subtitle: An audio transcription cli that runs locally
+---
 
 
 

@@ -1,97 +1,112 @@
+use anyhow::anyhow;
 use askama::Template;
 use axum::{extract::Path, response::Html};
+use core::panic;
 use reqwest::StatusCode;
-use std::fs;
-use tracing::error;
+use tracing::warn;
 
-use crate::routing::HandlerResult;
+use crate::{
+    hilighting::{Content, HighlighterParser},
+    routing::HandlerResult,
+};
 
 #[derive(Template)]
 #[template(path = "portfolio/layout.html")]
 pub struct PortfolioTemplate;
 
-#[derive(Template)]
+#[derive(Template, Debug)]
 #[template(path = "portfolio/item.html")]
 pub struct PortfolioItemTemplate {
     pub title: String,
     pub subtitle: String,
-    pub content: String,
+    pub content: Vec<String>,
 }
 
-fn deathwish_tmpl() -> anyhow::Result<PortfolioItemTemplate> {
-    let content = fs::read_to_string("public/assets/portfolio/deathwish.md")?;
-    let content = markdown::to_html(&content);
+const PORTFOLIO_DIR: &str = "public/assets/portfolio/";
+const DEATHWISH: &str = "deathwish";
+const ESPIONOX: &str = "espionox";
+const PRATTL: &str = "espx-ls";
+const LOVETOGETHER: &str = "lovetogether";
+// const SEMPERFLIES_FILE: &str = "semperflies"
+// const ESPX_LS_FILE: &str = "espx-ls"
+pub const ALL_PORTFOLIO_ITEMS: [&str; 4] = [DEATHWISH, ESPIONOX, PRATTL, LOVETOGETHER];
+
+fn item_template(str: &str) -> anyhow::Result<PortfolioItemTemplate> {
+    let filepath = format!("{PORTFOLIO_DIR}{str}.md");
+    let content = std::fs::read_to_string(filepath)?;
+    let info = content.splitn(3, "---").collect::<Vec<&str>>();
+    if !info[0].trim().is_empty() {
+        return Err(anyhow!("expected empty string, got: {:?}", info[0]));
+    }
+
+    let (title, subtitle) = parse_subtitle_and_title_from_content(info[1]);
+
+    let mut parser = HighlighterParser::new(&info[2]);
+    let content = parser
+        .highlight_code_blocks()?
+        .into_iter()
+        .map(|c| c.into_html().expect("Failed to convert into html"))
+        .collect();
+
     Ok(PortfolioItemTemplate {
-        title: "Deathwish Powersports".to_string(),
-        subtitle: "Freelance Full Stack Development".to_string(),
+        title,
+        subtitle,
         content,
     })
 }
 
-fn espionox_tmpl() -> anyhow::Result<PortfolioItemTemplate> {
-    let content = fs::read_to_string("public/assets/portfolio/espionox.md")?;
-    let content = markdown::to_html(&content);
-    Ok(PortfolioItemTemplate {
-        title: "Espionox".to_string(),
-        subtitle: "A Rust crate for building LLM Applications".to_string(),
-        content,
-    })
-}
+fn parse_subtitle_and_title_from_content(str: &str) -> (String, String) {
+    warn!("parsing for title and subtitle from: {str}");
+    let mut title = String::new();
+    let mut subtitle = String::new();
+    for line in str.lines() {
+        if line.contains("subtitle: ") {
+            if let Some(split) = line.split_once("subtitle: ") {
+                subtitle = split.1.trim().to_string();
+            }
+        } else {
+            if let Some(split) = line.split_once("title: ") {
+                title = split.1.trim().to_string();
+            }
+        }
+    }
 
-fn lovetogether_tmpl() -> anyhow::Result<PortfolioItemTemplate> {
-    let content = fs::read_to_string("public/assets/portfolio/lovetogether.md")?;
-    let content = markdown::to_html(&content);
-
-    Ok(PortfolioItemTemplate {
-        title: "LoveTogether".to_string(),
-        subtitle: "Full Stack Intern".to_string(),
-        content,
-    })
-}
-
-fn prattl_tmpl() -> anyhow::Result<PortfolioItemTemplate> {
-    let content = fs::read_to_string("public/assets/portfolio/prattl.md")?;
-    let content = markdown::to_html(&content);
-
-    Ok(PortfolioItemTemplate {
-        title: "Prattl".to_string(),
-        subtitle: "Local Transcription CLI tool".to_string(),
-        content,
-    })
+    return (title, subtitle);
 }
 
 pub async fn index(Path(work_type): Path<String>) -> HandlerResult<Html<String>> {
-    match match work_type.as_str() {
-        "deathwish" => deathwish_tmpl()
-            .map_err(|err| {
-                error!("there was an error getting a portfolio template: {:?}", err);
-                StatusCode::INTERNAL_SERVER_ERROR
-            })?
-            .render(),
-        "espionox" => espionox_tmpl()
-            .map_err(|err| {
-                error!("there was an error getting a portfolio template: {:?}", err);
-                StatusCode::INTERNAL_SERVER_ERROR
-            })?
-            .render(),
-        "lovetogether" => lovetogether_tmpl()
-            .map_err(|err| {
-                error!("there was an error getting a portfolio template: {:?}", err);
-                StatusCode::INTERNAL_SERVER_ERROR
-            })?
-            .render(),
-        "prattl" => prattl_tmpl()
-            .map_err(|err| {
-                error!("there was an error getting a portfolio template: {:?}", err);
-                StatusCode::INTERNAL_SERVER_ERROR
-            })?
-            .render(),
-        _ => return Err(StatusCode::NOT_FOUND),
-    } {
+    let template = item_template(&work_type).map_err(|err| {
+        warn!(
+            "there was an error getting a portfolio template for {work_type}: {:?}",
+            err
+        );
+        StatusCode::INTERNAL_SERVER_ERROR
+    })?;
+
+    warn!("got item template: {template:#?}");
+
+    match template.render() {
         Ok(r) => Ok(Html(r)),
         Err(err) => Ok(Html(format!(
             "Error rendering template: {}",
             err.to_string()
         ))),
+    }
+}
+
+mod tests {
+    use super::parse_subtitle_and_title_from_content;
+
+    #[test]
+    fn title_and_subtitle() {
+        let input = r#"
+        title: title
+        subtitle: subtitle
+        "#;
+
+        let (title, subtitle) = parse_subtitle_and_title_from_content(input);
+
+        assert_eq!(&title, "title");
+        assert_eq!(&subtitle, "subtitle");
     }
 }

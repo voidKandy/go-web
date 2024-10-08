@@ -1,0 +1,33 @@
+<style>
+  @media (min-width: 768px) {
+    /* Adjust as necessary for your breakpoints */
+    .video-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 columns on larger screens */
+    }
+
+    .video-item {
+      padding: 5rem; /* Increased padding on larger screens */
+    }
+  }
+</style>
+
+<div
+  x-style="flex; flex-col; flex-grow; justify-items:center; overflow-y: auto; p:1rem;"
+  class="page-transition"
+>
+  <div class="video-grid" x-style="grid; gap:1rem;">
+    {% for vid in videos %}
+    <div
+      x-style="flex; flex-col; justify-content:space-between;  backdrop-filter: blur(2px); lg|p:2rem; p:0.5rem;"
+    >
+      <h1 x-style="text:md; color:@bright-pink;">{{vid.title}}</h1>
+      <iframe
+        x-style="w:100%; h:auto; lg|min-w:250px; border:none; align-self:flex-end; "
+        style="aspect-ratio: 16/9"
+        src="{{vid.url}}"
+      >
+      </iframe>
+    </div>
+    {% endfor %}
+  </div>
+</div>

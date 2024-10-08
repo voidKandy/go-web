@@ -1,5 +1,6 @@
+use std::sync::LazyLock;
+
 use axum::{http::StatusCode, Json};
-use once_cell::sync::Lazy;
 use serde::Serialize;
 use tracing::info;
 
@@ -52,7 +53,7 @@ pub fn error_chain_fmt(
 }
 
 pub fn init_test_tracing() {
-    Lazy::force(&TRACING);
+    LazyLock::force(&TRACING);
     info!("test tracing initialized");
 }
 
