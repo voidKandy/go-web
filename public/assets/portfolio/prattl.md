@@ -9,6 +9,7 @@ Prattl is a CLI tool I built with a friend that creates an easy interface for tr
 
 > [![small-github-img](/public/assets/logos/github-mark-white.svg)](https://github.com/prattlOrg/prattl) Check out the code
 
+![medium-prattl-logo](/public/assets/prattl/logo.webp)
 ## Prattl manages its own python distribution
 When you run `prattl prepare` prattl installs a python distribution specific to your OS to your system, This means you don't need to manage Python dependencies or risk corrupting your existing environments.
 `prattl clean` will completely remove this distribution. 
@@ -46,4 +47,7 @@ the output will be:
 
 ### Prerequisites
 [ffmpeg](https://www.ffmpeg.org/) installed and included in `$PATH`
+
+### Other Contributions
+On top of being a lead contributor on the project, I also designed and illustrated prattl's logo.
 
