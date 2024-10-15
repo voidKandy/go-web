@@ -1,6 +1,6 @@
 ---
-title: Deathwish Powersports
-subtitle: Freelance Full Stack Developer
+title: Espionox
+subtitle: A Rust crate for building LLM Applications
 ---
 
 # Simplifying Writing LLM Applications in Rust
