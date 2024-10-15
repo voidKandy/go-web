@@ -10,10 +10,9 @@ use crate::{
     routing::HandlerResult,
 };
 
-#[derive(Template)]
-#[template(path = "portfolio/layout.html")]
-pub struct PortfolioTemplate;
-
+// #[derive(Template)]
+// #[template(path = "portfolio/layout.html")]
+// pub struct PortfolioTemplate;
 #[derive(Template, Debug)]
 #[template(path = "portfolio/item.html")]
 pub struct PortfolioItemTemplate {
@@ -25,11 +24,32 @@ pub struct PortfolioItemTemplate {
 const PORTFOLIO_DIR: &str = "public/assets/portfolio/";
 const DEATHWISH: &str = "deathwish";
 const ESPIONOX: &str = "espionox";
-const PRATTL: &str = "espx-ls";
-const LOVETOGETHER: &str = "lovetogether";
-// const SEMPERFLIES_FILE: &str = "semperflies"
-// const ESPX_LS_FILE: &str = "espx-ls"
-pub const ALL_PORTFOLIO_ITEMS: [&str; 4] = [DEATHWISH, ESPIONOX, PRATTL, LOVETOGETHER];
+const PRATTL: &str = "prattl";
+const LOVETOGETHER: &str = "love-together";
+const SEMPERFLIES: &str = "semperflies";
+
+pub const ALL_PORTFOLIO_ITEMS: [&str; 5] = [DEATHWISH, ESPIONOX, PRATTL, LOVETOGETHER, SEMPERFLIES];
+
+impl PortfolioItemTemplate {
+    pub fn to_display(str: &str) -> String {
+        let mut buffer = String::new();
+        let mut capitalize = true;
+        for char in str.chars() {
+            if capitalize {
+                buffer.push_str(&char.to_uppercase().to_string());
+                capitalize = false;
+            } else {
+                if char == '-' {
+                    capitalize = true;
+                    buffer.push(' ');
+                } else {
+                    buffer.push(char);
+                }
+            }
+        }
+        buffer
+    }
+}
 
 fn item_template(str: &str) -> anyhow::Result<PortfolioItemTemplate> {
     let filepath = format!("{PORTFOLIO_DIR}{str}.md");

@@ -112,38 +112,16 @@
       hx-swap="outerHTML"
       hx-push-url="true"
     >
+      {% for item in ALL_PORTFOLIO_ITEMS %}
       <button
         _="install WorkNavigation"
         hx-trigger="getContent"
-        hx-get="deathwish"
+        hx-get="{{item}}"
         class="button"
       >
-        Deathwish Powersports
+        {{Self::to_display(item)}}
       </button>
-      <button
-        _="install WorkNavigation"
-        hx-trigger="getContent"
-        hx-get="lovetogether"
-        class="button"
-      >
-        Love Together
-      </button>
-      <button
-        _="install WorkNavigation"
-        hx-trigger="getContent"
-        hx-get="prattl"
-        class="button"
-      >
-        Prattl
-      </button>
-      <button
-        _="install WorkNavigation"
-        hx-trigger="getContent"
-        hx-get="espionox"
-        class="button"
-      >
-        Espionox
-      </button>
+      {% endfor %}
     </nav>
   </div>
 
